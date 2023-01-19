@@ -11,7 +11,6 @@ const STYLES: Record<string, CSSProperties> = {
     menu: { position: 'absolute', top: 0, left: 0, background: '#e8e8e8', borderRadius: 4, padding: 10, display: 'flex', flexDirection: 'column' }
 }
 
-type MenuItemType = 'Select' | 'Rect';
 
 export type EditorProps = {
     plugins: Plugin[];
@@ -20,7 +19,6 @@ export type EditorProps = {
 
 function Editor(props: EditorProps) {
 
-    const [selectedMenuItem, setSelectedMenuItem] = useState<MenuItemType>('Select');
     const [newSelectedMenuItem, setNewSelectedMenuItem] = useState<MenuItem>(null);
     const [lastSelectedMenuItem, setLastNewSelectedMenuItem] = useState<MenuItem>(null);
 
@@ -43,28 +41,6 @@ function Editor(props: EditorProps) {
     },
         [newSelectedMenuItem?.name]
     )
-    useEffect(() => {
-        if (!canvas) return;
-        const onMouseDown = (e: fabric.IEvent<MouseEvent>): void => {
-            canvas.selection = false;
-            if (selectedMenuItem == 'Rect') {
-                canvas.add(new fabric.Rect({
-                    left: e.pointer.x,
-                    top: e.pointer.y,
-                    width: 30,
-                    height: 30,
-                }));
-                canvas.discardActiveObject();
-            } else if (selectedMenuItem === 'Select') {
-                canvas.selection = true;
-            }
-        };
-        canvas.on('mouse:down', onMouseDown)
-        return () => {
-            canvas.off("mouse:down", onMouseDown)
-        }
-
-    }, [!!canvas, selectedMenuItem])
 
     return (
         <div style={STYLES.container}>
@@ -83,14 +59,6 @@ function Editor(props: EditorProps) {
                         }
                     )
                 }
-                <div>
-                    <label htmlFor='radio-select'>Select</label>
-                    <input id='radio-select' type='radio' checked={selectedMenuItem == 'Select'} onChange={() => { setSelectedMenuItem('Select') }} />
-                </div>
-                <div>
-                    <label htmlFor='radio-rect'>Rectangle</label>
-                    <input id='radio-rect' type='radio' checked={selectedMenuItem == 'Rect'} onChange={() => { setSelectedMenuItem('Rect') }} />
-                </div>
             </div>
         </div>
     )
