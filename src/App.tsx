@@ -1,11 +1,13 @@
 import React from 'react';
 import Editor from './Editor';
 import { MenuItem } from "./lib/core/MenuItem";
+import { CreateRectanglePlugin } from './lib/plugins/CreateRectanglePlugin';
 import { ShowGridPlugin } from './lib/plugins/ShowGridPlugin';
 
 
 const plugins = [
-    new ShowGridPlugin()
+    new ShowGridPlugin(),
+    new CreateRectanglePlugin(),
 ]
 const menuItems: MenuItem[] = [
     {
@@ -15,7 +17,11 @@ const menuItems: MenuItem[] = [
     {
         name: 'Other',
         icon: undefined,
-    }
+    },
+    {
+        name: 'Create Rectangle',
+        icon: undefined,
+    },
 ]
 
 function App() {

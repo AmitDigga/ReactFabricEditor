@@ -22,6 +22,7 @@ function Editor(props: EditorProps) {
 
     const [selectedMenuItem, setSelectedMenuItem] = useState<MenuItemType>('Select');
     const [newSelectedMenuItem, setNewSelectedMenuItem] = useState<MenuItem>(null);
+    const [lastSelectedMenuItem, setLastNewSelectedMenuItem] = useState<MenuItem>(null);
 
     const { fabricCanvas: canvasRef } = useFabricCanvas({ canvasId: 'canvas' });
     const canvas = canvasRef.current;
@@ -35,7 +36,7 @@ function Editor(props: EditorProps) {
         props.plugins.forEach(plugin => {
             if (plugin.getMenuItemName() === newSelectedMenuItem?.name) {
                 plugin.onMenuItemSelected({});
-            } else {
+            } else if (plugin.getMenuItemName() === lastSelectedMenuItem?.name) {
                 plugin.onMenuItemUnselected({});
             }
         })
@@ -76,6 +77,7 @@ function Editor(props: EditorProps) {
                                 <label htmlFor={menuItem.name}>{menuItem.name}</label>
                                 <input id={menuItem.name} type={'radio'} checked={newSelectedMenuItem?.name === menuItem.name} onChange={(e) => {
                                     setNewSelectedMenuItem(menuItem);
+                                    setLastNewSelectedMenuItem(newSelectedMenuItem);
                                 }} ></input>
                             </div>
                         }
