@@ -40,18 +40,13 @@ const menuItems: MenuItem[] = [
 ]
 
 const STYLES: Record<string, CSSProperties> = {
-    container: { position: 'relative' },
+    container: {
+        display: 'grid',
+        gridTemplateAreas: `'editor menu' 'editor property-windows'`,
+        gridTemplateColumns: '1fr 200px',
+        gridTemplateRows: '250px 1fr'
+    },
     editor: { border: '1px solid black' },
-    menu: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        background: '#e8e8e8',
-        borderRadius: 4,
-        padding: 10,
-        display: 'flex',
-        flexDirection: 'column',
-    }
 }
 
 export function useForceUpdate() {
@@ -85,8 +80,10 @@ function App() {
                 <h1>Welcome to our app</h1>
             </center>
             <div style={STYLES.container}>
-                <Editor plugins={plugins} />
-                <div style={STYLES.menu}>
+                <div style={{ gridArea: 'editor' }}>
+                    <Editor plugins={plugins} />
+                </div>
+                <div style={{ gridArea: 'menu' }}>
                     <Menu
                         menuItems={newMenuItems}
                         onValueChange={(menuItem, value) => {
@@ -110,9 +107,15 @@ function App() {
                         }}
                     />
                 </div>
-                {
-                    plugins.map(p => <PropertyWindows key={p.getName()} windowTitle={p.getName()} properties={p.getExposedProperty()}></PropertyWindows>)
-                }
+                <div style={{ gridArea: 'property-windows' }}>
+                    <h4>Properties</h4>
+
+                    {
+                        plugins.map(p =>
+                            <PropertyWindows key={p.getName()} windowTitle={p.getName()} properties={p.getExposedProperty()}></PropertyWindows>
+                        )
+                    }
+                </div>
             </div>
         </div>
     )

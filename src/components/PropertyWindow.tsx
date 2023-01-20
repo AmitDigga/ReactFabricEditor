@@ -4,7 +4,7 @@ import { ExposedProperty } from './ExposedProperty';
 
 export function PropertyWindows(props: { windowTitle: string, properties: ExposedPropertyType[] }) {
     const child = props.properties.length === 0 ?
-        <div>Nothing Selected</div> :
+        <div>Empty</div> :
         <>
             {props.properties.map((p) => {
                 return <ExposedProperty key={p.name} exposedProperty={p} />
@@ -12,7 +12,7 @@ export function PropertyWindows(props: { windowTitle: string, properties: Expose
         </>
 
     return <div>
-        <h4>{props.windowTitle}</h4>
+        <h5>{props.windowTitle}</h5>
         {child}
     </div>
 }
