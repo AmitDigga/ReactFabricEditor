@@ -1,5 +1,5 @@
 import { fabric } from 'fabric';
-import { Plugin } from '../core/Plugin';
+import { ExposedPropertyType, Plugin } from '../core/Plugin';
 
 export class CreateRectanglePlugin extends Plugin<boolean> {
 
@@ -58,5 +58,9 @@ export class CreateRectanglePlugin extends Plugin<boolean> {
             }
         }
         this.canvas.renderAll();
+    }
+
+    getExposedProperty(): ExposedPropertyType[] {
+        return [];
     }
 }

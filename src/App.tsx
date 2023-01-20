@@ -1,7 +1,9 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
 import Editor from './components/Editor';
 import Menu from './components/Menu';
+import { PropertyWindows } from './components/PropertyWindow';
 import { MenuItem } from "./lib/core/MenuItem";
+import { OnChange } from './lib/core/Plugin';
 import { CreateRectanglePlugin } from './lib/plugins/CreateRectanglePlugin';
 import { SelectPlugin } from './lib/plugins/SelectPlugin';
 import { ShowGridPlugin } from './lib/plugins/ShowGridPlugin';
@@ -66,6 +68,17 @@ function App() {
         }
     });
 
+    useEffect(() => {
+        const onChangeFunction: OnChange<any> = () => {
+            forceUpdate();
+            console.log("updated");
+        };
+        plugins.forEach((plugin) => plugin.addPropertyChangeListener(onChangeFunction))
+        return () => {
+            plugins.forEach((plugin) => plugin.removePropertyChangeListener(onChangeFunction))
+        }
+    }, []);
+
     return (
         <div>
             <center>
@@ -97,6 +110,9 @@ function App() {
                         }}
                     />
                 </div>
+                {
+                    plugins.map(p => <PropertyWindows key={p.getName()} windowTitle={p.getName()} properties={p.getExposedProperty()}></PropertyWindows>)
+                }
             </div>
         </div>
     )
