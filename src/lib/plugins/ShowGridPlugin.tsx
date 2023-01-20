@@ -2,63 +2,49 @@ import { Canvas } from 'fabric/fabric-impl';
 import { fabric } from 'fabric';
 import { Plugin } from '../core/Plugin';
 
-export class ShowGridPlugin extends Plugin {
+export class ShowGridPlugin extends Plugin<boolean> {
     canvas: Canvas;
-    gridsCreated: boolean;
     init(canvas: Canvas): void {
         this.canvas = canvas;
-        this.gridsCreated = false;
+        this.createGrid();
     }
-    onMenuItemSelected(event: any): void {
+
+    private createGrid() {
         const canvas = this.canvas;
-        if (!canvas)
-            return;
-        if (!this.gridsCreated) {
-            const canvasWidth = canvas.width;
-            const canvasHeight = canvas.height;
-            const lines = 20;
-            const darkerLineGap = 5;
-            for (let hLines = 0; hLines < lines; hLines++) {
-                const y = canvasHeight * hLines / lines;
-                const isDarker = hLines % darkerLineGap == 0;
-                const color = isDarker ? '#00888888' : '#00888844';
-                const line = new fabric.Line([0, y, canvasWidth, y], { stroke: color, selectable: false, name: 'gridLine', visible: true });
-                canvas.add(line);
-            }
-            for (let vLines = 0; vLines < lines; vLines++) {
-                const x = canvasWidth * vLines / lines;
-                const isDarker = vLines % darkerLineGap == 0;
-                const color = isDarker ? '#00888888' : '#00888844';
-                const line = new fabric.Line([x, 0, x, canvasHeight], { stroke: color, selectable: false, name: 'gridLine', visible: true });
-                canvas.add(line);
-            }
+        const visible = this.getState();
+        const lightProperties = { stroke: '#00888844', selectable: false, name: 'gridLine', visible };
+        const darkerProperties = { stroke: '#00888888', selectable: false, name: 'gridLine', visible };
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+        const lines = 20;
+        const darkerLineGap = 5;
+        for (let hLines = 0; hLines < lines; hLines++) {
+            const y = canvasHeight * hLines / lines;
+            const isDarker = hLines % darkerLineGap == 0;
+            const line = new fabric.Line([0, y, canvasWidth, y], isDarker ? darkerProperties : lightProperties);
+            canvas.add(line);
         }
-
-        canvas.forEachObject((o) => {
-            if (o.name === "gridLine") {
-                o.visible = true;
-            }
-        });
-
-        canvas.requestRenderAll();
+        for (let vLines = 0; vLines < lines; vLines++) {
+            const x = canvasWidth * vLines / lines;
+            const isDarker = vLines % darkerLineGap == 0;
+            const line = new fabric.Line([x, 0, x, canvasHeight], isDarker ? darkerProperties : lightProperties);
+            canvas.add(line);
+        }
     }
-    onMenuItemUnselected(event: any): void {
+
+    public onStateChange(newState: boolean, _previousState: boolean): void {
+        const showGrid = newState;
         const canvas = this.canvas;
         if (!canvas)
             return;
         canvas.forEachObject((o) => {
             if (o.name === "gridLine") {
-                o.visible = false;
+                o.visible = showGrid;
             }
         });
         canvas.requestRenderAll();
+
     }
-    onEvent(event: any): void {
-    }
-    getName(): string {
-        return "Show Grid";
-    }
-    getMenuItemName(): string {
-        return "Grid";
+    onEvent(event: fabric.IEvent): void {
     }
 }
