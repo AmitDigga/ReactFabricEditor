@@ -7,21 +7,19 @@ import { ShowGridPlugin } from './lib/plugins/ShowGridPlugin';
 
 
 const plugins = [
-    new ShowGridPlugin(),
-    new CreateRectanglePlugin(),
+    new ShowGridPlugin('Show Grid', false),
+    new CreateRectanglePlugin('Create Rectangle', false),
 ]
 const menuItems: MenuItem[] = [
     {
-        name: 'Grid',
+        name: 'Show Grid',
         icon: undefined,
-    },
-    {
-        name: 'Other',
-        icon: undefined,
+        value: false,
     },
     {
         name: 'Create Rectangle',
         icon: undefined,
+        value: false,
     },
 ]
 
@@ -37,25 +35,22 @@ const STYLES: Record<string, CSSProperties> = {
         padding: 10,
         display: 'flex',
         flexDirection: 'column',
-
     }
 }
 
-function App() {
-    const [selectedMenuItem, setSelectedMenuItem] = useState<MenuItem>(null);
-    const [lastSelectedMenuItem, setLastSelectedMenuItem] = useState<MenuItem>(null);
-    useEffect(() => {
-        plugins.forEach(plugin => {
-            if (plugin.getMenuItemName() === selectedMenuItem?.name) {
-                plugin.onMenuItemSelected({});
-            } else if (plugin.getMenuItemName() === lastSelectedMenuItem?.name) {
-                plugin.onMenuItemUnselected({});
-            }
-        })
-    },
-        [selectedMenuItem?.name]
-    )
+function useForceUpdate() {
+    const [_, setValue] = useState(0); // integer state
+    return () => setValue(value => value + 1); // update the state to force render
+}
 
+function App() {
+    const forceUpdate = useForceUpdate();
+    const newMenuItems = menuItems.map(menuItem => {
+        return {
+            ...menuItem,
+            value: plugins.find(plugin => plugin.getName() === menuItem.name)?.getState()
+        }
+    });
 
     return (
         <div>
@@ -66,12 +61,21 @@ function App() {
                 <Editor plugins={plugins} />
                 <div style={STYLES.menu}>
                     <Menu
-                        menuItems={menuItems}
-                        selectedMenuItem={selectedMenuItem}
-                        setSelectedMenuItem={item => {
-                            setLastSelectedMenuItem(selectedMenuItem);
-                            setSelectedMenuItem(item);
-                        }} />
+                        menuItems={newMenuItems}
+                        onValueChange={(menuItem, value) => {
+                            switch (menuItem.name) {
+                                case 'Show Grid':
+                                    plugins[0].setState(value);
+                                    break;
+                                case 'Create Rectangle':
+                                    plugins[1].setState(value);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            forceUpdate();
+                        }}
+                    />
                 </div>
             </div>
         </div>
