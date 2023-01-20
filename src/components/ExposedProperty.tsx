@@ -1,7 +1,11 @@
 import React from 'react';
 import { ExposedPropertyType } from '../lib/core/Plugin';
 
-export function ExposedProperty(props: { exposedProperty: ExposedPropertyType }) {
+export type ExposedPropertyProps = {
+    exposedProperty: ExposedPropertyType;
+};
+
+export function ExposedProperty(props: ExposedPropertyProps) {
     if (props.exposedProperty.type === 'number') {
         return <div>
             <label htmlFor={props.exposedProperty.name}>{props.exposedProperty.name}</label>

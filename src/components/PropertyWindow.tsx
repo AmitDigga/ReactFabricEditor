@@ -2,7 +2,11 @@ import React from 'react';
 import { ExposedPropertyType } from '../lib/core/Plugin';
 import { ExposedProperty } from './ExposedProperty';
 
-export function PropertyWindows(props: { windowTitle: string, properties: ExposedPropertyType[] }) {
+export type PropertyWindowsProps = {
+    windowTitle: string;
+    properties: ExposedPropertyType[];
+};
+export function PropertyWindows(props: PropertyWindowsProps) {
     const child = props.properties.length === 0 ?
         <div>Empty</div> :
         <>
