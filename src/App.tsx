@@ -3,16 +3,23 @@ import Editor from './components/Editor';
 import Menu from './components/Menu';
 import { MenuItem } from "./lib/core/MenuItem";
 import { CreateRectanglePlugin } from './lib/plugins/CreateRectanglePlugin';
+import { SelectPlugin } from './lib/plugins/SelectPlugin';
 import { ShowGridPlugin } from './lib/plugins/ShowGridPlugin';
 import { XYLocationPlugin } from './lib/plugins/XYLocationPlugin';
 
 
 const plugins = [
+    new SelectPlugin('Selection', false),
     new ShowGridPlugin('Show Grid', false),
     new CreateRectanglePlugin('Create Rectangle', false),
     new XYLocationPlugin('XY Position', false),
 ]
 const menuItems: MenuItem[] = [
+    {
+        name: 'Selection',
+        icon: undefined,
+        value: false,
+    },
     {
         name: 'Show Grid',
         icon: undefined,
@@ -71,14 +78,17 @@ function App() {
                         menuItems={newMenuItems}
                         onValueChange={(menuItem, value) => {
                             switch (menuItem.name) {
-                                case 'Show Grid':
+                                case 'Selection':
                                     plugins[0].setState(value);
                                     break;
-                                case 'Create Rectangle':
+                                case 'Show Grid':
                                     plugins[1].setState(value);
                                     break;
-                                case 'XY Position':
+                                case 'Create Rectangle':
                                     plugins[2].setState(value);
+                                    break;
+                                case 'XY Position':
+                                    plugins[3].setState(value);
                                     break;
                                 default:
                                     break;

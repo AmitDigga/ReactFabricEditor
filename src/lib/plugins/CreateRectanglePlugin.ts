@@ -33,13 +33,13 @@ export class CreateRectanglePlugin extends Plugin<boolean> {
             fill: 'red',
             width: 20,
             height: 20,
+            selectable: true,
         });
         this.canvas.add(this.rect);
     }
 
     onEvent(event: fabric.IEvent) {
         const isMouseDown = event.e.type === 'mousedown';
-        const isMouseUp = event.e.type === 'mouseup';
         const isOriginSet = !!this.origin;
         if (isMouseDown) {
             if (isOriginSet) {
