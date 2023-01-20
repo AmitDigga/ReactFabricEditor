@@ -1,6 +1,6 @@
 import { Canvas } from 'fabric/fabric-impl';
 import { fabric } from 'fabric';
-import { Plugin } from '../core/Plugin';
+import { ExposedPropertyType, Plugin } from '../core/Plugin';
 
 export class ShowGridPlugin extends Plugin<boolean> {
     canvas: Canvas;
@@ -46,5 +46,9 @@ export class ShowGridPlugin extends Plugin<boolean> {
 
     }
     onEvent(event: fabric.IEvent): void {
+    }
+
+    getExposedProperty(): ExposedPropertyType[] {
+        return [];
     }
 }

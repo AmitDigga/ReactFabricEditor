@@ -1,5 +1,5 @@
 import { fabric } from 'fabric';
-import { Plugin } from '../core/Plugin';
+import { ExposedPropertyType, Plugin } from '../core/Plugin';
 
 
 export class XYLocationPlugin extends Plugin<boolean>{
@@ -34,6 +34,10 @@ export class XYLocationPlugin extends Plugin<boolean>{
     onEvent(event: any) {
         this.text.set('text', `${Math.floor(event.pointer.x)},${Math.floor(event.pointer.y)}`);
         this.canvas.renderAll();
+    }
+
+    getExposedProperty(): ExposedPropertyType[] {
+        return [];
     }
 
 }
