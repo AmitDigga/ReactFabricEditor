@@ -4,11 +4,13 @@ import Menu from './components/Menu';
 import { MenuItem } from "./lib/core/MenuItem";
 import { CreateRectanglePlugin } from './lib/plugins/CreateRectanglePlugin';
 import { ShowGridPlugin } from './lib/plugins/ShowGridPlugin';
+import { XYLocationPlugin } from './lib/plugins/XYLocationPlugin';
 
 
 const plugins = [
     new ShowGridPlugin('Show Grid', false),
     new CreateRectanglePlugin('Create Rectangle', false),
+    new XYLocationPlugin('XY Position', false),
 ]
 const menuItems: MenuItem[] = [
     {
@@ -18,6 +20,11 @@ const menuItems: MenuItem[] = [
     },
     {
         name: 'Create Rectangle',
+        icon: undefined,
+        value: false,
+    },
+    {
+        name: 'XY Position',
         icon: undefined,
         value: false,
     },
@@ -69,6 +76,9 @@ function App() {
                                     break;
                                 case 'Create Rectangle':
                                     plugins[1].setState(value);
+                                    break;
+                                case 'XY Position':
+                                    plugins[2].setState(value);
                                     break;
                                 default:
                                     break;

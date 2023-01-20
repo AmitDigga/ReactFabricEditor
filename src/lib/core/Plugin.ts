@@ -1,5 +1,11 @@
 import { fabric } from 'fabric';
 
+// export type MouseEventType = is fabric.EventName;
+
+// export type MouseEvent<MouseEventType extends fabric.EventName> = {
+//     [K in MouseEventType]: fabric.IEvent
+// };
+
 export abstract class Plugin<T extends boolean> {
     constructor(private name: string, private state: T) { }
     public getState() { return this.state };
