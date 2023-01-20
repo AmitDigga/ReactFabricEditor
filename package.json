@@ -22,8 +22,6 @@
     "babel-loader": "^9.1.2",
     "copy-webpack-plugin": "^11.0.0",
     "html-webpack-plugin": "^5.5.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "typescript": "^4.9.4",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
@@ -31,6 +29,8 @@
   },
   "dependencies": {
     "fabric": "^5.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "uuid": "^9.0.0"
   }
 }
