@@ -1,6 +1,6 @@
-import React, { useEffect, useState, CSSProperties } from 'react';
-import { useForceUpdate } from '../App';
-import { useFabricCanvas } from '../FabricCanvas';
+import React, { useEffect, CSSProperties } from 'react';
+import { useForceUpdate } from "../hooks/useForceUpdate";
+import { useFabricCanvas } from '../hooks/useFabricCanvas';
 import { Plugin } from '../lib/core/Plugin';
 
 

@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect } from 'react';
 import Editor from './components/Editor';
 import Menu from './components/Menu';
 import { PropertyWindows } from './components/PropertyWindow';
@@ -8,6 +8,7 @@ import { CreateRectanglePlugin } from './lib/plugins/CreateRectanglePlugin';
 import { SelectPlugin } from './lib/plugins/SelectPlugin';
 import { ShowGridPlugin } from './lib/plugins/ShowGridPlugin';
 import { XYLocationPlugin } from './lib/plugins/XYLocationPlugin';
+import { useForceUpdate } from './hooks/useForceUpdate';
 
 
 const plugins = [
@@ -47,11 +48,6 @@ const STYLES: Record<string, CSSProperties> = {
         gridTemplateRows: '250px 1fr'
     },
     editor: { border: '1px solid black' },
-}
-
-export function useForceUpdate() {
-    const [_, setValue] = useState(0); // integer state
-    return () => setValue(value => value + 1); // update the state to force render
 }
 
 function App() {
