@@ -1,4 +1,5 @@
 import React, { useEffect, useState, CSSProperties } from 'react';
+import { useForceUpdate } from '../App';
 import { useFabricCanvas } from '../FabricCanvas';
 import { Plugin } from '../lib/core/Plugin';
 
@@ -11,10 +12,11 @@ const STYLES: Record<string, CSSProperties> = {
 
 
 export type EditorProps = {
-    plugins: Plugin[];
+    plugins: Plugin<boolean>[];
 }
 
 function Editor(props: EditorProps) {
+    const forceUpdate = useForceUpdate();
 
     const { fabricCanvas: canvasRef } = useFabricCanvas({ canvasId: 'canvas' });
     const canvas = canvasRef.current;
@@ -23,6 +25,9 @@ function Editor(props: EditorProps) {
         props.plugins.forEach(p => p.init(canvas));
 
     }, [!!canvas])
+    useEffect(() => {
+        forceUpdate();
+    }, [])
 
 
     return (

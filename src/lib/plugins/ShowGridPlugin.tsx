@@ -47,7 +47,4 @@ export class ShowGridPlugin extends Plugin<boolean> {
     }
     onEvent(event: fabric.IEvent): void {
     }
-    getName(): string {
-        return "Show Grid";
-    }
 }
