@@ -9,7 +9,8 @@
     "build:js": "webpack --config webpack.config.js",
     "build:types": "tsc --project tsconfig.build.json",
     "type:check": "tsc --project tsconfig.dev.json",
-    "start": "npm run serve"
+    "start": "npm run serve",
+    "start:types": "npm run type:check -- --watch"
   },
   "author": "Amit Digga <diggaamitoo7@gmail.com> (https://github.com/AmitDigga/)",
   "license": "ISC",
