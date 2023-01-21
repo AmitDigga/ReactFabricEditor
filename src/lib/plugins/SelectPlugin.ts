@@ -2,8 +2,8 @@ import { fabric } from 'fabric';
 import { ExposedPropertyType, Plugin } from '../core/Plugin';
 
 export class SelectPlugin extends Plugin<boolean> {
-    canvas: fabric.Canvas;
-    selectedObject: fabric.Object;
+    canvas: fabric.Canvas | null = null;
+    selectedObject: fabric.Object | null = null;
 
     init(canvas: fabric.Canvas): void {
         this.onEvent = this.onEvent.bind(this);
@@ -11,6 +11,7 @@ export class SelectPlugin extends Plugin<boolean> {
         this.canvas.selection = this.getState();
     }
     onStateChange(newState: boolean, previousState: boolean): void {
+        if (this.canvas === null) throw new Error('Canvas is null');
         if (newState) {
             this.canvas.selection = true;
             this.canvas.on('mouse:up', this.onEvent);
@@ -20,6 +21,7 @@ export class SelectPlugin extends Plugin<boolean> {
         }
     }
     onEvent(e: fabric.IEvent): void {
+        if (this.canvas === null) throw new Error('Canvas is null');
         if (e.e.type === 'mouseup') {
             const target = this.canvas.getActiveObject();
             if (!!target) {
@@ -32,13 +34,15 @@ export class SelectPlugin extends Plugin<boolean> {
     }
     getExposedProperty(): ExposedPropertyType[] {
         var main = this;
-        if (this.selectedObject) {
+        if (main.selectedObject) {
             return [
                 {
                     name: 'x',
                     type: 'number',
-                    getValue: () => this.selectedObject.left,
+                    getValue: () => main.selectedObject?.left ?? 0,
                     setValue: function (value: unknown) {
+                        if (main.selectedObject === null) return;
+                        if (main.canvas === null) throw new Error('Canvas is null');
                         main.selectedObject.set('left', parseInt(value as string));
                         main.notifyPropertyChange(this);
                         main.canvas.renderAll();

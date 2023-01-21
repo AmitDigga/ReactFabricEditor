@@ -1,13 +1,10 @@
 {
     "compilerOptions": {
-        "outFile": "./public/dist/app.bundle.d.ts",
         "jsx": "react",
         "allowJs": true,
-        "declaration": true,
-        "emitDeclarationOnly": true,
+        "strict": true,
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
-        "declarationMap": true
     },
     "include": [
         "./src/**/*"

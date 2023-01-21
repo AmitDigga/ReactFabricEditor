@@ -3,19 +3,20 @@ import { fabric } from 'fabric';
 import { ExposedPropertyType, Plugin } from '../core/Plugin';
 
 export class ShowGridPlugin extends Plugin<boolean> {
-    canvas: Canvas;
+    canvas: Canvas | null = null;
     init(canvas: Canvas): void {
         this.canvas = canvas;
         this.createGrid();
     }
 
     private createGrid() {
+        if (this.canvas === null) throw new Error('Canvas is null');
         const canvas = this.canvas;
         const visible = this.getState();
         const lightProperties = { stroke: '#00888844', selectable: false, name: 'gridLine', visible };
         const darkerProperties = { stroke: '#00888888', selectable: false, name: 'gridLine', visible };
-        const canvasWidth = canvas.width;
-        const canvasHeight = canvas.height;
+        const canvasWidth = canvas.width ?? 600;
+        const canvasHeight = canvas.height ?? 600;
         const lines = 20;
         const darkerLineGap = 5;
         for (let hLines = 0; hLines < lines; hLines++) {

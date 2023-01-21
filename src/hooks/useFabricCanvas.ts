@@ -6,7 +6,7 @@ export interface Options {
 }
 
 export function useFabricCanvas({ canvasId }: Options): {
-    fabricCanvas: MutableRefObject<fabric.Canvas>,
+    fabricCanvas: MutableRefObject<fabric.Canvas | null>,
 } {
     const fabricCanvas = useRef<fabric.Canvas | null>(null);
     useEffect(() => {

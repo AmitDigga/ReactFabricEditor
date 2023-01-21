@@ -55,7 +55,7 @@ function App() {
     const newMenuItems = menuItems.map(menuItem => {
         return {
             ...menuItem,
-            value: plugins.find(plugin => plugin.getName() === menuItem.name)?.getState()
+            value: plugins.find(plugin => plugin.getName() === menuItem.name)?.getState() ?? false
         }
     });
 
