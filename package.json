@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "serve": "webpack serve --port 8080",
-    "build": "webpack --config webpack.config.js",
+    "build": "npm run build:js && npm run build:types",
+    "build:js": "webpack --config webpack.config.js",
+    "build:types": "tsc",
     "start": "npm run serve"
   },
   "author": "Amit Digga <diggaamitoo7@gmail.com> (https://github.com/AmitDigga/)",

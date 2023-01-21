@@ -1,11 +1,18 @@
 {
     "compilerOptions": {
-        "outDir": "./public/",
-        "module": "es6",
-        "target": "es5",
+        "outFile": "./public/dist/app.bundle.d.ts",
         "jsx": "react",
         "allowJs": true,
+        "declaration": true,
+        "emitDeclarationOnly": true,
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
-    }
+        "declarationMap": true
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }
