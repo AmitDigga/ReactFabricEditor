@@ -1,5 +1,5 @@
 import { fabric } from 'fabric';
-import { Property } from './Property';
+import { Property } from '../core/Property';
 
 
 export class SelectedObjectLeftPositionProperty extends Property {

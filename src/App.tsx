@@ -3,7 +3,7 @@ import Editor from './components/Editor';
 import Menu from './components/Menu';
 import { PropertyWindows } from './components/PropertyWindow';
 import { MenuItem } from "./lib/core/MenuItem";
-import { SelectedObjectLeftPositionProperty } from "./lib/core/SelectedObjectLeftPositionProperty";
+import { SelectedObjectLeftPositionProperty } from "./lib/properties/SelectedObjectLeftPositionProperty";
 import { CreateRectanglePlugin } from './lib/plugins/CreateRectanglePlugin';
 import { SelectPlugin } from './lib/plugins/SelectPlugin';
 import { ShowGridPlugin } from './lib/plugins/ShowGridPlugin';
