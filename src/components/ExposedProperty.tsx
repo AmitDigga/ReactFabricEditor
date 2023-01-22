@@ -1,19 +1,29 @@
-import React from 'react';
-import { ExposedPropertyType } from '../lib/core/Plugin';
+import React, { useEffect } from 'react';
+import { useForceUpdate } from '../hooks/useForceUpdate';
+import { Property } from "../lib/core/Property";
 
 export type ExposedPropertyProps = {
-    exposedProperty: ExposedPropertyType;
+    property: Property;
 };
 
 export function ExposedProperty(props: ExposedPropertyProps) {
-    if (props.exposedProperty.type === 'number') {
+    const forceUpdate = useForceUpdate();
+    useEffect(() => {
+        const unsubscribe = props.property.change$.subscribe(() => {
+            forceUpdate();
+        })
+        return () => {
+            unsubscribe.unsubscribe();
+        }
+    }, [props.property]);
+    if (props.property.type === 'number') {
         return <div>
-            <label htmlFor={props.exposedProperty.name}>{props.exposedProperty.name}</label>
-            <input id={props.exposedProperty.name} type='number' value={props.exposedProperty.getValue()} onChange={(e) => {
-                props.exposedProperty.setValue(e.target.value);
+            <label htmlFor={props.property.name}>{props.property.name}</label>
+            <input id={props.property.name} type='number' value={props.property.getValue()} onChange={(e) => {
+                props.property.setValue(e.target.value);
             }} />
         </div>
     } else {
-        return <div>Not Supported {props.exposedProperty.name} of type {props.exposedProperty.type}</div>
+        return <div>Not Supported {props.property.name} of type {props.property.type}</div>
     }
 }

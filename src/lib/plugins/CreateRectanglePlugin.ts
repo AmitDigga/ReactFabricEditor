@@ -1,15 +1,14 @@
 import { fabric } from 'fabric';
-import { ExposedPropertyType, Plugin } from '../core/Plugin';
+import { Plugin } from '../core/Plugin';
 
 export class CreateRectanglePlugin extends Plugin<boolean> {
 
-    private canvas: fabric.Canvas | null = null;
+
     private rect: fabric.Rect | null = null;
     private origin: fabric.Point | null = null;
 
-    init(canvas: fabric.Canvas) {
+    onInit(canvas: fabric.Canvas): void {
         this.onEvent = this.onEvent.bind(this);
-        this.canvas = canvas;
     }
 
     public onStateChange(newState: boolean, _previousState: boolean): void {
@@ -65,7 +64,4 @@ export class CreateRectanglePlugin extends Plugin<boolean> {
         this.canvas.renderAll();
     }
 
-    getExposedProperty(): ExposedPropertyType[] {
-        return [];
-    }
 }
