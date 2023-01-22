@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "outFile": "./public/dist/app.bundle.d.ts",
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "declarationMap": true
+    },
+}

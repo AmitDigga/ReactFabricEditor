@@ -1,15 +1,13 @@
 import { fabric } from 'fabric';
-import { ExposedPropertyType, Plugin } from '../core/Plugin';
+import { Plugin } from '../core/Plugin';
 
 
 export class XYLocationPlugin extends Plugin<boolean>{
 
-    private canvas: fabric.Canvas;
-    private text: fabric.Text;
+    private text: fabric.Text | null = null;
 
-    init(canvas: fabric.Canvas) {
+    onInit(canvas: fabric.Canvas): void {
         this.onEvent = this.onEvent.bind(this);
-        this.canvas = canvas;
         this.text = new fabric.Text('0,0', {
             left: 10,
             top: 10,
@@ -17,10 +15,12 @@ export class XYLocationPlugin extends Plugin<boolean>{
             fill: 'black',
             visible: this.getState(),
         });
-        this.canvas.add(this.text);
+        canvas.add(this.text);
     }
 
     public onStateChange(newState: boolean, previousState: boolean): void {
+        if (this.canvas === null) throw new Error('Canvas is null');
+        if (this.text === null) throw new Error('Text is null');
         if (newState) {
             this.text.visible = true;
             this.canvas.on('mouse:move', this.onEvent);
@@ -32,12 +32,10 @@ export class XYLocationPlugin extends Plugin<boolean>{
     }
 
     onEvent(event: any) {
+        if (this.canvas === null) throw new Error('Canvas is null');
+        if (this.text === null) throw new Error('Text is null');
         this.text.set('text', `${Math.floor(event.pointer.x)},${Math.floor(event.pointer.y)}`);
         this.canvas.renderAll();
-    }
-
-    getExposedProperty(): ExposedPropertyType[] {
-        return [];
     }
 
 }

@@ -1,21 +1,22 @@
 import { Canvas } from 'fabric/fabric-impl';
 import { fabric } from 'fabric';
-import { ExposedPropertyType, Plugin } from '../core/Plugin';
+import { Plugin } from '../core/Plugin';
 
 export class ShowGridPlugin extends Plugin<boolean> {
-    canvas: Canvas;
-    init(canvas: Canvas): void {
-        this.canvas = canvas;
+    canvas: Canvas | null = null;
+
+    onInit(canvas: fabric.Canvas): void {
         this.createGrid();
     }
 
     private createGrid() {
+        if (this.canvas === null) throw new Error('Canvas is null');
         const canvas = this.canvas;
         const visible = this.getState();
         const lightProperties = { stroke: '#00888844', selectable: false, name: 'gridLine', visible };
         const darkerProperties = { stroke: '#00888888', selectable: false, name: 'gridLine', visible };
-        const canvasWidth = canvas.width;
-        const canvasHeight = canvas.height;
+        const canvasWidth = canvas.width ?? 600;
+        const canvasHeight = canvas.height ?? 600;
         const lines = 20;
         const darkerLineGap = 5;
         for (let hLines = 0; hLines < lines; hLines++) {
@@ -48,7 +49,4 @@ export class ShowGridPlugin extends Plugin<boolean> {
     onEvent(event: fabric.IEvent): void {
     }
 
-    getExposedProperty(): ExposedPropertyType[] {
-        return [];
-    }
 }

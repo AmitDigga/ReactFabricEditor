@@ -1,18 +1,18 @@
 import { fabric } from 'fabric';
-import { ExposedPropertyType, Plugin } from '../core/Plugin';
+import { Plugin } from '../core/Plugin';
 
 export class CreateRectanglePlugin extends Plugin<boolean> {
 
-    private canvas: fabric.Canvas;
-    private rect: fabric.Rect;
-    private origin: fabric.Point;
 
-    init(canvas: fabric.Canvas) {
+    private rect: fabric.Rect | null = null;
+    private origin: fabric.Point | null = null;
+
+    onInit(canvas: fabric.Canvas): void {
         this.onEvent = this.onEvent.bind(this);
-        this.canvas = canvas;
     }
 
     public onStateChange(newState: boolean, _previousState: boolean): void {
+        if (this.canvas === null) throw new Error('Canvas is null');
         if (newState) {
             this.createAndAddRect();
             this.canvas.on('mouse:move', this.onEvent);
@@ -27,10 +27,12 @@ export class CreateRectanglePlugin extends Plugin<boolean> {
     }
 
     createAndAddRect() {
+        if (this.canvas === null) throw new Error('Canvas is null');
         this.rect = new fabric.Rect({
             left: 100,
             top: 100,
-            fill: 'red',
+            fill: '#880000',
+            stroke: '#000001',
             width: 20,
             height: 20,
             selectable: true,
@@ -39,17 +41,20 @@ export class CreateRectanglePlugin extends Plugin<boolean> {
     }
 
     onEvent(event: fabric.IEvent) {
-        const isMouseDown = event.e.type === 'mousedown';
-        const isOriginSet = !!this.origin;
-        if (isMouseDown) {
-            if (isOriginSet) {
+        if (this.canvas === null) throw new Error('Canvas is null');
+        if (this.rect === null) throw new Error('Rect is null');
+        if (!event.pointer) {
+            return;
+        }
+        if (event.e.type === "mousedown") {
+            if (!!this.origin) {
                 this.createAndAddRect();
                 this.origin = null;
             } else {
                 this.origin = new fabric.Point(event.pointer.x, event.pointer.y);
             }
         } else {
-            if (isOriginSet) {
+            if (!!this.origin) {
                 this.rect.set('width', event.pointer.x - this.origin.x);
                 this.rect.set('height', event.pointer.y - this.origin.y);
             } else {
@@ -60,7 +65,4 @@ export class CreateRectanglePlugin extends Plugin<boolean> {
         this.canvas.renderAll();
     }
 
-    getExposedProperty(): ExposedPropertyType[] {
-        return [];
-    }
 }

@@ -1,17 +1,22 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect } from 'react';
 import Editor from './components/Editor';
 import Menu from './components/Menu';
 import { PropertyWindows } from './components/PropertyWindow';
 import { MenuItem } from "./lib/core/MenuItem";
-import { OnChange } from './lib/core/Plugin';
+import { SelectedObjectLeftPositionProperty } from "./lib/properties/SelectedObjectLeftPositionProperty";
 import { CreateRectanglePlugin } from './lib/plugins/CreateRectanglePlugin';
 import { SelectPlugin } from './lib/plugins/SelectPlugin';
 import { ShowGridPlugin } from './lib/plugins/ShowGridPlugin';
 import { XYLocationPlugin } from './lib/plugins/XYLocationPlugin';
+import { useForceUpdate } from './hooks/useForceUpdate';
+import { SelectedObjectFillColorProperty } from './lib/properties/SelectedObjectFillColorProperty';
 
 
 const plugins = [
-    new SelectPlugin('Selection', false),
+    new SelectPlugin('Selection', false, [
+        new SelectedObjectLeftPositionProperty("Left Position", "number", 0),
+        new SelectedObjectFillColorProperty("Fill Color", "color", "#000001"),
+    ]),
     new ShowGridPlugin('Show Grid', false),
     new CreateRectanglePlugin('Create Rectangle', false),
     new XYLocationPlugin('XY Position', false),
@@ -49,30 +54,15 @@ const STYLES: Record<string, CSSProperties> = {
     editor: { border: '1px solid black' },
 }
 
-export function useForceUpdate() {
-    const [_, setValue] = useState(0); // integer state
-    return () => setValue(value => value + 1); // update the state to force render
-}
-
 function App() {
     const forceUpdate = useForceUpdate();
     const newMenuItems = menuItems.map(menuItem => {
         return {
             ...menuItem,
-            value: plugins.find(plugin => plugin.getName() === menuItem.name)?.getState()
+            value: plugins.find(plugin => plugin.getName() === menuItem.name)?.getState() ?? false
         }
     });
 
-    useEffect(() => {
-        const onChangeFunction: OnChange<any> = () => {
-            forceUpdate();
-            console.log("updated");
-        };
-        plugins.forEach((plugin) => plugin.addPropertyChangeListener(onChangeFunction))
-        return () => {
-            plugins.forEach((plugin) => plugin.removePropertyChangeListener(onChangeFunction))
-        }
-    }, []);
 
     return (
         <div>
@@ -112,7 +102,11 @@ function App() {
 
                     {
                         plugins.map(p =>
-                            <PropertyWindows key={p.getName()} windowTitle={p.getName()} properties={p.getExposedProperty()}></PropertyWindows>
+                            <PropertyWindows
+                                key={p.getName()}
+                                windowTitle={p.getName()}
+                                properties={p.properties}
+                            />
                         )
                     }
                 </div>
