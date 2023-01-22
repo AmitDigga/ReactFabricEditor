@@ -14,8 +14,8 @@ import { SelectedObjectFillColorProperty } from './lib/properties/SelectedObject
 
 const plugins = [
     new SelectPlugin('Selection', false, [
-        new SelectedObjectLeftPositionProperty("Left Position", "number"),
-        new SelectedObjectFillColorProperty("Fill Color", "color"),
+        new SelectedObjectLeftPositionProperty("Left Position", "number", 0),
+        new SelectedObjectFillColorProperty("Fill Color", "color", "#000001"),
     ]),
     new ShowGridPlugin('Show Grid', false),
     new CreateRectanglePlugin('Create Rectangle', false),
