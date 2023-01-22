@@ -21,23 +21,26 @@ export class CreateRectanglePlugin extends Plugin<boolean> {
             this.canvas.off('mouse:move', this.onEvent);
             this.canvas.off('mouse:down', this.onEvent);
             if (this.rect) {
-                this.canvas.remove(this.rect);
+                this.context?.removeObject(this.canvas, this.rect);
             }
         }
     }
 
     createAndAddRect() {
         if (this.canvas === null) throw new Error('Canvas is null');
+        // if (!this.rect) {
         this.rect = new fabric.Rect({
             left: 100,
             top: 100,
-            fill: '#880000',
-            stroke: '#000001',
+            fill: '#00000000',
+            stroke: '#0000000',
+            strokeWidth: 1,
             width: 20,
             height: 20,
             selectable: true,
         });
-        this.canvas.add(this.rect);
+        this.context?.addObject(this.canvas, this.rect, 'rect')
+        // }
     }
 
     onEvent(event: fabric.IEvent) {

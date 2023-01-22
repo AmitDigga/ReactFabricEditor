@@ -1,19 +1,18 @@
 import { fabric } from 'fabric';
+import { BaseState, EditorObject, FabricContext } from '../../components/Editor';
 import { Property } from '../core/Property';
-import { SelectedObjectProperty } from './SelectedObjectProperty';
 
 
-export class EveryObjectProperty extends Property<fabric.Object[]> {
-    init(canvas: fabric.Canvas): void {
-        super.init(canvas);
+export class EveryObjectProperty extends Property<EditorObject[]> {
+    onInit(canvas: fabric.Canvas, context: FabricContext<BaseState>) {
         canvas.on('object:added', () => this.change$.next(this.getValue()));
         canvas.on('object:removed', () => this.change$.next(this.getValue()));
     }
     getValue() {
-        return this.canvas?.getObjects() || [];
+        return this.context?.state.editorObjects ?? [];
     }
-    setValueInternal(value: fabric.Object[], previousValue: fabric.Object[]) {
-        this.canvas?.clear();
-        this.canvas?.add(...value);
+    setValueInternal(value: EditorObject[], previousValue: EditorObject[]) {
+        // this.canvas?.clear();
+        // this.canvas?.add(...value);
     }
 }

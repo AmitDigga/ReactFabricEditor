@@ -1,5 +1,5 @@
-import React, { CSSProperties, useEffect } from 'react';
-import Editor from './components/Editor';
+import React, { CSSProperties, useState } from 'react';
+import Editor, { BaseState, FabricContext } from './components/Editor';
 import Menu from './components/Menu';
 import { PropertyWindows } from './components/PropertyWindow';
 import { MenuItem } from "./lib/core/MenuItem";
@@ -68,6 +68,10 @@ function App() {
         }
     });
 
+    const [context] = useState(new FabricContext<BaseState>({
+        objectMap: new Map(),
+        editorObjects: [],
+    }));
 
     return (
         <div>
@@ -79,6 +83,7 @@ function App() {
                     <Editor
                         plugins={plugins}
                         properties={properties}
+                        context={context}
                     />
                 </div>
                 <div style={{ gridArea: 'menu' }}>
@@ -116,8 +121,18 @@ function App() {
                                     <h5>{property.name}</h5>
                                     <div>
                                         {property.getValue().map(p => {
-                                            return <div key={p.name}>
-                                                <h6>{p.name}</h6>
+                                            return <div
+                                                onClick={(e) => {
+                                                    property.canvas?.setActiveObject(p.fabricObject);
+                                                    property.canvas?.requestRenderAll();
+                                                    forceUpdate();
+                                                }}
+                                                style={{
+                                                    padding: 5,
+                                                    backgroundColor: p.fabricObject === property.canvas?.getActiveObject() ? 'lightblue' : 'white'
+                                                }}
+                                                key={p.name}>
+                                                <div>{p.name}</div>
                                             </div>
                                         })}
                                     </div>

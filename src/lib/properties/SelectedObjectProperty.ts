@@ -1,4 +1,5 @@
 import { fabric } from 'fabric';
+import { FabricContext } from '../../components/Editor';
 import { Property } from '../core/Property';
 
 
@@ -6,8 +7,7 @@ export abstract class SelectedObjectProperty<T> extends Property<T> {
     constructor(name: string, type: string, private defaultValue: any) {
         super(name, type);
     }
-    init(canvas: fabric.Canvas): void {
-        super.init(canvas);
+    onInit(canvas: fabric.Canvas, context: FabricContext<any>): void {
         canvas.on('selection:created', () => {
             this.change$.next(this.getValue());
         });
