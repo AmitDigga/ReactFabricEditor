@@ -9,10 +9,14 @@ import { SelectPlugin } from './lib/plugins/SelectPlugin';
 import { ShowGridPlugin } from './lib/plugins/ShowGridPlugin';
 import { XYLocationPlugin } from './lib/plugins/XYLocationPlugin';
 import { useForceUpdate } from './hooks/useForceUpdate';
+import { SelectedObjectFillColorProperty } from './lib/properties/SelectedObjectFillColorProperty';
 
 
 const plugins = [
-    new SelectPlugin('Selection', false, [new SelectedObjectLeftPositionProperty("Left Position", "number")]),
+    new SelectPlugin('Selection', false, [
+        new SelectedObjectLeftPositionProperty("Left Position", "number"),
+        new SelectedObjectFillColorProperty("Fill Color", "color"),
+    ]),
     new ShowGridPlugin('Show Grid', false),
     new CreateRectanglePlugin('Create Rectangle', false),
     new XYLocationPlugin('XY Position', false),

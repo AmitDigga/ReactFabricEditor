@@ -31,7 +31,8 @@ export class CreateRectanglePlugin extends Plugin<boolean> {
         this.rect = new fabric.Rect({
             left: 100,
             top: 100,
-            fill: 'red',
+            fill: '#880000',
+            stroke: '#000001',
             width: 20,
             height: 20,
             selectable: true,
