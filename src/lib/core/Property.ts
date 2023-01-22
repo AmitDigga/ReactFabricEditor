@@ -2,7 +2,7 @@ import { fabric } from 'fabric';
 import { Subject } from 'rxjs';
 
 
-export abstract class Property {
+export abstract class Property<T> {
     change$: Subject<any> = new Subject<any>();
     canvas: fabric.Canvas | undefined = undefined;
     constructor(
@@ -12,7 +12,7 @@ export abstract class Property {
     init(canvas: fabric.Canvas): void {
         this.canvas = canvas;
     };
-    setValue(value: any) {
+    setValue(value: T) {
         const previousValue = this.getValue();
         if (previousValue === value) {
             return;
@@ -21,7 +21,7 @@ export abstract class Property {
         this.change$.next(value);
     }
 
-    abstract getValue(): any;
-    abstract setValueInternal(value: any, previousValue: any): void;
+    abstract getValue(): T;
+    abstract setValueInternal(value: T, previousValue: T): void;
 
 }

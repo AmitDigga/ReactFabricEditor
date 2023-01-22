@@ -2,6 +2,7 @@ import React, { useEffect, CSSProperties } from 'react';
 import { useForceUpdate } from "../hooks/useForceUpdate";
 import { useFabricCanvas } from '../hooks/useFabricCanvas';
 import { Plugin } from '../lib/core/Plugin';
+import { Property } from '../lib/core/Property';
 
 
 const STYLES: Record<string, CSSProperties> = {
@@ -13,6 +14,7 @@ const STYLES: Record<string, CSSProperties> = {
 
 export type EditorProps = {
     plugins: Plugin<boolean>[];
+    properties: Property<any>[];
 }
 
 function Editor(props: EditorProps) {
@@ -23,6 +25,7 @@ function Editor(props: EditorProps) {
     useEffect(() => {
         if (!canvas) return;
         props.plugins.forEach(p => p.init(canvas));
+        props.properties.forEach(p => p.init(canvas));
 
     }, [!!canvas])
     useEffect(() => {

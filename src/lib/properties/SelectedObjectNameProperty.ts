@@ -2,13 +2,11 @@ import { fabric } from 'fabric';
 import { SelectedObjectProperty } from './SelectedObjectProperty';
 
 
-export class SelectedObjectLeftPositionProperty extends SelectedObjectProperty<number | undefined> {
+export class SelectedObjectNameProperty extends SelectedObjectProperty<string | undefined> {
     getValueFromSelectedObject(obj: fabric.Object) {
-        return obj.left;
+        return obj.name;
     }
     setValueToSelectedObject(obj: fabric.Object, value: any) {
-        if (!isNaN(value)) {
-            obj.set('left', parseInt(value));
-        }
+        obj.set('name', value);
     }
 }
