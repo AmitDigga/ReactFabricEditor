@@ -12,6 +12,8 @@ import { SelectedObjectFillColorProperty } from './lib/properties/SelectedObject
 import { Plugin } from './lib/core/Plugin';
 import { EveryObjectProperty } from './lib/properties/EveryObjectProperty';
 import { SelectedObjectNameProperty } from './lib/properties/SelectedObjectNameProperty';
+import { Property } from './lib/core/Property';
+import { ListObjectTree } from './components/windows/ListObjectTree';
 
 
 const plugins: Plugin<boolean>[] = [
@@ -116,27 +118,8 @@ function App() {
                         windowTitle={'Exposed Properties'}
                         properties={properties}
                         customPropertyRenderer={{
-                            'every-object-property': (property: EveryObjectProperty) => {
-                                return <div>
-                                    <h5>{property.name}</h5>
-                                    <div>
-                                        {property.getValue().map(p => {
-                                            return <div
-                                                onClick={(e) => {
-                                                    property.canvas?.setActiveObject(p.fabricObject);
-                                                    property.canvas?.requestRenderAll();
-                                                    forceUpdate();
-                                                }}
-                                                style={{
-                                                    padding: 5,
-                                                    backgroundColor: p.fabricObject === property.canvas?.getActiveObject() ? 'lightblue' : 'white'
-                                                }}
-                                                key={p.name}>
-                                                <div>{p.name}</div>
-                                            </div>
-                                        })}
-                                    </div>
-                                </div>
+                            'every-object-property': (property: Property<any>) => {
+                                return <ListObjectTree context={context} property={property as EveryObjectProperty} />
                             }
                         }}
                     />

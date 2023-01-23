@@ -53,6 +53,22 @@ export class FabricContext<State extends BaseState>{
         canvas.remove(object);
     }
 
+    getEditorObjectById(id: string) {
+        return this.state.editorObjects.find(o => o.id === id);
+    }
+
+    setParentById(childId: string, parentId: string) {
+        const { editorObjects } = this.state;
+        const parent = editorObjects.find(o => o.id === parentId);
+        const child = editorObjects.find(o => o.id === childId);
+        if (!parent) {
+            throw new Error("Parent object not found");
+        }
+        if (!child) {
+            throw new Error("Child object not found");
+        }
+        this.setParent(child.fabricObject, parent.fabricObject);
+    }
     setParent(child: fabric.Object, parent: fabric.Object) {
         const { objectMap } = this.state;
         const parentEditorObject = objectMap.get(parent);
