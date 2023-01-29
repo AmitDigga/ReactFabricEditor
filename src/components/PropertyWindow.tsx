@@ -4,14 +4,22 @@ import { ExposedProperty } from './ExposedProperty';
 
 export type PropertyWindowsProps = {
     windowTitle: string;
-    properties: Property[];
+    properties: Property<any>[];
+    customPropertyRenderer?: {
+        [key: string]: (property: Property<any>) => JSX.Element;
+    };
 };
 export function PropertyWindows(props: PropertyWindowsProps) {
     const child = props.properties.length === 0 ?
         <div>Empty</div> :
         <>
             {props.properties.map((p) => {
-                return <ExposedProperty key={p.name} property={p} />
+                if (props.customPropertyRenderer?.[p.type] !== undefined) {
+                    return props.customPropertyRenderer[p.type](p);
+                }
+                else {
+                    return <ExposedProperty key={p.name} property={p} />
+                }
             })}
         </>
 

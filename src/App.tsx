@@ -1,37 +1,44 @@
-import React, { CSSProperties, useEffect } from 'react';
-import Editor from './components/Editor';
+import React, { CSSProperties, useState } from 'react';
+import Editor, { BaseState, FabricContext } from './components/Editor';
 import Menu from './components/Menu';
 import { PropertyWindows } from './components/PropertyWindow';
 import { MenuItem } from "./lib/core/MenuItem";
 import { SelectedObjectLeftPositionProperty } from "./lib/properties/SelectedObjectLeftPositionProperty";
 import { CreateRectanglePlugin } from './lib/plugins/CreateRectanglePlugin';
 import { SelectPlugin } from './lib/plugins/SelectPlugin';
-import { ShowGridPlugin } from './lib/plugins/ShowGridPlugin';
 import { XYLocationPlugin } from './lib/plugins/XYLocationPlugin';
 import { useForceUpdate } from './hooks/useForceUpdate';
 import { SelectedObjectFillColorProperty } from './lib/properties/SelectedObjectFillColorProperty';
+import { Plugin } from './lib/core/Plugin';
+import { EveryObjectProperty } from './lib/properties/EveryObjectProperty';
+import { SelectedObjectNameProperty } from './lib/properties/SelectedObjectNameProperty';
+import { Property } from './lib/core/Property';
+import { ListObjectTree } from './components/windows/ListObjectTree';
 
 
-const plugins = [
-    new SelectPlugin('Selection', false, [
-        new SelectedObjectLeftPositionProperty("Left Position", "number", 0),
-        new SelectedObjectFillColorProperty("Fill Color", "color", "#000001"),
-    ]),
-    new ShowGridPlugin('Show Grid', false),
+const plugins: Plugin<boolean>[] = [
+    new SelectPlugin('Selection', false),
+    // new ShowGridPlugin('Show Grid', false),
     new CreateRectanglePlugin('Create Rectangle', false),
     new XYLocationPlugin('XY Position', false),
 ]
+const properties = [
+    new SelectedObjectNameProperty("Name", "string", ""),
+    new SelectedObjectLeftPositionProperty("Left Position", "number", 0),
+    new SelectedObjectFillColorProperty("Fill Color", "color", "#000001"),
+    new EveryObjectProperty("Every Object", "every-object-property")
+];
 const menuItems: MenuItem[] = [
     {
         name: 'Selection',
         icon: undefined,
         value: false,
     },
-    {
-        name: 'Show Grid',
-        icon: undefined,
-        value: false,
-    },
+    // {
+    //     name: 'Show Grid',
+    //     icon: undefined,
+    //     value: false,
+    // },
     {
         name: 'Create Rectangle',
         icon: undefined,
@@ -63,6 +70,10 @@ function App() {
         }
     });
 
+    const [context] = useState(new FabricContext<BaseState>({
+        objectMap: new Map(),
+        editorObjects: [],
+    }));
 
     return (
         <div>
@@ -71,7 +82,11 @@ function App() {
             </center>
             <div style={STYLES.container}>
                 <div style={{ gridArea: 'editor' }}>
-                    <Editor plugins={plugins} />
+                    <Editor
+                        plugins={plugins}
+                        properties={properties}
+                        context={context}
+                    />
                 </div>
                 <div style={{ gridArea: 'menu' }}>
                     <Menu
@@ -81,14 +96,14 @@ function App() {
                                 case 'Selection':
                                     plugins[0].setState(value);
                                     break;
-                                case 'Show Grid':
+                                // case 'Show Grid':
+                                //     plugins[1].setState(value);
+                                //     break;
+                                case 'Create Rectangle':
                                     plugins[1].setState(value);
                                     break;
-                                case 'Create Rectangle':
-                                    plugins[2].setState(value);
-                                    break;
                                 case 'XY Position':
-                                    plugins[3].setState(value);
+                                    plugins[2].setState(value);
                                     break;
                                 default:
                                     break;
@@ -99,16 +114,15 @@ function App() {
                 </div>
                 <div style={{ gridArea: 'property-windows' }}>
                     <h4>Properties</h4>
-
-                    {
-                        plugins.map(p =>
-                            <PropertyWindows
-                                key={p.getName()}
-                                windowTitle={p.getName()}
-                                properties={p.properties}
-                            />
-                        )
-                    }
+                    <PropertyWindows
+                        windowTitle={'Exposed Properties'}
+                        properties={properties}
+                        customPropertyRenderer={{
+                            'every-object-property': (property: Property<any>) => {
+                                return <ListObjectTree context={context} property={property as EveryObjectProperty} />
+                            }
+                        }}
+                    />
                 </div>
             </div>
         </div>
