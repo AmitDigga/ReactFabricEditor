@@ -18,7 +18,7 @@ export function ListObjectTree({ property, context }: { property: EveryObjectPro
 export function DisplayParentEditorObject(props: { object: EditorObject; canvas?: fabric.Canvas; context: FabricContext<BaseState>; }) {
     const forceUpdate = useForceUpdate();
     const { object, canvas } = props;
-    function allowDrop(ev) {
+    function allowDrop(ev: React.DragEvent<HTMLDivElement>) {
         ev.preventDefault();
     }
     return <div

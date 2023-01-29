@@ -18,7 +18,7 @@ export class EditorObject {
     parent: EditorObject | null;
     children: EditorObject[];
     fabricObject: fabric.Object;
-    #dataOnClick: {
+    dataOnClick: {
         parent: TransformData;
         child: TransformData;
     };
@@ -30,7 +30,7 @@ export class EditorObject {
         this.fabricObject = fabricObject;
         this.parent = null;
         this.children = [];
-        this.#dataOnClick = {
+        this.dataOnClick = {
             parent: getObjectData(fabricObject),
             child: getObjectData(fabricObject),
         }
@@ -56,32 +56,32 @@ export class EditorObject {
         this.parent = parentEditorObject;
         this.parent.addChild(this);
     }
-    onMouseDown(e) {
+    onMouseDown(e: any) {
         if (!this.parent) return;
-        this.#dataOnClick.parent = getObjectData(this.parent.fabricObject);
-        this.#dataOnClick.child = getObjectData(this.fabricObject);
+        this.dataOnClick.parent = getObjectData(this.parent.fabricObject);
+        this.dataOnClick.child = getObjectData(this.fabricObject);
     };
-    onMove(e) {
+    onMove(e: any) {
         if (!this.parent) return;
         this.fabricObject.set({
-            left: this.#dataOnClick.child.left + (this.parent.fabricObject.left ?? 0) - this.#dataOnClick.parent.left,
-            top: this.#dataOnClick.child.top + (this.parent.fabricObject.top ?? 0) - this.#dataOnClick.parent.top,
+            left: this.dataOnClick.child.left + (this.parent.fabricObject.left ?? 0) - this.dataOnClick.parent.left,
+            top: this.dataOnClick.child.top + (this.parent.fabricObject.top ?? 0) - this.dataOnClick.parent.top,
         });
     }
-    onScale(e) {
+    onScale(e: any) {
         if (!this.parent) return;
-        const positionDelta = getPositionDelta(this.#dataOnClick.parent, this.#dataOnClick.child);
+        const positionDelta = getPositionDelta(this.dataOnClick.parent, this.dataOnClick.child);
         const newScale = {
-            scaleXFactor: (this.parent.fabricObject.scaleX ?? 1) / this.#dataOnClick.parent.scaleX,
-            scaleYFactor: (this.parent.fabricObject.scaleY ?? 1) / this.#dataOnClick.parent.scaleY,
+            scaleXFactor: (this.parent.fabricObject.scaleX ?? 1) / this.dataOnClick.parent.scaleX,
+            scaleYFactor: (this.parent.fabricObject.scaleY ?? 1) / this.dataOnClick.parent.scaleY,
         };
         const newPosition = {
-            left: this.#dataOnClick.parent.left + positionDelta.deltaX * newScale.scaleXFactor,
-            top: this.#dataOnClick.parent.top + positionDelta.deltaY * newScale.scaleYFactor,
+            left: this.dataOnClick.parent.left + positionDelta.deltaX * newScale.scaleXFactor,
+            top: this.dataOnClick.parent.top + positionDelta.deltaY * newScale.scaleYFactor,
         };
         const newSize = {
-            width: this.#dataOnClick.child.width * newScale.scaleXFactor,
-            height: this.#dataOnClick.child.height * newScale.scaleYFactor,
+            width: this.dataOnClick.child.width * newScale.scaleXFactor,
+            height: this.dataOnClick.child.height * newScale.scaleYFactor,
         };
         this.fabricObject.set({
             ...newPosition,
