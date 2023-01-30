@@ -8,6 +8,9 @@ import { PropertyWindows, Menu, MenuItem, MenuItemProps, Editor, ListObjectTree 
 import { Property } from './lib/core';
 import { FabricContext } from './components/FabricContext';
 import { SelectedObjectSelectableProperty } from './lib/properties/SelectedObjectSelectableProperty';
+import { SelectedObjectWidthPositionProperty } from './lib/properties/SelectedObjectWidthPositionProperty';
+import { SelectedObjectHeightPositionProperty } from './lib/properties/SelectedObjectHeightPositionProperty';
+import { SelectedObjectTopPositionProperty } from './lib/properties/SelectedObjectTopPositionProperty copy';
 
 
 const plugins: Plugin[] = [
@@ -18,7 +21,10 @@ const plugins: Plugin[] = [
 ]
 const properties = [
     new SelectedObjectNameProperty("Name", "string", plugins[0], ""),
-    new SelectedObjectLeftPositionProperty("Left Position", "number", plugins[0], 0),
+    new SelectedObjectLeftPositionProperty("X", "number", plugins[0], 0),
+    new SelectedObjectTopPositionProperty("Y", "number", plugins[0], 0),
+    new SelectedObjectWidthPositionProperty("Width", "number", plugins[0], 0),
+    new SelectedObjectHeightPositionProperty("Height", "number", plugins[0], 0),
     new SelectedObjectFillColorProperty("Fill Color", "color", plugins[0], "#000001"),
     new SelectedObjectSelectableProperty("Selectable", "boolean", plugins[0], true),
     new EveryObjectProperty("Every Object", "every-object-property", "global")
