@@ -10,10 +10,10 @@ export type MenuProps = {
 
 }
 
-function Menu(props: MenuProps) {
+export function Menu(props: MenuProps) {
     const Renderer = props.customRenderer ?? MenuItem;
     return (
-        <div id="menu">
+        <div id="menu" style={{ display: 'flex', flexDirection: 'column' }}>
             {
                 props.context.plugins.map(
                     plugin => <Renderer

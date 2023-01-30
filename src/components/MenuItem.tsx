@@ -17,3 +17,6 @@ export function MenuItem({ plugin, selected, onValueChange }: MenuItemProps) {
         }}></input>
     </div>;
 }
+
+
+export default MenuItem;

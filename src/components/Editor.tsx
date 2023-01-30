@@ -205,7 +205,7 @@ export type EditorProps = {
     context: FabricContext<any>;
 }
 
-function Editor(props: EditorProps) {
+export function Editor(props: EditorProps) {
     const forceUpdate = useForceUpdate();
 
     const { fabricCanvas: canvasRef } = useFabricCanvas({ canvasId: 'canvas' });

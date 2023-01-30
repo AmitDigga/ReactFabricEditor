@@ -28,3 +28,4 @@ export function PropertyWindows(props: PropertyWindowsProps) {
         {child}
     </div>
 }
+export default PropertyWindows;

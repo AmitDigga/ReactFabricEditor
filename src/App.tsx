@@ -1,18 +1,11 @@
 import React, { CSSProperties, useState } from 'react';
-import Editor, { BaseState, FabricContext } from './components/Editor';
-import Menu from './components/Menu';
-import { PropertyWindows } from './components/PropertyWindow';
-import { SelectedObjectLeftPositionProperty } from "./lib/properties/SelectedObjectLeftPositionProperty";
-import { CreateRectanglePlugin } from './lib/plugins/CreateRectanglePlugin';
-import { SelectPlugin } from './lib/plugins/SelectPlugin';
-import { XYLocationPlugin } from './lib/plugins/XYLocationPlugin';
 import { useForceUpdate } from './hooks/useForceUpdate';
-import { SelectedObjectFillColorProperty } from './lib/properties/SelectedObjectFillColorProperty';
 import { Plugin } from './lib/core/Plugin';
-import { EveryObjectProperty } from './lib/properties/EveryObjectProperty';
-import { SelectedObjectNameProperty } from './lib/properties/SelectedObjectNameProperty';
-import { Property } from './lib/core/Property';
-import { ListObjectTree } from './components/windows/ListObjectTree';
+import { SelectPlugin, CreateRectanglePlugin, XYLocationPlugin } from './lib/plugins';
+import { SelectedObjectNameProperty, SelectedObjectLeftPositionProperty, SelectedObjectFillColorProperty, EveryObjectProperty } from './lib/properties';
+import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon } from '@mui/icons-material';
+import { PropertyWindows, Menu, MenuItem, MenuItemProps, Editor, FabricContext, BaseState, ListObjectTree } from './components';
+import { Property } from './lib/core';
 
 
 const plugins: Plugin[] = [
@@ -36,6 +29,31 @@ const STYLES: Record<string, CSSProperties> = {
         gridTemplateRows: '250px 1fr'
     },
     editor: { border: '1px solid black' },
+}
+
+function getIconFor(plugin: Plugin) {
+    switch (plugin.getName()) {
+        case 'Selection':
+            return HighlightAltOutlined;
+        case 'Create Rectangle':
+            return RectangleOutlined;
+        default:
+            return MenuIcon;
+    }
+}
+
+function CustomMenuItem(props: MenuItemProps) {
+    const { plugin, selected } = props;
+    const color = selected ? 'primary' : 'secondary';
+    const Icon = getIconFor(plugin);
+    return (
+        <Icon
+            style={{ padding: 5 }}
+            component={Icon}
+            color={color}
+            onClick={() => { props.onValueChange(plugin, true) }}
+        />
+    )
 }
 
 function App() {
@@ -66,6 +84,7 @@ function App() {
                             context.selectPlugin(plugin)
                             forceUpdate();
                         }}
+                        customRenderer={CustomMenuItem}
                     />
                 </div>
                 <div style={{ gridArea: 'property-windows' }}>
