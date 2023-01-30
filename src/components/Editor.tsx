@@ -3,6 +3,7 @@ import { useForceUpdate } from "../hooks/useForceUpdate";
 import { useFabricCanvas } from '../hooks/useFabricCanvas';
 import { Plugin } from '../lib/core/Plugin';
 import { Property } from '../lib/core/Property';
+import { MenuItem } from '../lib/core/MenuItem';
 
 
 const STYLES: Record<string, CSSProperties> = {
@@ -104,9 +105,28 @@ export class EditorObject {
 export type BaseState = {
     editorObjects: EditorObject[];
     objectMap: Map<fabric.Object, EditorObject>;
+    selectedMenuItem: MenuItem;
 }
 export class FabricContext<State extends BaseState>{
-    constructor(public state: State) { }
+    constructor(
+        public state: State,
+        public plugins: Plugin[]
+    ) { }
+
+
+    selectMenuItem(menuItem: MenuItem) {
+        const previousMenuItem = this.state.selectedMenuItem;
+        this.plugins.forEach(p => {
+            if (p.getName() === previousMenuItem.name) {
+                p.onSelected(false)
+            }
+            if (p.getName() === menuItem.name) {
+                p.onSelected(true)
+            }
+        })
+        this.state.selectedMenuItem = menuItem;
+    }
+
     updateState(state: State) {
         this.state = state;
     }
@@ -182,7 +202,6 @@ function getRandomUid(): string {
 
 
 export type EditorProps = {
-    plugins: Plugin<boolean>[];
     properties: Property<any>[];
     context: FabricContext<any>;
 }
@@ -194,7 +213,7 @@ function Editor(props: EditorProps) {
     const canvas = canvasRef.current;
     useEffect(() => {
         if (!canvas) return;
-        props.plugins.forEach(p => p.init(canvas, props.context));
+        props.context.plugins.forEach(p => p.init(canvas, props.context));
         props.properties.forEach(p => p.init(canvas, props.context));
 
     }, [!!canvas])

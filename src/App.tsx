@@ -16,7 +16,7 @@ import { Property } from './lib/core/Property';
 import { ListObjectTree } from './components/windows/ListObjectTree';
 
 
-const plugins: Plugin<boolean>[] = [
+const plugins: Plugin[] = [
     new SelectPlugin('Selection', false),
     // new ShowGridPlugin('Show Grid', false),
     new CreateRectanglePlugin('Create Rectangle', false),
@@ -32,7 +32,6 @@ const menuItems: MenuItem[] = [
     {
         name: 'Selection',
         icon: undefined,
-        value: false,
     },
     // {
     //     name: 'Show Grid',
@@ -42,12 +41,10 @@ const menuItems: MenuItem[] = [
     {
         name: 'Create Rectangle',
         icon: undefined,
-        value: false,
     },
     {
         name: 'XY Position',
         icon: undefined,
-        value: false,
     },
 ]
 
@@ -66,14 +63,16 @@ function App() {
     const newMenuItems = menuItems.map(menuItem => {
         return {
             ...menuItem,
-            value: plugins.find(plugin => plugin.getName() === menuItem.name)?.getState() ?? false
+            // value: plugins.find(plugin => plugin.getName() === menuItem.name)?.getState() ?? false
         }
     });
 
     const [context] = useState(new FabricContext<BaseState>({
         objectMap: new Map(),
         editorObjects: [],
-    }));
+        selectedMenuItem: menuItems[0],
+    },
+        plugins));
 
     return (
         <div>
@@ -83,7 +82,6 @@ function App() {
             <div style={STYLES.container}>
                 <div style={{ gridArea: 'editor' }}>
                     <Editor
-                        plugins={plugins}
                         properties={properties}
                         context={context}
                     />
@@ -91,23 +89,9 @@ function App() {
                 <div style={{ gridArea: 'menu' }}>
                     <Menu
                         menuItems={newMenuItems}
+                        selectedMenuItem={context.state.selectedMenuItem}
                         onValueChange={(menuItem, value) => {
-                            switch (menuItem.name) {
-                                case 'Selection':
-                                    plugins[0].setState(value);
-                                    break;
-                                // case 'Show Grid':
-                                //     plugins[1].setState(value);
-                                //     break;
-                                case 'Create Rectangle':
-                                    plugins[1].setState(value);
-                                    break;
-                                case 'XY Position':
-                                    plugins[2].setState(value);
-                                    break;
-                                default:
-                                    break;
-                            }
+                            context.selectMenuItem(menuItem)
                             forceUpdate();
                         }}
                     />

@@ -1,7 +1,7 @@
 import { fabric } from 'fabric';
 import { Plugin } from '../core/Plugin';
 
-export class CreateRectanglePlugin extends Plugin<boolean> {
+export class CreateRectanglePlugin extends Plugin {
 
 
     private rect: fabric.Rect | null = null;
@@ -11,7 +11,7 @@ export class CreateRectanglePlugin extends Plugin<boolean> {
         this.onEvent = this.onEvent.bind(this);
     }
 
-    public onStateChange(newState: boolean, _previousState: boolean): void {
+    public onSelected(newState: boolean): void {
         if (this.canvas === null) throw new Error('Canvas is null');
         if (newState) {
             this.createAndAddRect();

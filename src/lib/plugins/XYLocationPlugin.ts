@@ -2,7 +2,7 @@ import { fabric } from 'fabric';
 import { Plugin } from '../core/Plugin';
 
 
-export class XYLocationPlugin extends Plugin<boolean>{
+export class XYLocationPlugin extends Plugin {
 
     private text: fabric.Text | null = null;
 
@@ -13,12 +13,12 @@ export class XYLocationPlugin extends Plugin<boolean>{
             top: 10,
             fontSize: 8,
             fill: 'black',
-            visible: this.getState(),
+            visible: this.isSelected(),
         });
         canvas.add(this.text);
     }
 
-    public onStateChange(newState: boolean, previousState: boolean): void {
+    public onSelected(newState: boolean): void {
         if (this.canvas === null) throw new Error('Canvas is null');
         if (this.text === null) throw new Error('Text is null');
         if (newState) {
