@@ -1,4 +1,4 @@
-import React, { useEffect, CSSProperties, useState } from 'react';
+import React, { useEffect, CSSProperties } from 'react';
 import { useForceUpdate } from "../hooks/useForceUpdate";
 import { useFabricCanvas } from '../hooks/useFabricCanvas';
 import { Plugin } from '../lib/core/Plugin';
@@ -7,8 +7,6 @@ import { Property } from '../lib/core/Property';
 
 const STYLES: Record<string, CSSProperties> = {
     canvas: { border: '1px solid black' },
-    container: { position: 'relative' },
-    menu: { position: 'absolute', top: 0, left: 0, background: '#e8e8e8', borderRadius: 4, padding: 10, display: 'flex', flexDirection: 'column' }
 }
 
 export class EditorObject {
