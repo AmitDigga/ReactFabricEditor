@@ -1,11 +1,11 @@
 import { fabric } from 'fabric';
-import { FabricContext } from '../../components/Editor';
-import { Property } from '../core/Property';
+import { FabricContext } from "../../components/FabricContext";
+import { Property, PropertyScope } from '../core/Property';
 
 
 export abstract class SelectedObjectProperty<T> extends Property<T> {
-    constructor(name: string, type: string, private defaultValue: any) {
-        super(name, type);
+    constructor(name: string, type: string, scope: PropertyScope, private defaultValue: any) {
+        super(name, type, scope);
     }
     onInit(canvas: fabric.Canvas, context: FabricContext<any>): void {
         canvas.on('selection:created', () => {

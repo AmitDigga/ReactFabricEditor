@@ -1,5 +1,5 @@
 import { fabric } from 'fabric';
-import { FabricContext } from '../../components/Editor';
+import { FabricContext } from "../../components/FabricContext";
 import { Property } from './Property';
 
 export abstract class Plugin {

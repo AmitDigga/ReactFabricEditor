@@ -4,8 +4,9 @@ import { Plugin } from './lib/core/Plugin';
 import { SelectPlugin, CreateRectanglePlugin, XYLocationPlugin } from './lib/plugins';
 import { SelectedObjectNameProperty, SelectedObjectLeftPositionProperty, SelectedObjectFillColorProperty, EveryObjectProperty } from './lib/properties';
 import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon } from '@mui/icons-material';
-import { PropertyWindows, Menu, MenuItem, MenuItemProps, Editor, FabricContext, BaseState, ListObjectTree } from './components';
+import { PropertyWindows, Menu, MenuItem, MenuItemProps, Editor, ListObjectTree } from './components';
 import { Property } from './lib/core';
+import { FabricContext } from './components/FabricContext';
 
 
 const plugins: Plugin[] = [
@@ -15,10 +16,10 @@ const plugins: Plugin[] = [
     new XYLocationPlugin('XY Position', false),
 ]
 const properties = [
-    new SelectedObjectNameProperty("Name", "string", ""),
-    new SelectedObjectLeftPositionProperty("Left Position", "number", 0),
-    new SelectedObjectFillColorProperty("Fill Color", "color", "#000001"),
-    new EveryObjectProperty("Every Object", "every-object-property")
+    new SelectedObjectNameProperty("Name", "string", plugins[0], ""),
+    new SelectedObjectLeftPositionProperty("Left Position", "number", plugins[0], 0),
+    new SelectedObjectFillColorProperty("Fill Color", "color", plugins[0], "#000001"),
+    new EveryObjectProperty("Every Object", "every-object-property", "global")
 ];
 
 const STYLES: Record<string, CSSProperties> = {
@@ -58,12 +59,14 @@ function CustomMenuItem(props: MenuItemProps) {
 
 function App() {
     const forceUpdate = useForceUpdate();
-    const [context] = useState(new FabricContext<BaseState>({
+    const [context] = useState(new FabricContext({
         objectMap: new Map(),
         editorObjects: [],
         selectedPluginName: plugins[0].getName(),
     },
-        plugins));
+        plugins,
+        properties,
+    ));
 
     return (
         <div>
@@ -90,8 +93,8 @@ function App() {
                 <div style={{ gridArea: 'property-windows' }}>
                     <h4>Properties</h4>
                     <PropertyWindows
+                        context={context}
                         windowTitle={'Exposed Properties'}
-                        properties={properties}
                         customPropertyRenderer={{
                             'every-object-property': (property: Property<any>) => {
                                 return <ListObjectTree context={context} property={property as EveryObjectProperty} />

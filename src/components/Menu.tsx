@@ -1,10 +1,10 @@
 import React from 'react';
 import { Plugin } from '../lib/core';
-import { BaseState, FabricContext } from './Editor';
+import { FabricContext } from "./FabricContext";
 import { MenuItem, MenuItemProps } from './MenuItem';
 
 export type MenuProps = {
-    context: FabricContext<BaseState>;
+    context: FabricContext;
     onValueChange: (plugin: Plugin, value: boolean) => void;
     customRenderer?: React.FC<MenuItemProps>;
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import { useForceUpdate } from '../../hooks/useForceUpdate';
 import { EveryObjectProperty } from '../../lib/properties/EveryObjectProperty';
-import { FabricContext, BaseState, EditorObject } from '../Editor';
+import { FabricContext } from "../FabricContext";
+import { EditorObject } from "../EditorObject";
 
-export function ListObjectTree({ property, context }: { property: EveryObjectProperty; context: FabricContext<BaseState>; }): JSX.Element {
+export function ListObjectTree({ property, context }: { property: EveryObjectProperty; context: FabricContext; }): JSX.Element {
     const parentObjects = (property.context?.state.editorObjects ?? [])
         .filter(o => o.parent == null);
     return <div>
@@ -15,7 +16,7 @@ export function ListObjectTree({ property, context }: { property: EveryObjectPro
 }
 
 
-export function DisplayParentEditorObject(props: { object: EditorObject; canvas?: fabric.Canvas; context: FabricContext<BaseState>; }) {
+export function DisplayParentEditorObject(props: { object: EditorObject; canvas?: fabric.Canvas; context: FabricContext; }) {
     const forceUpdate = useForceUpdate();
     const { object, canvas } = props;
     function allowDrop(ev: React.DragEvent<HTMLDivElement>) {
