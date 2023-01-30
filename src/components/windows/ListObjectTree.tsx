@@ -1,3 +1,5 @@
+import { DeleteOutline } from '@mui/icons-material';
+import { Icon } from '@mui/material';
 import React from 'react';
 import { useForceUpdate } from '../../hooks/useForceUpdate';
 import { FabricContext, EditorObject } from '../../lib/core';
@@ -33,17 +35,23 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
         onDragStartCapture={(e) => {
             e.dataTransfer.setData('text', object.id);
         }}
-        onClick={(e) => {
-            canvas?.setActiveObject(object.fabricObject);
-            canvas?.requestRenderAll();
-            forceUpdate();
-        }}
         style={{
             padding: 5,
         }}
         key={object.name}>
-        <div>
-            {object.name}
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div
+                onClick={(e) => {
+                    canvas?.setActiveObject(object.fabricObject);
+                    canvas?.requestRenderAll();
+                    forceUpdate();
+                }}>
+                {object.name}
+            </div>
+            <Icon fontSize='small' component={DeleteOutline} onClick={() => {
+                props.context.removeObject(canvas as fabric.Canvas, object.fabricObject);
+            }}></Icon>
+
         </div>
         <div style={{ paddingLeft: 10 }}>
             {object.children.map(child => <DisplayParentEditorObject key={child.id} context={props.context} object={child} canvas={canvas} />)}

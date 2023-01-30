@@ -53,6 +53,12 @@ export class FabricContext<State extends BaseState = BaseState> {
         if (!editorObject) {
             throw new Error("Object not found");
         }
+        if (editorObject.parent) {
+            editorObject.setParent(null);
+        }
+        if (editorObject.children.length > 0) {
+            editorObject.children.forEach(c => this.removeObject(canvas, c.fabricObject));
+        }
         objectMap.delete(object);
         editorObjects.splice(editorObjects.indexOf(editorObject), 1);
         canvas.remove(object);

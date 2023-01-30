@@ -33,15 +33,17 @@ export class EditorObject {
         this.children.push(child);
     }
 
-    setParent(parentEditorObject: EditorObject) {
+    setParent(parentEditorObject: EditorObject | null) {
         if (this.parent) {
             this.untrackParent(this.parent);
             this.parent.removeChild(this.id);
             this.parent = null;
         }
-        this.trackParent(parentEditorObject);
-        this.parent = parentEditorObject;
-        this.parent.addChild(this);
+        if (parentEditorObject) {
+            this.trackParent(parentEditorObject);
+            this.parent = parentEditorObject;
+            this.parent.addChild(this);
+        }
     }
     onMouseDown(e: any) {
         if (!this.parent)
