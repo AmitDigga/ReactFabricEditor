@@ -2,7 +2,6 @@ import React, { CSSProperties, useState } from 'react';
 import Editor, { BaseState, FabricContext } from './components/Editor';
 import Menu from './components/Menu';
 import { PropertyWindows } from './components/PropertyWindow';
-import { MenuItem } from "./lib/core/MenuItem";
 import { SelectedObjectLeftPositionProperty } from "./lib/properties/SelectedObjectLeftPositionProperty";
 import { CreateRectanglePlugin } from './lib/plugins/CreateRectanglePlugin';
 import { SelectPlugin } from './lib/plugins/SelectPlugin';
@@ -28,25 +27,6 @@ const properties = [
     new SelectedObjectFillColorProperty("Fill Color", "color", "#000001"),
     new EveryObjectProperty("Every Object", "every-object-property")
 ];
-const menuItems: MenuItem[] = [
-    {
-        name: 'Selection',
-        icon: undefined,
-    },
-    // {
-    //     name: 'Show Grid',
-    //     icon: undefined,
-    //     value: false,
-    // },
-    {
-        name: 'Create Rectangle',
-        icon: undefined,
-    },
-    {
-        name: 'XY Position',
-        icon: undefined,
-    },
-]
 
 const STYLES: Record<string, CSSProperties> = {
     container: {
@@ -60,17 +40,10 @@ const STYLES: Record<string, CSSProperties> = {
 
 function App() {
     const forceUpdate = useForceUpdate();
-    const newMenuItems = menuItems.map(menuItem => {
-        return {
-            ...menuItem,
-            // value: plugins.find(plugin => plugin.getName() === menuItem.name)?.getState() ?? false
-        }
-    });
-
     const [context] = useState(new FabricContext<BaseState>({
         objectMap: new Map(),
         editorObjects: [],
-        selectedMenuItem: menuItems[0],
+        selectedPluginName: plugins[0].getName(),
     },
         plugins));
 
@@ -88,10 +61,9 @@ function App() {
                 </div>
                 <div style={{ gridArea: 'menu' }}>
                     <Menu
-                        menuItems={newMenuItems}
-                        selectedMenuItem={context.state.selectedMenuItem}
-                        onValueChange={(menuItem, value) => {
-                            context.selectMenuItem(menuItem)
+                        context={context}
+                        onValueChange={(plugin, value) => {
+                            context.selectPlugin(plugin)
                             forceUpdate();
                         }}
                     />

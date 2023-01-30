@@ -3,7 +3,6 @@ import { useForceUpdate } from "../hooks/useForceUpdate";
 import { useFabricCanvas } from '../hooks/useFabricCanvas';
 import { Plugin } from '../lib/core/Plugin';
 import { Property } from '../lib/core/Property';
-import { MenuItem } from '../lib/core/MenuItem';
 
 
 const STYLES: Record<string, CSSProperties> = {
@@ -105,7 +104,7 @@ export class EditorObject {
 export type BaseState = {
     editorObjects: EditorObject[];
     objectMap: Map<fabric.Object, EditorObject>;
-    selectedMenuItem: MenuItem;
+    selectedPluginName: string;
 }
 export class FabricContext<State extends BaseState>{
     constructor(
@@ -114,17 +113,17 @@ export class FabricContext<State extends BaseState>{
     ) { }
 
 
-    selectMenuItem(menuItem: MenuItem) {
-        const previousMenuItem = this.state.selectedMenuItem;
+    selectPlugin(plugin: Plugin) {
+        const previousPluginName = this.state.selectedPluginName;
         this.plugins.forEach(p => {
-            if (p.getName() === previousMenuItem.name) {
+            if (p.getName() === previousPluginName) {
                 p.onSelected(false)
             }
-            if (p.getName() === menuItem.name) {
+            if (p.getName() === plugin.getName()) {
                 p.onSelected(true)
             }
         })
-        this.state.selectedMenuItem = menuItem;
+        this.state.selectedPluginName = plugin.getName();
     }
 
     updateState(state: State) {
