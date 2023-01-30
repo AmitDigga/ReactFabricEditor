@@ -1,16 +1,14 @@
 import React, { CSSProperties, useState } from 'react';
 import { useForceUpdate } from './hooks/useForceUpdate';
-import { Plugin } from './lib/core/Plugin';
 import { SelectPlugin, CreateRectanglePlugin, XYLocationPlugin } from './lib/plugins';
 import { SelectedObjectNameProperty, SelectedObjectLeftPositionProperty, SelectedObjectFillColorProperty, EveryObjectProperty } from './lib/properties';
 import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon } from '@mui/icons-material';
 import { PropertyWindows, Menu, MenuItem, MenuItemProps, Editor, ListObjectTree } from './components';
-import { Property } from './lib/core';
-import { FabricContext } from './components/FabricContext';
 import { SelectedObjectSelectableProperty } from './lib/properties/SelectedObjectSelectableProperty';
 import { SelectedObjectWidthPositionProperty } from './lib/properties/SelectedObjectWidthPositionProperty';
 import { SelectedObjectHeightPositionProperty } from './lib/properties/SelectedObjectHeightPositionProperty';
 import { SelectedObjectTopPositionProperty } from './lib/properties/SelectedObjectTopPositionProperty copy';
+import { FabricContext, Plugin, Property } from './lib/core';
 
 
 const plugins: Plugin[] = [

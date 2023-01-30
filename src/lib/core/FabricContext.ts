@@ -1,7 +1,7 @@
-import { Plugin } from '../lib/core/Plugin';
+import { Plugin } from './Plugin';
 import { EditorObject } from './EditorObject';
-import { getRandomUid } from "../lib/utilities/getRandomUid";
-import { Property } from '../lib/core';
+import { getRandomUid } from "../utilities/getRandomUid";
+import { Property } from '.';
 
 export type BaseState = {
     editorObjects: EditorObject[];

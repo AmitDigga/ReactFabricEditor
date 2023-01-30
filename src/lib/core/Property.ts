@@ -1,6 +1,6 @@
 import { fabric } from 'fabric';
 import { Subject } from 'rxjs';
-import { FabricContext } from "../../components/FabricContext";
+import { FabricContext } from "./FabricContext";
 import { Plugin } from './Plugin';
 
 

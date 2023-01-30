@@ -1,6 +1,5 @@
 import { fabric } from 'fabric';
-import { FabricContext } from "../../components/FabricContext";
-import { Property, PropertyScope } from '../core/Property';
+import { Property, PropertyScope, FabricContext } from '../core';
 
 
 export abstract class SelectedObjectProperty<T> extends Property<T> {

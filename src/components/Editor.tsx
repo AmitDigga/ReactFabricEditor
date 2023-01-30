@@ -2,7 +2,7 @@ import React, { useEffect, CSSProperties } from 'react';
 import { useForceUpdate } from "../hooks/useForceUpdate";
 import { useFabricCanvas } from '../hooks/useFabricCanvas';
 import { Property } from '../lib/core/Property';
-import { FabricContext } from './FabricContext';
+import { FabricContext } from '../lib/core/FabricContext';
 
 
 const STYLES: Record<string, CSSProperties> = {

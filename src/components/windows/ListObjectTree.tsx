@@ -1,8 +1,7 @@
 import React from 'react';
 import { useForceUpdate } from '../../hooks/useForceUpdate';
+import { FabricContext, EditorObject } from '../../lib/core';
 import { EveryObjectProperty } from '../../lib/properties/EveryObjectProperty';
-import { FabricContext } from "../FabricContext";
-import { EditorObject } from "../EditorObject";
 
 export function ListObjectTree({ property, context }: { property: EveryObjectProperty; context: FabricContext; }): JSX.Element {
     const parentObjects = (property.context?.state.editorObjects ?? [])

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Plugin } from '../lib/core';
-import { FabricContext } from "./FabricContext";
+import { FabricContext, Plugin } from '../lib/core';
 import { MenuItem, MenuItemProps } from './MenuItem';
 
 export type MenuProps = {

@@ -1,6 +1,5 @@
 import { fabric } from 'fabric';
-import { FabricContext } from "../../components/FabricContext";
-import { EditorObject } from "../../components/EditorObject";
+import { EditorObject, FabricContext } from '../core';
 import { Property } from '../core/Property';
 
 

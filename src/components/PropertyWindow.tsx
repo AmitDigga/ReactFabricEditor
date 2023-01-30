@@ -1,7 +1,7 @@
 import React from 'react';
 import { Property } from "../lib/core/Property";
 import { ExposedProperty } from './ExposedProperty';
-import { FabricContext } from './FabricContext';
+import { FabricContext } from '../lib/core/FabricContext';
 
 export type PropertyWindowsProps = {
     context: FabricContext,
