@@ -1,13 +1,9 @@
 import React, { CSSProperties, useState } from 'react';
 import { useForceUpdate } from './hooks/useForceUpdate';
 import { SelectPlugin, CreateRectanglePlugin, XYLocationPlugin } from './lib/plugins';
-import { SelectedObjectNameProperty, SelectedObjectLeftPositionProperty, SelectedObjectFillColorProperty, EveryObjectProperty } from './lib/properties';
+import { NameProperty, LeftProperty, FillProperty, EveryObjectProperty, TopProperty, HeightProperty, SelectableProperty, WidthProperty } from './lib/properties';
 import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon } from '@mui/icons-material';
-import { PropertyWindows, Menu, MenuItem, MenuItemProps, Editor, ListObjectTree } from './components';
-import { SelectedObjectSelectableProperty } from './lib/properties/SelectedObjectSelectableProperty';
-import { SelectedObjectWidthPositionProperty } from './lib/properties/SelectedObjectWidthPositionProperty';
-import { SelectedObjectHeightPositionProperty } from './lib/properties/SelectedObjectHeightPositionProperty';
-import { SelectedObjectTopPositionProperty } from './lib/properties/SelectedObjectTopPositionProperty copy';
+import { PropertyWindows, Menu, MenuItemProps, Editor, ListObjectTree } from './components';
 import { FabricContext, Plugin, Property } from './lib/core';
 
 
@@ -18,13 +14,13 @@ const plugins: Plugin[] = [
     new XYLocationPlugin('XY Position', false),
 ]
 const properties = [
-    new SelectedObjectNameProperty("Name", "string", plugins[0], ""),
-    new SelectedObjectLeftPositionProperty("X", "number", plugins[0], 0),
-    new SelectedObjectTopPositionProperty("Y", "number", plugins[0], 0),
-    new SelectedObjectWidthPositionProperty("Width", "number", plugins[0], 0),
-    new SelectedObjectHeightPositionProperty("Height", "number", plugins[0], 0),
-    new SelectedObjectFillColorProperty("Fill Color", "color", plugins[0], "#000001"),
-    new SelectedObjectSelectableProperty("Selectable", "boolean", plugins[0], true),
+    new NameProperty("Name", "string", plugins[0], ""),
+    new LeftProperty("X", "number", plugins[0], 0),
+    new TopProperty("Y", "number", plugins[0], 0),
+    new WidthProperty("Width", "number", plugins[0], 0),
+    new HeightProperty("Height", "number", plugins[0], 0),
+    new FillProperty("Fill Color", "color", plugins[0], "#000001"),
+    new SelectableProperty("Selectable", "boolean", plugins[0], true),
     new EveryObjectProperty("Every Object", "every-object-property", "global")
 ];
 
