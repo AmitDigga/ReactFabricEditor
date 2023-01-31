@@ -65,6 +65,13 @@ export class FabricContext<State extends BaseState = BaseState> {
         canvas.remove(object);
     }
 
+    removeObjectById(canvas: fabric.Canvas, objectId: string) {
+        const object = this.getEditorObjectById(objectId)?.fabricObject;
+        if (object) {
+            this.removeObject(canvas, object);
+        }
+    }
+
     getEditorObjectById(id: string) {
         return this.state.editorObjects.find(o => o.id === id);
     }
