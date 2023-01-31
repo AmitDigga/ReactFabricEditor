@@ -1,4 +1,6 @@
-export class EditorObject {
+import { IDestroyable } from "./IDestroyable";
+
+export class EditorObject implements IDestroyable {
     id: string;
     name: string;
     type: string;

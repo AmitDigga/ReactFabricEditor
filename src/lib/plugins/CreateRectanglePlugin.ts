@@ -6,6 +6,7 @@ import { getRandomUid } from '../utilities/getRandomUid';
 export class CreateRectanglePlugin extends Plugin {
 
 
+
     private rect: fabric.Rect | null = null;
     private origin: fabric.Point | null = null;
 
@@ -78,6 +79,13 @@ export class CreateRectanglePlugin extends Plugin {
             }
         }
         canvas.renderAll();
+    }
+
+    destroy(): void {
+        const canvas = this.context?.canvas;
+        if (!canvas) throw new Error('Canvas is null');
+        canvas.off('mouse:move', this.onEvent);
+        canvas.off('mouse:down', this.onEvent);
     }
 
 }

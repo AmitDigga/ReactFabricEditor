@@ -4,7 +4,6 @@ import { FabricContext } from '../core';
 import { Plugin } from '../core/Plugin';
 
 export class SelectPlugin extends Plugin {
-    canvas: fabric.Canvas | null = null;
     onInit(context: FabricContext): void {
         this.onEvent = this.onEvent.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
@@ -12,6 +11,12 @@ export class SelectPlugin extends Plugin {
         if (!canvas) throw new Error('Canvas is null');
         canvas.selection = this.isSelected();
         canvas.on('mouse:up', this.onMouseUp);
+    }
+    destroy(): void {
+        const canvas = this.context?.canvas;
+        if (!canvas) throw new Error('Canvas is null');
+        canvas.off('mouse:up', this.onMouseUp);
+        canvas.off('mouse:up', this.onEvent);
     }
     onSelected(selected: boolean): void {
         const canvas = this.context?.canvas;

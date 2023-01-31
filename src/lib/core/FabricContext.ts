@@ -1,4 +1,4 @@
-import { Property } from '.';
+import { IDestroyable, Property } from '.';
 import { EditorObject } from './EditorObject';
 import { Plugin, FabricCommandManager } from '.';
 
@@ -8,7 +8,7 @@ export type BaseState = {
     selectedPluginName: string;
 }
 
-export class FabricContext<State extends BaseState = BaseState> {
+export class FabricContext<State extends BaseState = BaseState> implements IDestroyable {
     canvas?: fabric.Canvas;
     fabricCommandManager: FabricCommandManager;
     constructor(
@@ -23,6 +23,12 @@ export class FabricContext<State extends BaseState = BaseState> {
         this.canvas = canvas;
         this.plugins.forEach(p => p.init(this));
         this.properties.forEach(p => p.init(this));
+    }
+
+    destroy(): void {
+        this.state.editorObjects.forEach(o => o.destroy());
+        this.plugins.forEach(p => p.destroy());
+        this.properties.forEach(p => p.destroy());
     }
 
     reset() {

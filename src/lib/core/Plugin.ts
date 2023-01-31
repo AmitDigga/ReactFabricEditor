@@ -1,10 +1,11 @@
 import { fabric } from 'fabric';
-import { FabricContext } from "./FabricContext";
+import { FabricContextUser } from './FabricContextUser';
 
-export abstract class Plugin {
-    context?: FabricContext<any>;
+export abstract class Plugin extends FabricContextUser {
     private selected: boolean = false;
-    constructor(private name: string, private state: boolean) { }
+    constructor(private name: string, private state: boolean) {
+        super();
+    }
     getName(): string {
         return this.name;
     };
@@ -21,13 +22,6 @@ export abstract class Plugin {
     onSelected(selected: boolean): void {
 
     }
-
-    init(context: FabricContext): void {
-        this.context = context;
-        this.onInit(context);
-    };
-
-    abstract onInit(context: FabricContext): void;
-    // public abstract onStateChange(newState: boolean, previousState: boolean): void;
     abstract onEvent(e: fabric.IEvent): void;
+
 }
