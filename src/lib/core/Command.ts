@@ -55,8 +55,16 @@ export type MoveObjectCommand = Command & {
     readonly type: "move-object",
     readonly data: { id: string, top: number, left: number },
 }
+export type SetParentCommand = Command & {
+    readonly type: "set-parent",
+    readonly data: { childId: string, parentId: string },
+}
 
-export type AllCommands = CreateObjectCommand | RemoveObjectCommand | MoveObjectCommand;
+export type AllCommands =
+    CreateObjectCommand |
+    RemoveObjectCommand |
+    MoveObjectCommand |
+    SetParentCommand;
 
 export class FabricCommandManager extends MementoCommandManager<AllCommands> {
     constructor(
@@ -77,6 +85,9 @@ export class FabricCommandManager extends MementoCommandManager<AllCommands> {
                 break;
             case "move-object":
                 this.context.moveObjectTo(data.id, data.left, data.top);
+                break;
+            case "set-parent":
+                this.context.setParentById(data.childId, data.parentId);
                 break;
             default:
                 throw new Error("Command not found");

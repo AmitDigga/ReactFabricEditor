@@ -34,7 +34,10 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
         draggable
         onDropCapture={(e) => {
             const data = e.dataTransfer.getData('text');
-            props.context.setParentById(data, object.id);
+            props.context.fabricCommandManager.addCommand({
+                type: 'set-parent',
+                data: { childId: data, parentId: object.id },
+            })
         }}
 
         onDragOverCapture={allowDrop}
