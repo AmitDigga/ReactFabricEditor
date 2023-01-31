@@ -1,8 +1,6 @@
 import React, { useEffect, CSSProperties } from 'react';
 import { useForceUpdate } from "../hooks/useForceUpdate";
 import { useFabricCanvas } from '../hooks/useFabricCanvas';
-import { Property } from '../lib/core/Property';
-import { FabricContext } from '../lib/core/FabricContext';
 
 
 const STYLES: Record<string, CSSProperties> = {
@@ -10,20 +8,16 @@ const STYLES: Record<string, CSSProperties> = {
 }
 
 export type EditorProps = {
-    properties: Property<any>[];
-    context: FabricContext<any>;
+    onCanvasReady?: (canvas: fabric.Canvas) => void;
 }
 
 export function Editor(props: EditorProps) {
     const forceUpdate = useForceUpdate();
-
     const { fabricCanvas: canvasRef } = useFabricCanvas({ canvasId: 'canvas' });
     const canvas = canvasRef.current;
     useEffect(() => {
         if (!canvas) return;
-        props.context.plugins.forEach(p => p.init(canvas, props.context));
-        props.properties.forEach(p => p.init(canvas, props.context));
-
+        props.onCanvasReady?.(canvas);
     }, [!!canvas])
     useEffect(() => {
         forceUpdate();

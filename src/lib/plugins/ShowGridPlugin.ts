@@ -1,11 +1,12 @@
 import { Canvas } from 'fabric/fabric-impl';
 import { fabric } from 'fabric';
 import { Plugin } from '../core/Plugin';
+import { FabricContext } from '../core';
 
 export class ShowGridPlugin extends Plugin {
     canvas: Canvas | null = null;
 
-    onInit(canvas: fabric.Canvas): void {
+    onInit(context: FabricContext): void {
         this.createGrid();
     }
 

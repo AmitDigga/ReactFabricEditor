@@ -19,7 +19,7 @@ export function ListObjectTree({ property, context }: { property: EveryObjectPro
                     key={p.id}
                     context={context}
                     object={p}
-                    canvas={property.canvas} />)}
+                    canvas={property.context?.canvas} />)}
         </div>
     </div>;
 }
@@ -34,7 +34,10 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
         draggable
         onDropCapture={(e) => {
             const data = e.dataTransfer.getData('text');
-            props.context.setParentById(data, object.id);
+            props.context.fabricCommandManager.addCommand({
+                type: 'set-parent',
+                data: { childId: data, parentId: object.id },
+            })
         }}
 
         onDragOverCapture={allowDrop}
@@ -60,7 +63,10 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
                 {object.name}
             </div>
             <Icon fontSize='small' component={DeleteOutline} onClick={() => {
-                props.context.removeObject(canvas as fabric.Canvas, object.fabricObject);
+                props.context.fabricCommandManager.addCommand({
+                    type: 'remove-object',
+                    data: { id: object.id },
+                })
             }}></Icon>
 
         </div>

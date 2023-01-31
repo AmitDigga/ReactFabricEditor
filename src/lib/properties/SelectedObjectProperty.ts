@@ -6,7 +6,9 @@ export abstract class SelectedObjectProperty<T> extends Property<T> {
     constructor(name: string, type: string, scope: PropertyScope, private defaultValue: any) {
         super(name, type, scope);
     }
-    onInit(canvas: fabric.Canvas, context: FabricContext<any>): void {
+    onInit(context: FabricContext<any>): void {
+        const canvas = this.context?.canvas;
+        if (!canvas) throw new Error('Canvas is null');
         canvas.on('selection:created', () => {
             this.change$.next(this.getValue());
         });
@@ -20,7 +22,8 @@ export abstract class SelectedObjectProperty<T> extends Property<T> {
     abstract getValueFromSelectedObject(obj: fabric.Object): T;
     abstract setValueToSelectedObject(obj: fabric.Object, value: T): any;
     getValue(): T {
-        const selectedObject = this.canvas?.getActiveObject();
+        const canvas = this.context?.canvas;
+        const selectedObject = canvas?.getActiveObject();
         if (selectedObject) {
             return this.getValueFromSelectedObject(selectedObject);
         } else {
@@ -28,10 +31,12 @@ export abstract class SelectedObjectProperty<T> extends Property<T> {
         }
     }
     setValueInternal(value: T): void {
-        const selectedObject = this.canvas?.getActiveObject();
+        const canvas = this.context?.canvas;
+        if (!canvas) throw new Error('Canvas is null');
+        const selectedObject = canvas.getActiveObject();
         if (selectedObject) {
             this.setValueToSelectedObject(selectedObject, value);
-            this.canvas?.requestRenderAll();
+            canvas.requestRenderAll();
         }
     }
 }

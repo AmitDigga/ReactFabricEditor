@@ -1,12 +1,10 @@
 import { fabric } from 'fabric';
 import { FabricContext } from "./FabricContext";
-import { Property } from './Property';
 
 export abstract class Plugin {
-    canvas: fabric.Canvas | null = null;
-    context: FabricContext<any> | null = null;
+    context?: FabricContext<any>;
     private selected: boolean = false;
-    constructor(private name: string, private state: boolean, public properties: Property<any>[] = []) { }
+    constructor(private name: string, private state: boolean) { }
     getName(): string {
         return this.name;
     };
@@ -24,14 +22,12 @@ export abstract class Plugin {
 
     }
 
-    init(canvas: fabric.Canvas, context: FabricContext<any>): void {
-        this.canvas = canvas;
+    init(context: FabricContext): void {
         this.context = context;
-        this.properties.forEach(p => p.init(canvas, context));
-        this.onInit(canvas);
+        this.onInit(context);
     };
 
-    abstract onInit(canvas: fabric.Canvas): void;
+    abstract onInit(context: FabricContext): void;
     // public abstract onStateChange(newState: boolean, previousState: boolean): void;
     abstract onEvent(e: fabric.IEvent): void;
 }

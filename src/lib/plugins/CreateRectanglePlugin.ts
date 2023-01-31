@@ -1,5 +1,7 @@
 import { fabric } from 'fabric';
+import { FabricContext } from '../core';
 import { Plugin } from '../core/Plugin';
+import { getRandomUid } from '../utilities/getRandomUid';
 
 export class CreateRectanglePlugin extends Plugin {
 
@@ -7,28 +9,29 @@ export class CreateRectanglePlugin extends Plugin {
     private rect: fabric.Rect | null = null;
     private origin: fabric.Point | null = null;
 
-    onInit(canvas: fabric.Canvas): void {
+    onInit(context: FabricContext): void {
         this.onEvent = this.onEvent.bind(this);
     }
 
-    public onSelected(newState: boolean): void {
-        if (this.canvas === null) throw new Error('Canvas is null');
-        if (newState) {
+    public onSelected(selected: boolean): void {
+        const canvas = this.context?.canvas;
+        if (!canvas) throw new Error('Canvas is null');
+        if (selected) {
             this.createAndAddRect();
-            this.canvas.on('mouse:move', this.onEvent);
-            this.canvas.on('mouse:down', this.onEvent);
+            canvas.on('mouse:move', this.onEvent);
+            canvas.on('mouse:down', this.onEvent);
         } else {
-            this.canvas.off('mouse:move', this.onEvent);
-            this.canvas.off('mouse:down', this.onEvent);
+            canvas.off('mouse:move', this.onEvent);
+            canvas.off('mouse:down', this.onEvent);
             if (this.rect) {
-                this.context?.removeObject(this.canvas, this.rect);
+                canvas.remove(this.rect);
             }
         }
     }
 
     createAndAddRect() {
-        if (this.canvas === null) throw new Error('Canvas is null');
-        // if (!this.rect) {
+        const canvas = this.context?.canvas;
+        if (!canvas) throw new Error('Canvas is null');
         this.rect = new fabric.Rect({
             left: 100,
             top: 100,
@@ -40,22 +43,30 @@ export class CreateRectanglePlugin extends Plugin {
             selectable: true,
             strokeUniform: true,
         });
-        this.context?.addObject(this.canvas, this.rect, 'rect')
-        // }
+        canvas.add(this.rect);
     }
 
     onEvent(event: fabric.IEvent) {
-        if (this.canvas === null) throw new Error('Canvas is null');
+        const canvas = this.context?.canvas;
+        if (!canvas) throw new Error('Canvas is null');
         if (this.rect === null) throw new Error('Rect is null');
-        if (!event.pointer) {
-            return;
-        }
+        if (!event.pointer) { return; }
+
         if (event.e.type === "mousedown") {
-            if (!!this.origin) {
+            if (!this.origin) {
+                this.origin = new fabric.Point(event.pointer.x, event.pointer.y);
+            } else {
+                this.context?.fabricCommandManager
+                    .addCommand({
+                        type: 'create-rectangle',
+                        data: {
+                            ...this.rect.toObject(),
+                            name: getRandomUid(),
+                        }
+                    })
+                canvas?.remove(this.rect);
                 this.createAndAddRect();
                 this.origin = null;
-            } else {
-                this.origin = new fabric.Point(event.pointer.x, event.pointer.y);
             }
         } else {
             if (!!this.origin) {
@@ -66,7 +77,7 @@ export class CreateRectanglePlugin extends Plugin {
                 this.rect.set('top', event.pointer.y);
             }
         }
-        this.canvas.renderAll();
+        canvas.renderAll();
     }
 
 }

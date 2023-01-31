@@ -8,17 +8,15 @@ export type PropertyScope = Plugin | 'global';
 
 export abstract class Property<T> {
     change$: Subject<any> = new Subject<any>();
-    public canvas: fabric.Canvas | undefined = undefined;
-    public context: FabricContext | undefined = undefined;
+    public context?: FabricContext;
     constructor(
         public readonly name: string,
         public readonly type: string,
         public readonly scope: PropertyScope,
     ) { }
-    init(canvas: fabric.Canvas, context: FabricContext): void {
-        this.canvas = canvas;
+    init(context: FabricContext): void {
         this.context = context;
-        this.onInit(canvas, context);
+        this.onInit(context);
     };
 
     setValue(value: T) {
@@ -30,7 +28,7 @@ export abstract class Property<T> {
         this.change$.next(value);
     }
 
-    onInit(canvas: fabric.Canvas, context: FabricContext): void { }
+    onInit(context: FabricContext): void { }
 
     abstract getValue(): T;
     abstract setValueInternal(value: T, previousValue: T): void;
