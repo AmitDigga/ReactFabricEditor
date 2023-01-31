@@ -7,8 +7,8 @@ import { EveryObjectProperty } from '../../lib/properties/EveryObjectProperty';
 
 export function ListObjectTree({ property, context }: { property: EveryObjectProperty; context: FabricContext; }): JSX.Element {
     const forceUpdate = useForceUpdate();
-    const parentObjects = (property.context?.state.editorObjects ?? [])
-        .filter(o => o.parent == null);
+    const parentObjects: EditorObject[] = (property.context?.state.editorObjects ?? [] as EditorObject[])
+        .filter((o: EditorObject) => o.parent == null);
     return <div>
         <h5>{property.name} ({property.context?.state.editorObjects.length ?? 0})</h5>
         <div>

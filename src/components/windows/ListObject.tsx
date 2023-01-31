@@ -7,7 +7,7 @@ export function ListObject({ property }: { property: EveryObjectProperty; }): JS
     return <div>
         <h5>{property.name}</h5>
         <div>
-            {property.getValue().map(p => {
+            {property.getValue().map((p: EditorObject) => {
                 return <DisplayEditorObject object={p} canvas={property.context?.canvas}></DisplayEditorObject>;
             })}
         </div>
