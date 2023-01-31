@@ -1,20 +1,28 @@
 import { fabric } from 'fabric';
-import { FabricContext } from '../../components/Editor';
+import { FabricContext } from "./FabricContext";
 import { Property } from './Property';
 
-export abstract class Plugin<T extends boolean> {
+export abstract class Plugin {
     canvas: fabric.Canvas | null = null;
     context: FabricContext<any> | null = null;
-    constructor(private name: string, private state: T, public properties: Property<any>[] = []) { }
-    public getState() { return this.state };
-    public setState(state: T) {
-        const previousState = this.state;
-        this.state = state;
-        this.onStateChange(state, previousState);
-    };
+    private selected: boolean = false;
+    constructor(private name: string, private state: boolean, public properties: Property<any>[] = []) { }
     getName(): string {
         return this.name;
     };
+
+    isSelected(): boolean {
+        return this.selected;
+    }
+
+    setSelected(selected: boolean): void {
+        this.selected = selected;
+        this.onSelected(selected);
+    }
+
+    onSelected(selected: boolean): void {
+
+    }
 
     init(canvas: fabric.Canvas, context: FabricContext<any>): void {
         this.canvas = canvas;
@@ -24,6 +32,6 @@ export abstract class Plugin<T extends boolean> {
     };
 
     abstract onInit(canvas: fabric.Canvas): void;
-    public abstract onStateChange(newState: T, previousState: T): void;
+    // public abstract onStateChange(newState: boolean, previousState: boolean): void;
     abstract onEvent(e: fabric.IEvent): void;
 }

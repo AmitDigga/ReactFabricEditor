@@ -30,6 +30,13 @@ export function ExposedProperty(props: ExposedPropertyProps) {
                 props.property.setValue(e.target.value);
             }} />
         </div>
+    } else if (props.property.type === 'boolean') {
+        return <div>
+            <label htmlFor={props.property.name}>{props.property.name}</label>
+            <input id={props.property.name} type='checkbox' checked={props.property.getValue()} onChange={(e) => {
+                props.property.setValue(e.target.checked);
+            }} />
+        </div>
     } else if (props.property.type === 'color') {
         return <div>
             <label htmlFor={props.property.name}>{props.property.name}</label>

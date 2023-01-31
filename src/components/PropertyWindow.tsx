@@ -1,26 +1,30 @@
 import React from 'react';
 import { Property } from "../lib/core/Property";
 import { ExposedProperty } from './ExposedProperty';
+import { FabricContext } from '../lib/core/FabricContext';
 
 export type PropertyWindowsProps = {
+    context: FabricContext,
     windowTitle: string;
-    properties: Property<any>[];
     customPropertyRenderer?: {
         [key: string]: (property: Property<any>) => JSX.Element;
     };
 };
 export function PropertyWindows(props: PropertyWindowsProps) {
-    const child = props.properties.length === 0 ?
+    const { context: { properties } } = props;
+    const child = properties.length === 0 ?
         <div>Empty</div> :
         <>
-            {props.properties.map((p) => {
-                if (props.customPropertyRenderer?.[p.type] !== undefined) {
-                    return props.customPropertyRenderer[p.type](p);
-                }
-                else {
-                    return <ExposedProperty key={p.name} property={p} />
-                }
-            })}
+            {properties
+                .filter(property => property.scope == 'global' || property.scope.getName() === props.context.state.selectedPluginName)
+                .map((p) => {
+                    if (props.customPropertyRenderer?.[p.type] !== undefined) {
+                        return props.customPropertyRenderer[p.type](p);
+                    }
+                    else {
+                        return <ExposedProperty key={p.name} property={p} />
+                    }
+                })}
         </>
 
     return <div>
@@ -28,3 +32,4 @@ export function PropertyWindows(props: PropertyWindowsProps) {
         {child}
     </div>
 }
+export default PropertyWindows;

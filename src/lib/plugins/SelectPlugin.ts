@@ -1,12 +1,12 @@
 import { fabric } from 'fabric';
 import { Plugin } from '../core/Plugin';
 
-export class SelectPlugin extends Plugin<boolean> {
+export class SelectPlugin extends Plugin {
     canvas: fabric.Canvas | null = null;
     // objects: fabric.Object[] = [];
     onInit(canvas: fabric.Canvas): void {
         this.onEvent = this.onEvent.bind(this);
-        canvas.selection = this.getState();
+        canvas.selection = this.isSelected();
         // canvas.on('object:added', (e) => {
         //     if (e.target) {
         //         this.objects.push(e.target);
@@ -21,7 +21,7 @@ export class SelectPlugin extends Plugin<boolean> {
         //     }
         // });
     }
-    onStateChange(newState: boolean, previousState: boolean): void {
+    onSelected(newState: boolean): void {
         if (this.canvas === null) throw new Error('Canvas is null');
         if (newState) {
             this.canvas.selection = true;

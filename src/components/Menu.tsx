@@ -1,26 +1,26 @@
 import React from 'react';
-import { MenuItem } from '../lib/core/MenuItem';
-
-
+import { FabricContext, Plugin } from '../lib/core';
+import { MenuItem, MenuItemProps } from './MenuItem';
 
 export type MenuProps = {
-    menuItems: MenuItem[];
-    onValueChange: (menuItem: MenuItem, value: boolean) => void;
+    context: FabricContext;
+    onValueChange: (plugin: Plugin, value: boolean) => void;
+    customRenderer?: React.FC<MenuItemProps>;
+
 }
 
-function Menu(props: MenuProps) {
+export function Menu(props: MenuProps) {
+    const Renderer = props.customRenderer ?? MenuItem;
     return (
-        <div id="menu">
+        <div id="menu" style={{ display: 'flex', flexDirection: 'column' }}>
             {
-                props.menuItems.map(
-                    menuItem => {
-                        return <div key={menuItem.name}>
-                            <label htmlFor={menuItem.name}>{menuItem.name}</label>
-                            <input id={menuItem.name} type='checkbox' checked={menuItem.value} onChange={(e) => {
-                                props.onValueChange(menuItem, e.target.checked);
-                            }} ></input>
-                        </div>
-                    }
+                props.context.plugins.map(
+                    plugin => <Renderer
+                        key={plugin.getName()}
+                        onValueChange={props.onValueChange}
+                        plugin={plugin}
+                        selected={props.context.state.selectedPluginName === plugin.getName()}
+                    />
                 )
             }
         </div>
