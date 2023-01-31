@@ -4,7 +4,8 @@ import { SelectPlugin, CreateRectanglePlugin, XYLocationPlugin } from './lib/plu
 import { NameProperty, LeftProperty, FillProperty, EveryObjectProperty, TopProperty, HeightProperty, SelectableProperty, WidthProperty } from './lib/properties';
 import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon } from '@mui/icons-material';
 import { PropertyWindows, Menu, MenuItemProps, Editor, ListObjectTree } from './components';
-import { FabricContext, Plugin, Property } from './lib/core';
+import { BaseState, FabricContext, Plugin, Property } from './lib/core';
+import { FabricPersistance } from './lib/core/Persistance';
 
 
 const plugins: Plugin[] = [
@@ -64,8 +65,8 @@ function CustomMenuItem(props: MenuItemProps) {
 function App() {
     const forceUpdate = useForceUpdate();
 
-    const [context] = useState(
-        new FabricContext({
+    const [context, setContext] = useState(
+        new FabricContext<BaseState>({
             objectMap: new Map(),
             editorObjects: [],
             selectedPluginName: plugins[0].getName(),
@@ -103,6 +104,31 @@ function App() {
                         }}
                         disabled={!context.fabricCommandManager.canUndo()}
                     >Undo</button>
+                    <button
+                        onClick={() => {
+                            const string = new FabricPersistance(
+                                plugins,
+                                properties,
+                                context.canvas as any,
+                            ).save(context);
+                            window.localStorage.setItem('data', string);
+                        }}
+                    >Save</button>
+                    <button
+                        onClick={() => {
+                            const string = window.localStorage.getItem('data');
+                            const canvas = context.canvas as fabric.Canvas;
+                            if (string === null) return;
+                            context.reset();
+                            canvas.clear();
+                            const c = new FabricPersistance(
+                                plugins,
+                                properties,
+                                context.canvas as any,
+                            ).load(string);
+                            setContext(c);
+                        }}
+                    >Load</button>
                 </div>
                 <div style={{ gridArea: 'property-windows' }}>
                     <PropertyWindows

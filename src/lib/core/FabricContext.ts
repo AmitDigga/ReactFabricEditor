@@ -57,8 +57,10 @@ export class FabricContext<State extends BaseState = BaseState> {
     }
 
     addObject(object: fabric.Object, type: string) {
-        const id = getRandomUid();
-        object.name = id;
+        if (this.getEditorObjectById(object.name as string)) {
+            throw new Error(`Object with name (${object.name}) already exists`);
+        }
+        const id = object.name as string;
         this.canvas?.add(object);
         const editorObject = new EditorObject(id, id, type, object);
         this.state.editorObjects.push(editorObject);

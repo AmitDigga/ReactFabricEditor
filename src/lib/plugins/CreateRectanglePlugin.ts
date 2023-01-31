@@ -1,5 +1,6 @@
 import { fabric } from 'fabric';
 import { Plugin } from '../core/Plugin';
+import { getRandomUid } from '../utilities/getRandomUid';
 
 export class CreateRectanglePlugin extends Plugin {
 
@@ -56,6 +57,7 @@ export class CreateRectanglePlugin extends Plugin {
                         type: 'create-rectangle',
                         data: {
                             ...this.rect.toObject(),
+                            name: getRandomUid(),
                         }
                     })
                 this.canvas?.remove(this.rect);
