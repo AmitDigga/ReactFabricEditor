@@ -1,6 +1,6 @@
 import React, { CSSProperties, useState } from 'react';
 import { useForceUpdate } from './hooks/useForceUpdate';
-import { SelectPlugin, CreateRectanglePlugin, XYLocationPlugin } from './lib/plugins';
+import { SelectPlugin, CreateRectanglePlugin } from './lib/plugins';
 import { NameProperty, LeftProperty, FillProperty, EveryObjectProperty, TopProperty, HeightProperty, SelectableProperty, WidthProperty } from './lib/properties';
 import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon } from '@mui/icons-material';
 import { PropertyWindows, Menu, MenuItemProps, Editor, ListObjectTree } from './components';
@@ -11,7 +11,6 @@ const plugins: Plugin[] = [
     new SelectPlugin('Selection', false),
     // new ShowGridPlugin('Show Grid', false),
     new CreateRectanglePlugin('Create Rectangle', false),
-    new XYLocationPlugin('XY Position', false),
 ]
 const properties = [
     new EveryObjectProperty("All Objects", "every-object-property", "global"),
