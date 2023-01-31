@@ -14,6 +14,7 @@ const plugins: Plugin[] = [
     new XYLocationPlugin('XY Position', false),
 ]
 const properties = [
+    new EveryObjectProperty("All Objects", "every-object-property", "global"),
     new NameProperty("Name", "string", plugins[0], ""),
     new LeftProperty("X", "number", plugins[0], 0),
     new TopProperty("Y", "number", plugins[0], 0),
@@ -21,15 +22,16 @@ const properties = [
     new HeightProperty("Height", "number", plugins[0], 0),
     new FillProperty("Fill Color", "color", plugins[0], "#000001"),
     new SelectableProperty("Selectable", "boolean", plugins[0], true),
-    new EveryObjectProperty("Every Object", "every-object-property", "global")
 ];
 
 const STYLES: Record<string, CSSProperties> = {
     container: {
         display: 'grid',
-        gridTemplateAreas: `'editor menu' 'editor property-windows'`,
-        gridTemplateColumns: '1fr 200px',
-        gridTemplateRows: '250px 1fr'
+        gridGap: 10,
+        gridTemplateAreas: `'menu editor property-windows'`,
+        gridTemplateColumns: '40px auto 200px',
+        gridTemplateRows: '1fr',
+        justifyContent: 'start',
     },
     editor: { border: '1px solid black' },
 }
@@ -73,7 +75,7 @@ function App() {
     return (
         <div>
             <center>
-                <h1>Welcome to our app</h1>
+                <h3>Welcome to our app</h3>
             </center>
             <div style={STYLES.container}>
                 <div style={{ gridArea: 'editor' }}>
@@ -93,10 +95,9 @@ function App() {
                     />
                 </div>
                 <div style={{ gridArea: 'property-windows' }}>
-                    <h4>Properties</h4>
                     <PropertyWindows
                         context={context}
-                        windowTitle={'Exposed Properties'}
+                        windowTitle='Exposed Properties'
                         customPropertyRenderer={{
                             'every-object-property': (property: Property<any>) => {
                                 return <ListObjectTree context={context} property={property as EveryObjectProperty} />

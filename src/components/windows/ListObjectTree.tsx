@@ -10,7 +10,7 @@ export function ListObjectTree({ property, context }: { property: EveryObjectPro
     const parentObjects = (property.context?.state.editorObjects ?? [])
         .filter(o => o.parent == null);
     return <div>
-        <h5>{property.name}</h5>
+        <h5>{property.name} ({property.context?.state.editorObjects.length ?? 0})</h5>
         <div>
             {parentObjects.map(p =>
                 <DisplayParentEditorObject
