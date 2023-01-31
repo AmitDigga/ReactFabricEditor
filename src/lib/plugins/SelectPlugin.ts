@@ -1,23 +1,27 @@
 import { fabric } from 'fabric';
 import { IEvent } from 'fabric/fabric-impl';
+import { FabricContext } from '../core';
 import { Plugin } from '../core/Plugin';
 
 export class SelectPlugin extends Plugin {
     canvas: fabric.Canvas | null = null;
-    onInit(canvas: fabric.Canvas): void {
+    onInit(context: FabricContext): void {
         this.onEvent = this.onEvent.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
+        const canvas = this.context?.canvas;
+        if (!canvas) throw new Error('Canvas is null');
         canvas.selection = this.isSelected();
         canvas.on('mouse:up', this.onMouseUp);
     }
-    onSelected(newState: boolean): void {
-        if (this.canvas === null) throw new Error('Canvas is null');
-        if (newState) {
-            this.canvas.selection = true;
-            this.canvas.on('mouse:up', this.onEvent);
+    onSelected(selected: boolean): void {
+        const canvas = this.context?.canvas;
+        if (!canvas) return;
+        if (selected) {
+            canvas.selection = true;
+            canvas.on('mouse:up', this.onEvent);
         } else {
-            this.canvas.selection = false;
-            this.canvas.off('mouse:up', this.onEvent);
+            canvas.selection = false;
+            canvas.off('mouse:up', this.onEvent);
         }
     }
     onEvent(e: fabric.IEvent): void {

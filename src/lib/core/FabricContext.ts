@@ -9,7 +9,7 @@ export type BaseState = {
 }
 
 export class FabricContext<State extends BaseState = BaseState> {
-    canvas: fabric.Canvas | null = null;
+    canvas?: fabric.Canvas;
     fabricCommandManager: FabricCommandManager;
     constructor(
         public state: State,
@@ -21,8 +21,8 @@ export class FabricContext<State extends BaseState = BaseState> {
 
     init(canvas: fabric.Canvas) {
         this.canvas = canvas;
-        this.plugins.forEach(p => p.init(canvas, this));
-        this.properties.forEach(p => p.init(canvas, this));
+        this.plugins.forEach(p => p.init(this));
+        this.properties.forEach(p => p.init(this));
     }
 
     reset() {

@@ -19,7 +19,7 @@ export function ListObjectTree({ property, context }: { property: EveryObjectPro
                     key={p.id}
                     context={context}
                     object={p}
-                    canvas={property.canvas} />)}
+                    canvas={property.context?.canvas} />)}
         </div>
     </div>;
 }

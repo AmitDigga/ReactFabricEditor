@@ -1,10 +1,11 @@
-import { fabric } from 'fabric';
 import { EditorObject, FabricContext } from '../core';
 import { Property } from '../core/Property';
 
 
 export class EveryObjectProperty extends Property<EditorObject[]> {
-    onInit(canvas: fabric.Canvas, context: FabricContext) {
+    onInit(context: FabricContext) {
+        const canvas = this.context?.canvas;
+        if (!canvas) throw new Error('Canvas is null');
         canvas.on('object:added', () => this.change$.next(this.getValue()));
         canvas.on('object:removed', () => this.change$.next(this.getValue()));
     }
