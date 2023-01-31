@@ -1,7 +1,6 @@
 import { fabric } from 'fabric';
 import { IEvent } from 'fabric/fabric-impl';
-import { FabricContext } from '../core';
-import { Plugin } from '../core/Plugin';
+import { FabricContext, Plugin } from '../core';
 
 export class SelectPlugin extends Plugin {
     onInit(context: FabricContext): void {

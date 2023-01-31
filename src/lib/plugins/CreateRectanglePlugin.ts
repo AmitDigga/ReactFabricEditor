@@ -1,6 +1,5 @@
 import { fabric } from 'fabric';
-import { FabricContext } from '../core';
-import { Plugin } from '../core/Plugin';
+import { FabricContext, Plugin } from '../core';
 import { getRandomUid } from '../utilities/getRandomUid';
 
 export class CreateRectanglePlugin extends Plugin {

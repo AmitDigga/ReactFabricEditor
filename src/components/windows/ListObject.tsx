@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForceUpdate } from '../../hooks/useForceUpdate';
 import { EveryObjectProperty } from '../../lib/properties/EveryObjectProperty';
-import { EditorObject } from "../../lib/core/EditorObject";
+import { EditorObject } from "../../lib/core";
 
 export function ListObject({ property }: { property: EveryObjectProperty; }): JSX.Element {
     return <div>

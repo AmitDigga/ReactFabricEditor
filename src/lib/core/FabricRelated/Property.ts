@@ -1,4 +1,3 @@
-import { fabric } from 'fabric';
 import { Subject } from 'rxjs';
 import { FabricContext } from "./FabricContext";
 import { FabricContextUser } from './FabricContextUser';

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForceUpdate } from '../hooks/useForceUpdate';
-import { Property } from "../lib/core/Property";
+import { Property } from "../lib/core";
 
 export type ExposedPropertyProps = {
     property: Property<any>;

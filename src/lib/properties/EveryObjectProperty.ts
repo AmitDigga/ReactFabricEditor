@@ -1,5 +1,4 @@
-import { EditorObject, FabricContext } from '../core';
-import { Property } from '../core/Property';
+import { EditorObject, FabricContext, Property } from '../core';
 
 
 export class EveryObjectProperty extends Property<EditorObject[]> {

@@ -1,6 +1,6 @@
-import { IDestroyable, Property } from '.';
+import { IDestroyable, Property } from '..';
 import { EditorObject } from './EditorObject';
-import { Plugin, FabricCommandManager } from '.';
+import { Plugin, FabricCommandManager } from '..';
 
 export type BaseState = {
     editorObjects: EditorObject[];
