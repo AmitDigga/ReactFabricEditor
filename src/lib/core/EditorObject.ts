@@ -5,10 +5,7 @@ export class EditorObject {
     parent: EditorObject | null;
     children: EditorObject[];
     fabricObject: fabric.Object;
-    dataOnClick: {
-        parent: TransformData;
-        child: TransformData;
-    };
+    tempPositionData: TransformData;
 
     constructor(id: string, name: string, type: string, fabricObject: fabric.Object) {
         this.id = id;
@@ -17,13 +14,19 @@ export class EditorObject {
         this.fabricObject = fabricObject;
         this.parent = null;
         this.children = [];
-        this.dataOnClick = {
-            parent: getObjectData(fabricObject),
-            child: getObjectData(fabricObject),
-        };
+        this.tempPositionData = getObjectData(fabricObject);
         this.onMove = this.onMove.bind(this);
         this.onScale = this.onScale.bind(this);
         this.onMouseDown = this.onMouseDown.bind(this);
+        this.fabricObject.on('mousedown:before', this.onMouseDown);
+        this.fabricObject.on('moving', this.onMove);
+        this.fabricObject.on('scaling', this.onScale);
+    }
+
+    destroy() {
+        this.fabricObject.off('mousedown:before', this.onMouseDown);
+        this.fabricObject.off('moving', this.onMove);
+        this.fabricObject.off('scaling', this.onScale);
     }
 
     removeChild(id: string) {
@@ -35,28 +38,33 @@ export class EditorObject {
 
     setParent(parentEditorObject: EditorObject | null) {
         if (this.parent) {
-            this.untrackParent(this.parent);
             this.parent.removeChild(this.id);
             this.parent = null;
         }
         if (parentEditorObject) {
-            this.trackParent(parentEditorObject);
             this.parent = parentEditorObject;
             this.parent.addChild(this);
         }
     }
     onMouseDown(e: any) {
-        if (!this.parent)
-            return;
-        this.dataOnClick.parent = getObjectData(this.parent.fabricObject);
-        this.dataOnClick.child = getObjectData(this.fabricObject);
+        this.tempPositionData = getObjectData(this.fabricObject);
     };
     onMove(e: any) {
-        if (!this.parent)
-            return;
-        this.fabricObject.set({
-            left: this.dataOnClick.child.left + (this.parent.fabricObject.left ?? 0) - this.dataOnClick.parent.left,
-            top: this.dataOnClick.child.top + (this.parent.fabricObject.top ?? 0) - this.dataOnClick.parent.top,
+        const newTransform = getObjectData(this.fabricObject);
+        const displacement = {
+            dLeft: newTransform.left - this.tempPositionData.left,
+            dTop: newTransform.top - this.tempPositionData.top,
+        };
+        this.tempPositionData = newTransform;
+        this.moveChildren(displacement)
+    }
+    moveChildren(displacement: { dLeft: number, dTop: number }) {
+        this.children.forEach(child => {
+            child.fabricObject.set({
+                left: (child.fabricObject.left ?? 0) + displacement.dLeft,
+                top: (child.fabricObject.top ?? 0) + displacement.dTop,
+            });
+            child.moveChildren(displacement);
         });
     }
     onScale(e: any) {
@@ -80,17 +88,6 @@ export class EditorObject {
         //     ...newSize,
         // });
     }
-    untrackParent(parent: EditorObject) {
-        parent.fabricObject.off('mousedown:before', this.onMouseDown);
-        parent.fabricObject.off('moving', this.onMove);
-        parent.fabricObject.off('scaling', this.onScale);
-    }
-    trackParent(parent: EditorObject) {
-        parent.fabricObject.on('mousedown:before', this.onMouseDown);
-        parent.fabricObject.on('moving', this.onMove);
-        parent.fabricObject.on('scaling', this.onScale);
-    }
-
 }
 
 export type TransformData = {

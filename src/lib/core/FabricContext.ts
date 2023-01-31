@@ -61,6 +61,7 @@ export class FabricContext<State extends BaseState = BaseState> {
         }
         objectMap.delete(object);
         editorObjects.splice(editorObjects.indexOf(editorObject), 1);
+        editorObject.destroy();
         canvas.remove(object);
     }
 
