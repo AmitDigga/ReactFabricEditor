@@ -3,23 +3,11 @@ import { Plugin } from '../core/Plugin';
 
 export class SelectPlugin extends Plugin {
     canvas: fabric.Canvas | null = null;
-    // objects: fabric.Object[] = [];
     onInit(canvas: fabric.Canvas): void {
         this.onEvent = this.onEvent.bind(this);
+        this.onMoving = this.onMoving.bind(this);
         canvas.selection = this.isSelected();
-        // canvas.on('object:added', (e) => {
-        //     if (e.target) {
-        //         this.objects.push(e.target);
-        //     }
-        // });
-        // canvas.on('object:removed', (e) => {
-        //     if (e.target) {
-        //         const index = this.objects.indexOf(e.target);
-        //         if (index > -1) {
-        //             this.objects.splice(index, 1);
-        //         }
-        //     }
-        // });
+        canvas.on('object:moving', this.onMoving);
     }
     onSelected(newState: boolean): void {
         if (this.canvas === null) throw new Error('Canvas is null');
@@ -33,4 +21,17 @@ export class SelectPlugin extends Plugin {
     }
     onEvent(e: fabric.IEvent): void {
     }
+
+    onMoving(e: any) {
+        this.context?.fabricCommandManager
+            .addCommand({
+                type: 'move-object',
+                data: {
+                    id: e.target.name,
+                    left: e.target.left ?? 0,
+                    top: e.target.top ?? 0,
+                }
+            },
+                false)
+    };
 }

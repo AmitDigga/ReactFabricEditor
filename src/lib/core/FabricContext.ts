@@ -1,7 +1,8 @@
-import { Plugin } from './Plugin';
-import { EditorObject } from './EditorObject';
-import { getRandomUid } from "../utilities/getRandomUid";
 import { Property } from '.';
+import { getRandomUid } from "../utilities/getRandomUid";
+import { FabricCommandManager } from './Command';
+import { EditorObject } from './EditorObject';
+import { Plugin } from './Plugin';
 
 export type BaseState = {
     editorObjects: EditorObject[];
@@ -10,12 +11,28 @@ export type BaseState = {
 }
 
 export class FabricContext<State extends BaseState = BaseState> {
+    canvas: fabric.Canvas | null = null;
+    fabricCommandManager: FabricCommandManager;
     constructor(
         public state: State,
         public plugins: Plugin[],
         public properties: Property<any>[],
+    ) {
+        this.fabricCommandManager = new FabricCommandManager(this);
+    }
 
-    ) { }
+    init(canvas: fabric.Canvas) {
+        this.canvas = canvas;
+        this.plugins.forEach(p => p.init(canvas, this));
+        this.properties.forEach(p => p.init(canvas, this));
+    }
+
+    reset() {
+        this.canvas?.clear();
+        this.state.editorObjects.forEach(o => o.destroy());
+        this.state.editorObjects = [];
+        this.state.objectMap = new Map();
+    }
 
 
     selectPlugin(plugin: Plugin) {
@@ -39,15 +56,15 @@ export class FabricContext<State extends BaseState = BaseState> {
         return this.state.objectMap.get(object) || null;
     }
 
-    addObject(canvas: fabric.Canvas, object: fabric.Object, type: string) {
+    addObject(object: fabric.Object, type: string) {
         const id = getRandomUid();
         object.name = id;
-        canvas.add(object);
+        this.canvas?.add(object);
         const editorObject = new EditorObject(id, id, type, object);
         this.state.editorObjects.push(editorObject);
         this.state.objectMap.set(object, editorObject);
     }
-    removeObject(canvas: fabric.Canvas, object: fabric.Object) {
+    removeObject(object: fabric.Object) {
         const { objectMap, editorObjects } = this.state;
         const editorObject = objectMap.get(object);
         if (!editorObject) {
@@ -57,18 +74,28 @@ export class FabricContext<State extends BaseState = BaseState> {
             editorObject.setParent(null);
         }
         if (editorObject.children.length > 0) {
-            editorObject.children.forEach(c => this.removeObject(canvas, c.fabricObject));
+            editorObject.children.forEach(c => this.removeObject(c.fabricObject));
         }
         objectMap.delete(object);
         editorObjects.splice(editorObjects.indexOf(editorObject), 1);
         editorObject.destroy();
-        canvas.remove(object);
+        this.canvas?.remove(object);
     }
 
-    removeObjectById(canvas: fabric.Canvas, objectId: string) {
+    removeObjectById(objectId: string) {
         const object = this.getEditorObjectById(objectId)?.fabricObject;
         if (object) {
-            this.removeObject(canvas, object);
+            this.removeObject(object);
+        }
+    }
+    moveObjectTo(objectId: string, left: number, top: number) {
+        const object = this.getEditorObjectById(objectId)?.fabricObject;
+        if (object) {
+            object.set({
+                left,
+                top
+            })
+            this.canvas?.requestRenderAll();
         }
     }
 

@@ -11,9 +11,9 @@ export class CreateRectanglePlugin extends Plugin {
         this.onEvent = this.onEvent.bind(this);
     }
 
-    public onSelected(newState: boolean): void {
+    public onSelected(selected: boolean): void {
         if (this.canvas === null) throw new Error('Canvas is null');
-        if (newState) {
+        if (selected) {
             this.createAndAddRect();
             this.canvas.on('mouse:move', this.onEvent);
             this.canvas.on('mouse:down', this.onEvent);
@@ -21,14 +21,13 @@ export class CreateRectanglePlugin extends Plugin {
             this.canvas.off('mouse:move', this.onEvent);
             this.canvas.off('mouse:down', this.onEvent);
             if (this.rect) {
-                this.context?.removeObject(this.canvas, this.rect);
+                this.canvas.remove(this.rect);
             }
         }
     }
 
     createAndAddRect() {
         if (this.canvas === null) throw new Error('Canvas is null');
-        // if (!this.rect) {
         this.rect = new fabric.Rect({
             left: 100,
             top: 100,
@@ -40,22 +39,28 @@ export class CreateRectanglePlugin extends Plugin {
             selectable: true,
             strokeUniform: true,
         });
-        this.context?.addObject(this.canvas, this.rect, 'rect')
-        // }
+        this.canvas.add(this.rect);
     }
 
     onEvent(event: fabric.IEvent) {
         if (this.canvas === null) throw new Error('Canvas is null');
         if (this.rect === null) throw new Error('Rect is null');
-        if (!event.pointer) {
-            return;
-        }
+        if (!event.pointer) { return; }
+
         if (event.e.type === "mousedown") {
-            if (!!this.origin) {
+            if (!this.origin) {
+                this.origin = new fabric.Point(event.pointer.x, event.pointer.y);
+            } else {
+                this.context?.fabricCommandManager
+                    .addCommand({
+                        type: 'create-rectangle',
+                        data: {
+                            ...this.rect.toObject(),
+                        }
+                    })
+                this.canvas?.remove(this.rect);
                 this.createAndAddRect();
                 this.origin = null;
-            } else {
-                this.origin = new fabric.Point(event.pointer.x, event.pointer.y);
             }
         } else {
             if (!!this.origin) {

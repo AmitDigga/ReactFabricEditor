@@ -60,7 +60,10 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
                 {object.name}
             </div>
             <Icon fontSize='small' component={DeleteOutline} onClick={() => {
-                props.context.removeObject(canvas as fabric.Canvas, object.fabricObject);
+                props.context.fabricCommandManager.addCommand({
+                    type: 'remove-object',
+                    data: { id: object.id },
+                })
             }}></Icon>
 
         </div>

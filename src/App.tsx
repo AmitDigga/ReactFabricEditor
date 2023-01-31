@@ -63,14 +63,16 @@ function CustomMenuItem(props: MenuItemProps) {
 
 function App() {
     const forceUpdate = useForceUpdate();
-    const [context] = useState(new FabricContext({
-        objectMap: new Map(),
-        editorObjects: [],
-        selectedPluginName: plugins[0].getName(),
-    },
-        plugins,
-        properties,
-    ));
+
+    const [context] = useState(
+        new FabricContext({
+            objectMap: new Map(),
+            editorObjects: [],
+            selectedPluginName: plugins[0].getName(),
+        },
+            plugins,
+            properties,
+        ));
 
     return (
         <div>
@@ -80,8 +82,9 @@ function App() {
             <div style={STYLES.container}>
                 <div style={{ gridArea: 'editor' }}>
                     <Editor
-                        properties={properties}
-                        context={context}
+                        onCanvasReady={(canvas) => {
+                            context.init(canvas);
+                        }}
                     />
                 </div>
                 <div style={{ gridArea: 'menu' }}>
@@ -93,6 +96,13 @@ function App() {
                         }}
                         customRenderer={CustomMenuItem}
                     />
+                    <button
+                        key={context.fabricCommandManager.commands.length}
+                        onClick={() => {
+                            context.fabricCommandManager.undo();
+                        }}
+                        disabled={!context.fabricCommandManager.canUndo()}
+                    >Undo</button>
                 </div>
                 <div style={{ gridArea: 'property-windows' }}>
                     <PropertyWindows
