@@ -38,6 +38,7 @@ export class CreateRectanglePlugin extends Plugin {
             width: 20,
             height: 20,
             selectable: true,
+            strokeUniform: true,
         });
         this.context?.addObject(this.canvas, this.rect, 'rect')
         // }

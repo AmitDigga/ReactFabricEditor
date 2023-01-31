@@ -60,25 +60,25 @@ export class EditorObject {
         });
     }
     onScale(e: any) {
-        if (!this.parent)
-            return;
-        const positionDelta = getPositionDelta(this.dataOnClick.parent, this.dataOnClick.child);
-        const newScale = {
-            scaleXFactor: (this.parent.fabricObject.scaleX ?? 1) / this.dataOnClick.parent.scaleX,
-            scaleYFactor: (this.parent.fabricObject.scaleY ?? 1) / this.dataOnClick.parent.scaleY,
-        };
-        const newPosition = {
-            left: this.dataOnClick.parent.left + positionDelta.deltaX * newScale.scaleXFactor,
-            top: this.dataOnClick.parent.top + positionDelta.deltaY * newScale.scaleYFactor,
-        };
-        const newSize = {
-            width: this.dataOnClick.child.width * newScale.scaleXFactor,
-            height: this.dataOnClick.child.height * newScale.scaleYFactor,
-        };
-        this.fabricObject.set({
-            ...newPosition,
-            ...newSize,
-        });
+        // if (!this.parent)
+        //     return;
+        // const positionDelta = getPositionDelta(this.dataOnClick.parent, this.dataOnClick.child);
+        // const newScale = {
+        //     scaleXFactor: (this.parent.fabricObject.scaleX ?? 1) / this.dataOnClick.parent.scaleX,
+        //     scaleYFactor: (this.parent.fabricObject.scaleY ?? 1) / this.dataOnClick.parent.scaleY,
+        // };
+        // const newPosition = {
+        //     left: this.dataOnClick.parent.left + positionDelta.deltaX * newScale.scaleXFactor,
+        //     top: this.dataOnClick.parent.top + positionDelta.deltaY * newScale.scaleYFactor,
+        // };
+        // const newSize = {
+        //     width: this.dataOnClick.child.width * newScale.scaleXFactor,
+        //     height: this.dataOnClick.child.height * newScale.scaleYFactor,
+        // };
+        // this.fabricObject.set({
+        //     ...newPosition,
+        //     ...newSize,
+        // });
     }
     untrackParent(parent: EditorObject) {
         parent.fabricObject.off('mousedown:before', this.onMouseDown);
