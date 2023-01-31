@@ -1,8 +1,6 @@
 import { Property } from '.';
-import { getRandomUid } from "../utilities/getRandomUid";
-import { FabricCommandManager } from './Command';
 import { EditorObject } from './EditorObject';
-import { Plugin } from './Plugin';
+import { Plugin, FabricCommandManager } from '.';
 
 export type BaseState = {
     editorObjects: EditorObject[];

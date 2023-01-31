@@ -1,15 +1,12 @@
-import { FabricContext, Plugin, Property } from ".";
+import { FabricContext, Plugin, Property } from "..";
+import { Persistance } from "./Persistance";
 
-export abstract class Persistance<T> {
-    abstract save(t: T): string;
-    abstract load(text: string): T;
-}
 
 export class FabricPersistance extends Persistance<FabricContext> {
     constructor(
         private plugins: Plugin[],
         private properties: Property<any>[],
-        private canvas: fabric.Canvas,
+        private canvas: fabric.Canvas
     ) { super(); }
     save(canvas: FabricContext): string {
         return JSON.stringify(canvas.fabricCommandManager.commands);
@@ -23,7 +20,7 @@ export class FabricPersistance extends Persistance<FabricContext> {
                 selectedPluginName: "Select",
             },
             this.plugins,
-            this.properties,
+            this.properties
         );
         context.init(this.canvas);
         context.fabricCommandManager.addCommands(commands);

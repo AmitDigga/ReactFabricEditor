@@ -4,8 +4,7 @@ import { SelectPlugin, CreateRectanglePlugin, XYLocationPlugin } from './lib/plu
 import { NameProperty, LeftProperty, FillProperty, EveryObjectProperty, TopProperty, HeightProperty, SelectableProperty, WidthProperty } from './lib/properties';
 import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon } from '@mui/icons-material';
 import { PropertyWindows, Menu, MenuItemProps, Editor, ListObjectTree } from './components';
-import { BaseState, FabricContext, Plugin, Property } from './lib/core';
-import { FabricPersistance } from './lib/core/Persistance';
+import { BaseState, FabricContext, FabricPersistance, Plugin, Property } from './lib/core';
 
 
 const plugins: Plugin[] = [
