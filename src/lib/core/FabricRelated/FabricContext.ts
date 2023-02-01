@@ -43,10 +43,10 @@ export class FabricContext<State extends BaseState = BaseState> implements IDest
         const previousPluginName = this.state.selectedPluginName;
         this.plugins.forEach(p => {
             if (p.getName() === previousPluginName) {
-                p.onSelected(false);
+                p.setSelected(false);
             }
             if (p.getName() === plugin.getName()) {
-                p.onSelected(true);
+                p.setSelected(true);
             }
         });
         this.state.selectedPluginName = plugin.getName();
