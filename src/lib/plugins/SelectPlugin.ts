@@ -1,4 +1,3 @@
-import { fabric } from 'fabric';
 import { IEvent } from 'fabric/fabric-impl';
 import { FabricContext, Plugin } from '../core';
 
@@ -13,15 +12,15 @@ export class SelectPlugin extends Plugin {
 
     onMouseUp = (e: IEvent) => {
         if (!e.target) return;
-        this.context?.fabricCommandManager
+        this.context?.commandManager
             .addCommand({
                 type: 'move-object',
                 data: {
                     id: e.target.name ?? '',
                     left: e.target.left ?? 0,
                     top: e.target.top ?? 0,
-                }
+                },
             },
-                false)
+                { execute: false })
     };
 }

@@ -2,13 +2,13 @@ import React from 'react';
 import { Plugin } from '../lib/core';
 
 
-export type MenuItemProps = {
+export type MenuPluginItemProps = {
     plugin: Plugin;
     selected: boolean;
     onValueChange: (plugin: Plugin, value: boolean) => void;
 }
 
-export function MenuItem({ plugin, selected, onValueChange }: MenuItemProps) {
+export function MenuPluginItem({ plugin, selected, onValueChange }: MenuPluginItemProps) {
     const name = plugin.getName();
     return <div key={name}>
         <label htmlFor={name}>{name}</label>
@@ -19,4 +19,4 @@ export function MenuItem({ plugin, selected, onValueChange }: MenuItemProps) {
 }
 
 
-export default MenuItem;
+export default MenuPluginItem;

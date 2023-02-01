@@ -3,16 +3,14 @@ import { IDestroyable } from "./IDestroyable";
 export class EditorObject implements IDestroyable {
     id: string;
     name: string;
-    type: string;
     parent: EditorObject | null;
     children: EditorObject[];
     fabricObject: fabric.Object;
     tempPositionData: TransformData;
 
-    constructor(id: string, name: string, type: string, fabricObject: fabric.Object) {
+    constructor(id: string, name: string, fabricObject: fabric.Object) {
         this.id = id;
         this.name = name;
-        this.type = type;
         this.fabricObject = fabricObject;
         this.parent = null;
         this.children = [];

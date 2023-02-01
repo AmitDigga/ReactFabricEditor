@@ -11,21 +11,23 @@ export class FabricCommandManager extends MementoCommandManager<AllCommands> {
         super();
     }
 
-
     executeCommand(command: AllCommands) {
         const { type, data } = command;
         switch (type) {
             case "create-rectangle":
-                this.context.addObject(new fabric.Rect(data), "");
+                this.context.addObject(new fabric.Rect(data));
                 break;
             case "remove-object":
                 this.context.removeObjectById(data.id);
                 break;
             case "move-object":
-                this.context.moveObjectTo(data.id, data.left, data.top);
+                this.context.moveObjectById(data.id, data.left, data.top);
                 break;
             case "set-parent":
                 this.context.setParentById(data.childId, data.parentId);
+                break;
+            case "undo":
+                this.undo();
                 break;
             default:
                 throw new Error("Command not found");

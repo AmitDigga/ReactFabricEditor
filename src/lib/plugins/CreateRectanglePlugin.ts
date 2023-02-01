@@ -47,13 +47,13 @@ export class CreateRectanglePlugin extends Plugin {
         if (!this.origin) {
             this.origin = new fabric.Point(event.pointer.x, event.pointer.y);
         } else {
-            this.context?.fabricCommandManager
+            this.context?.commandManager
                 .addCommand({
                     type: 'create-rectangle',
                     data: {
                         ...this.rect.toObject(),
                         name: getRandomUid(),
-                    }
+                    },
                 })
             canvas?.remove(this.rect);
             this.createAndAddRect();

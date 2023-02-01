@@ -1,16 +1,24 @@
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import { useForceUpdate } from './hooks/useForceUpdate';
 import { SelectPlugin, CreateRectanglePlugin } from './lib/plugins';
+import { LoadAction, SaveAction, UndoAction } from './lib/actions';
 import { NameProperty, LeftProperty, FillProperty, EveryObjectProperty, TopProperty, HeightProperty, SelectableProperty, WidthProperty } from './lib/properties';
-import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon } from '@mui/icons-material';
-import { PropertyWindows, Menu, MenuItemProps, Editor, ListObjectTree } from './components';
-import { BaseState, FabricContext, FabricPersistance, Plugin, Property } from './lib/core';
+import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon, UndoOutlined, SaveOutlined, DownloadOutlined } from '@mui/icons-material';
+import { PropertyWindows, Menu, MenuPluginItemProps, Editor, ListObjectTree, MenuActionItemProps } from './components';
+import { Action, FabricContext, FabricCommandPersistance, Plugin, Property } from './lib/core';
+import { useWatch } from './hooks/useWatch';
 
 
 const plugins: Plugin[] = [
-    new SelectPlugin('Selection', false),
+    new SelectPlugin('Selection'),
     // new ShowGridPlugin('Show Grid', false),
-    new CreateRectanglePlugin('Create Rectangle', false),
+    new CreateRectanglePlugin('Create Rectangle'),
+]
+
+const actions: Action[] = [
+    new UndoAction('Undo'),
+    new SaveAction('Save', (text) => { window.localStorage.setItem('fabric', text) }),
+    new LoadAction('Load', () => { return window.localStorage.getItem('fabric') ?? null }),
 ]
 const properties = [
     new EveryObjectProperty("All Objects", "every-object-property", "global"),
@@ -35,18 +43,24 @@ const STYLES: Record<string, CSSProperties> = {
     editor: { border: '1px solid black' },
 }
 
-function getIconFor(plugin: Plugin) {
-    switch (plugin.getName()) {
+function getIconFor(item: Plugin | Action) {
+    switch (item.getName()) {
         case 'Selection':
             return HighlightAltOutlined;
         case 'Create Rectangle':
             return RectangleOutlined;
+        case 'Undo':
+            return UndoOutlined;
+        case 'Save':
+            return SaveOutlined;
+        case 'Load':
+            return DownloadOutlined;
         default:
             return MenuIcon;
     }
 }
 
-function CustomMenuItem(props: MenuItemProps) {
+function CustomPluginItem(props: MenuPluginItemProps) {
     const { plugin, selected } = props;
     const color = selected ? 'primary' : 'secondary';
     const Icon = getIconFor(plugin);
@@ -60,18 +74,40 @@ function CustomMenuItem(props: MenuItemProps) {
     )
 }
 
+function CustomActionItem(props: MenuActionItemProps) {
+    const { action, onTakeAction } = props;
+    const color = 'secondary';
+    const Icon = getIconFor(action);
+    return (
+        <Icon
+            style={{ padding: 5 }}
+            component={Icon}
+            color={color}
+            onClick={() => { onTakeAction(action) }}
+        />
+    )
+}
+
 function App() {
     const forceUpdate = useForceUpdate();
 
-    const [context, setContext] = useState(
-        new FabricContext({
-            objectMap: new Map(),
-            editorObjects: [],
-            selectedPluginName: plugins[0].getName(),
-        },
-            plugins,
-            properties,
-        ));
+    const [context, setContext] = useState(new FabricContext());
+
+    useEffect(() => {
+        plugins.forEach(plugin => {
+            context.registerPlugin(plugin);
+        });
+        properties.forEach(property => {
+            context.registerProperty(property);
+        })
+        actions.forEach(action => {
+            context.registerAction(action);
+        })
+        forceUpdate();
+    }, []);
+
+    useWatch(context.pluginChange$);
+    useWatch(context.commandManager.onChange$);
 
     return (
         <div>
@@ -93,40 +129,12 @@ function App() {
                             context.selectPlugin(plugin)
                             forceUpdate();
                         }}
-                        customRenderer={CustomMenuItem}
+                        onActionTaken={(action) => {
+                            action.execute();
+                        }}
+                        renderPlugin={CustomPluginItem}
+                        renderAction={CustomActionItem}
                     />
-                    <button
-                        key={context.fabricCommandManager.commands.length}
-                        onClick={() => {
-                            context.fabricCommandManager.undo();
-                        }}
-                        disabled={!context.fabricCommandManager.canUndo()}
-                    >Undo</button>
-                    <button
-                        onClick={() => {
-                            const string = new FabricPersistance(
-                                plugins,
-                                properties,
-                                context.canvas as any,
-                            ).save(context);
-                            window.localStorage.setItem('data', string);
-                        }}
-                    >Save</button>
-                    <button
-                        onClick={() => {
-                            const string = window.localStorage.getItem('data');
-                            const canvas = context.canvas as fabric.Canvas;
-                            if (string === null) return;
-                            context.reset();
-                            canvas.clear();
-                            const c = new FabricPersistance(
-                                plugins,
-                                properties,
-                                context.canvas as any,
-                            ).load(string);
-                            setContext(c);
-                        }}
-                    >Load</button>
                 </div>
                 <div style={{ gridArea: 'property-windows' }}>
                     <PropertyWindows

@@ -6,7 +6,7 @@ import { Plugin } from './Plugin';
 
 export type PropertyScope = Plugin | 'global';
 
-export abstract class Property<T> extends FabricContextUser {
+export abstract class Property<T = any> extends FabricContextUser {
     change$: Subject<any> = new Subject<any>();
     constructor(
         public readonly name: string,

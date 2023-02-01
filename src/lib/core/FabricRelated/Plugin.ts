@@ -1,4 +1,3 @@
-import { fabric } from 'fabric';
 import { EventName, IEvent } from 'fabric/fabric-impl';
 import { filter, Observable, Subject } from 'rxjs';
 import { FabricContextUser } from './FabricContextUser';
@@ -6,7 +5,7 @@ import { FabricContextUser } from './FabricContextUser';
 export abstract class Plugin extends FabricContextUser {
     private selected: boolean = false;
     public select$ = new Subject<boolean>();
-    constructor(private name: string, private state: boolean) {
+    constructor(private name: string) {
         super();
     }
     getName(): string {

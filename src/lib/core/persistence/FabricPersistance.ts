@@ -1,29 +1,14 @@
-import { FabricContext, Plugin, Property } from "..";
+import { AllCommands } from "..";
 import { Persistance } from "./Persistance";
 
 
-export class FabricPersistance extends Persistance<FabricContext> {
-    constructor(
-        private plugins: Plugin[],
-        private properties: Property<any>[],
-        private canvas: fabric.Canvas
-    ) { super(); }
-    save(canvas: FabricContext): string {
-        return JSON.stringify(canvas.fabricCommandManager.commands);
+export class FabricCommandPersistance extends Persistance<AllCommands[]> {
+    constructor() { super(); }
+    save(commands: AllCommands[]): string {
+        return JSON.stringify(commands);
     }
-    load(text: string): FabricContext {
+    load(text: string): AllCommands[] {
         const commands = JSON.parse(text);
-        const context = new FabricContext(
-            {
-                editorObjects: [],
-                objectMap: new Map(),
-                selectedPluginName: "Select",
-            },
-            this.plugins,
-            this.properties
-        );
-        context.init(this.canvas);
-        context.fabricCommandManager.addCommands(commands);
-        return context;
+        return commands;
     }
 }

@@ -34,7 +34,7 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
         draggable
         onDropCapture={(e) => {
             const data = e.dataTransfer.getData('text');
-            props.context.fabricCommandManager.addCommand({
+            props.context.commandManager.addCommand({
                 type: 'set-parent',
                 data: { childId: data, parentId: object.id },
             })
@@ -63,7 +63,7 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
                 {object.name}
             </div>
             <Icon fontSize='small' component={DeleteOutline} onClick={() => {
-                props.context.fabricCommandManager.addCommand({
+                props.context.commandManager.addCommand({
                     type: 'remove-object',
                     data: { id: object.id },
                 })
