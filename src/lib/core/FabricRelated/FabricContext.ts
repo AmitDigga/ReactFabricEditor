@@ -1,6 +1,8 @@
-import { IDestroyable, Property } from '..';
+import { fromEvent, Observable, pipe, takeUntil } from 'rxjs';
+import { FabricContextUser, IDestroyable, Property } from '..';
 import { EditorObject } from './EditorObject';
 import { Plugin, FabricCommandManager } from '..';
+import { IEvent } from 'fabric/fabric-impl';
 
 export type BaseState = {
     editorObjects: EditorObject[];
@@ -17,6 +19,15 @@ export class FabricContext<State extends BaseState = BaseState> implements IDest
         public properties: Property<any>[],
     ) {
         this.fabricCommandManager = new FabricCommandManager(this);
+    }
+
+    subscribeToEvents(eventName: string, fabricContextUser: FabricContextUser): Observable<IEvent<Event>> {
+        if (!this.canvas) {
+            throw new Error("Canvas is not initialized");
+        }
+        return fromEvent(this.canvas, eventName).pipe(
+            takeUntil(fabricContextUser.destroy$)
+        )
     }
 
     init(canvas: fabric.Canvas) {
