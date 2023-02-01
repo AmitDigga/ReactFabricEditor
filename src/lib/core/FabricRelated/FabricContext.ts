@@ -10,11 +10,11 @@ export type BaseState = {
     selectedPluginName: string;
 }
 
-export class FabricContext<State extends BaseState = BaseState> implements IDestroyable {
+export class FabricContext implements IDestroyable {
     canvas?: fabric.Canvas;
     fabricCommandManager: FabricCommandManager;
     constructor(
-        public state: State,
+        public state: BaseState,
         public plugins: Plugin[],
         public properties: Property<any>[],
     ) {
@@ -63,7 +63,7 @@ export class FabricContext<State extends BaseState = BaseState> implements IDest
         this.state.selectedPluginName = plugin.getName();
     }
 
-    updateState(state: State) {
+    updateState(state: BaseState) {
         this.state = state;
     }
 

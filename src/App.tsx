@@ -64,7 +64,7 @@ function App() {
     const forceUpdate = useForceUpdate();
 
     const [context, setContext] = useState(
-        new FabricContext<BaseState>({
+        new FabricContext({
             objectMap: new Map(),
             editorObjects: [],
             selectedPluginName: plugins[0].getName(),
