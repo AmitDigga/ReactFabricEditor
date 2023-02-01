@@ -17,18 +17,13 @@ export class EditorObject implements IDestroyable {
         this.parent = null;
         this.children = [];
         this.tempPositionData = getObjectData(fabricObject);
-        this.onMove = this.onMove.bind(this);
-        this.onScale = this.onScale.bind(this);
-        this.onMouseDown = this.onMouseDown.bind(this);
         this.fabricObject.on('mousedown:before', this.onMouseDown);
         this.fabricObject.on('moving', this.onMove);
-        this.fabricObject.on('scaling', this.onScale);
     }
 
     destroy() {
         this.fabricObject.off('mousedown:before', this.onMouseDown);
         this.fabricObject.off('moving', this.onMove);
-        this.fabricObject.off('scaling', this.onScale);
     }
 
     removeChild(id: string) {
@@ -48,10 +43,10 @@ export class EditorObject implements IDestroyable {
             this.parent.addChild(this);
         }
     }
-    onMouseDown(e: any) {
+    onMouseDown = (e: any) => {
         this.tempPositionData = getObjectData(this.fabricObject);
     };
-    onMove(e: any) {
+    onMove = (e: any) => {
         const newTransform = getObjectData(this.fabricObject);
         const displacement = {
             dLeft: newTransform.left - this.tempPositionData.left,
@@ -60,7 +55,7 @@ export class EditorObject implements IDestroyable {
         this.tempPositionData = newTransform;
         this.moveChildren(displacement)
     }
-    moveChildren(displacement: { dLeft: number, dTop: number }) {
+    private moveChildren(displacement: { dLeft: number, dTop: number }) {
         this.children.forEach(child => {
             child.fabricObject.set({
                 left: (child.fabricObject.left ?? 0) + displacement.dLeft,
@@ -68,27 +63,6 @@ export class EditorObject implements IDestroyable {
             });
             child.moveChildren(displacement);
         });
-    }
-    onScale(e: any) {
-        // if (!this.parent)
-        //     return;
-        // const positionDelta = getPositionDelta(this.dataOnClick.parent, this.dataOnClick.child);
-        // const newScale = {
-        //     scaleXFactor: (this.parent.fabricObject.scaleX ?? 1) / this.dataOnClick.parent.scaleX,
-        //     scaleYFactor: (this.parent.fabricObject.scaleY ?? 1) / this.dataOnClick.parent.scaleY,
-        // };
-        // const newPosition = {
-        //     left: this.dataOnClick.parent.left + positionDelta.deltaX * newScale.scaleXFactor,
-        //     top: this.dataOnClick.parent.top + positionDelta.deltaY * newScale.scaleYFactor,
-        // };
-        // const newSize = {
-        //     width: this.dataOnClick.child.width * newScale.scaleXFactor,
-        //     height: this.dataOnClick.child.height * newScale.scaleYFactor,
-        // };
-        // this.fabricObject.set({
-        //     ...newPosition,
-        //     ...newSize,
-        // });
     }
 }
 
