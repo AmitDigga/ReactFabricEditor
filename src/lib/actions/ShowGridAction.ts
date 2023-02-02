@@ -21,18 +21,20 @@ export class ShowGridAction extends Action {
         const visible = this.gridVisible;
         const lightProperties = { stroke: '#00888844', selectable: false, name: 'gridLine', visible };
         const darkerProperties = { stroke: '#00888888', selectable: false, name: 'gridLine', visible };
-        const canvasWidth = canvas.width ?? 600;
-        const canvasHeight = canvas.height ?? 600;
-        const lines = 20;
+        const canvasWidth = canvas.width ?? 0;
+        const canvasHeight = canvas.height ?? 0;
+        const gap = 20;
+        const H_LINES = Math.min(canvasHeight / gap, 500);
+        const V_LINES = Math.min(canvasWidth / gap, 500);
         const darkerLineGap = 5;
-        for (let hLines = 0; hLines < lines; hLines++) {
-            const y = canvasHeight * hLines / lines;
+        for (let hLines = 0; hLines < H_LINES; hLines++) {
+            const y = canvasHeight * hLines / H_LINES;
             const isDarker = hLines % darkerLineGap == 0;
             const line = new fabric.Line([0, y, canvasWidth, y], isDarker ? darkerProperties : lightProperties);
             canvas.add(line);
         }
-        for (let vLines = 0; vLines < lines; vLines++) {
-            const x = canvasWidth * vLines / lines;
+        for (let vLines = 0; vLines < V_LINES; vLines++) {
+            const x = canvasWidth * vLines / V_LINES;
             const isDarker = vLines % darkerLineGap == 0;
             const line = new fabric.Line([x, 0, x, canvasHeight], isDarker ? darkerProperties : lightProperties);
             canvas.add(line);
