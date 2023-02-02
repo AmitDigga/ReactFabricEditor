@@ -25,7 +25,7 @@ export function Editor(props: EditorProps) {
 
 
     return (
-        <canvas height="600" width="600" id="canvas" style={STYLES.canvas}></canvas>
+        <canvas height="500" width="750" id="canvas" style={STYLES.canvas}></canvas>
     )
 }
 export default Editor;
