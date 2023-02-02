@@ -17,6 +17,19 @@ export class FabricCommandManager extends MementoCommandManager<AllCommands> {
             case "create-rectangle":
                 this.context.addObject(new fabric.Rect(data));
                 break;
+            case "create-object":
+                const options = data.options;
+                switch (data.objectType) {
+                    case 'rect':
+                        this.context.addObject(new fabric.Rect(options));
+                        break;
+                    case 'circle':
+                        this.context.addObject(new fabric.Circle(options));
+                        break;
+                    default:
+                        throw new Error("Object type not found");
+                }
+                break;
             case "remove-object":
                 this.context.removeObjectById(data.id);
                 break;

@@ -116,6 +116,7 @@ export class FabricContext implements IDestroyable {
     }
 
     addObject(object: fabric.Object) {
+        if (object.name === undefined) throw new Error("Object name should not be undefined")
         if (this.getEditorObjectById(object.name as string)) {
             throw new Error(`Object with name (${object.name}) already exists`);
         }

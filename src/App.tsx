@@ -1,9 +1,9 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
 import { useForceUpdate } from './hooks/useForceUpdate';
-import { SelectPlugin, CreateRectanglePlugin } from './lib/plugins';
+import { SelectPlugin, CreateRectanglePlugin, CreateRectPlugin, CreateCirclePlugin } from './lib/plugins';
 import { LoadAction, SaveAction, UndoAction } from './lib/actions';
 import { LeftProperty, FillProperty, EveryObjectProperty, TopProperty, HeightProperty, SelectableProperty, WidthProperty } from './lib/properties';
-import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon, UndoOutlined, SaveOutlined, DownloadOutlined } from '@mui/icons-material';
+import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon, UndoOutlined, SaveOutlined, DownloadOutlined, CircleOutlined } from '@mui/icons-material';
 import { PropertyWindows, Menu, MenuPluginItemProps, Editor, ListObjectTree, MenuActionItemProps } from './components';
 import { Action, FabricContext, FabricCommandPersistance, Plugin, Property } from './lib/core';
 import { useWatch } from './hooks/useWatch';
@@ -12,7 +12,8 @@ import { useWatch } from './hooks/useWatch';
 const plugins: Plugin[] = [
     new SelectPlugin('Selection'),
     // new ShowGridPlugin('Show Grid', false),
-    new CreateRectanglePlugin('Create Rectangle'),
+    new CreateRectPlugin('Create Rect'),
+    new CreateCirclePlugin('Create Circle'),
 ]
 
 const actions: Action[] = [
@@ -47,8 +48,10 @@ function getIconFor(item: Plugin | Action) {
     switch (item.getName()) {
         case 'Selection':
             return HighlightAltOutlined;
-        case 'Create Rectangle':
+        case 'Create Rect':
             return RectangleOutlined;
+        case 'Create Circle':
+            return CircleOutlined;
         case 'Undo':
             return UndoOutlined;
         case 'Save':

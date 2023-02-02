@@ -1,8 +1,17 @@
 import { Command } from "./Command";
 
-export type CreateObjectCommand = Command & {
+export type CreateRectangleCommand = Command & {
     readonly type: "create-rectangle",
     readonly data: fabric.IRectOptions,
+}
+export type CreateObjectTypes = 'rect' | 'circle';
+export type CreateObjectCommand = Command & {
+    readonly type: "create-object",
+    readonly data: {
+        readonly objectType: CreateObjectTypes,
+        readonly options: fabric.IObjectOptions,
+
+    },
 }
 
 export type RemoveObjectCommand = Command & {
@@ -33,6 +42,7 @@ export type UndoCommand = Command & {
 
 
 export type AllCommands =
+    CreateRectangleCommand |
     CreateObjectCommand |
     RemoveObjectCommand |
     MoveObjectCommand |
