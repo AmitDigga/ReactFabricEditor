@@ -20,8 +20,7 @@ export class EditorObjectData {
         this.data = data;
     }
 
-    getKey<T extends SerializableObject>(key: string, defaultValue: T): T;
-    getKey<T extends SerializableObject>(key: string, defaultValue: T | undefined = undefined): T | undefined {
+    getKey<T extends SerializableObject>(key: string, defaultValue?: T): T | undefined {
         return this.data[key] as T ?? defaultValue;
     }
 

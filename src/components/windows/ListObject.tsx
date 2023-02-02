@@ -27,7 +27,7 @@ export function DisplayEditorObject(props: { object: EditorObject; canvas?: fabr
         style={{
             padding: 5,
         }}
-        key={object.name}>
-        <div>{object.name}</div>
+        key={object.id}>
+        <div>{object.id}</div>
     </div>;
 }

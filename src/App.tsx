@@ -145,7 +145,7 @@ function App() {
                         windowTitle='Exposed Properties'
                         customPropertyRenderer={{
                             'every-object-property': (property: Property<any>) => {
-                                return <ListObjectTree getObjectName={(eo) => eo.data.getKey<string>('name', eo.id)} context={context} property={property as EveryObjectProperty} />
+                                return <ListObjectTree getObjectName={(eo) => eo.data.getKey('name', eo.id) as string} context={context} property={property as EveryObjectProperty} />
                             }
                         }}
                     />
