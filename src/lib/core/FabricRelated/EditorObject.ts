@@ -54,7 +54,7 @@ export class EditorObject implements IDestroyable {
         this.tempPositionData = newTransform;
         this.moveChildren(displacement)
     }
-    private moveChildren(displacement: { dLeft: number, dTop: number }) {
+    public moveChildren(displacement: { dLeft: number, dTop: number }) {
         this.children.forEach(child => {
             child.fabricObject.set({
                 left: (child.fabricObject.left ?? 0) + displacement.dLeft,
