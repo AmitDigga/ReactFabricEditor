@@ -1,3 +1,4 @@
+import { SerializableObject } from "../FabricRelated/EditorObjectData";
 import { Command } from "./Command";
 
 export type CreateRectangleCommand = Command & {
@@ -39,6 +40,28 @@ export type UndoCommand = Command & {
     readonly data: void,
 }
 
+export type EditorObjectDataSetKeyCommand = Command & {
+    readonly type: "editor-object-data-set-key",
+    readonly data: {
+        objectId: string,
+        key: string,
+        value: SerializableObject
+    },
+}
+export type EditorObjectDataClearCommand = Command & {
+    readonly type: "editor-object-data-clear",
+    readonly data: {
+        objectId: string,
+    },
+}
+export type EditorObjectDataSetDataCommand = Command & {
+    readonly type: "editor-object-data-set-data",
+    readonly data: {
+        objectId: string,
+        data: Record<string, SerializableObject>
+    },
+}
+
 
 
 export type AllCommands =
@@ -48,4 +71,7 @@ export type AllCommands =
     MoveObjectCommand |
     UpdateObjectCommand |
     SetParentCommand |
-    UndoCommand;
+    UndoCommand |
+    EditorObjectDataSetKeyCommand |
+    EditorObjectDataClearCommand |
+    EditorObjectDataSetDataCommand;

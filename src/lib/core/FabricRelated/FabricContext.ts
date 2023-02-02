@@ -122,7 +122,7 @@ export class FabricContext implements IDestroyable {
         }
         const id = object.name as string;
         this.canvas?.add(object);
-        const editorObject = new EditorObject(id, id, object);
+        const editorObject = new EditorObject(id, object);
         this.destroyable.push(editorObject);
         this.state.editorObjects.push(editorObject);
         this.state.objectMap.set(object, editorObject);

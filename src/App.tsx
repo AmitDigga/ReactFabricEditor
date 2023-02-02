@@ -1,11 +1,11 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
 import { useForceUpdate } from './hooks/useForceUpdate';
-import { SelectPlugin, CreateRectanglePlugin, CreateRectPlugin, CreateCirclePlugin } from './lib/plugins';
+import { SelectPlugin, CreateRectPlugin, CreateCirclePlugin } from './lib/plugins';
 import { LoadAction, SaveAction, UndoAction } from './lib/actions';
-import { LeftProperty, FillProperty, EveryObjectProperty, TopProperty, HeightProperty, SelectableProperty, WidthProperty } from './lib/properties';
+import { LeftProperty, FillProperty, EveryObjectProperty, TopProperty, HeightProperty, SelectableProperty, WidthProperty, NameProperty } from './lib/properties';
 import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon, UndoOutlined, SaveOutlined, DownloadOutlined, CircleOutlined } from '@mui/icons-material';
 import { PropertyWindows, Menu, MenuPluginItemProps, Editor, ListObjectTree, MenuActionItemProps } from './components';
-import { Action, FabricContext, FabricCommandPersistance, Plugin, Property } from './lib/core';
+import { Action, FabricContext, Plugin, Property } from './lib/core';
 import { useWatch } from './hooks/useWatch';
 
 
@@ -23,7 +23,7 @@ const actions: Action[] = [
 ]
 const properties = [
     new EveryObjectProperty("All Objects", "every-object-property", "global"),
-    // new NameProperty("Name", "string", plugins[0], ""),
+    new NameProperty("Name", "string", plugins[0], ""),
     new LeftProperty("X", "number", plugins[0], 0),
     new TopProperty("Y", "number", plugins[0], 0),
     new WidthProperty("Width", "number", plugins[0], 0),
@@ -145,7 +145,7 @@ function App() {
                         windowTitle='Exposed Properties'
                         customPropertyRenderer={{
                             'every-object-property': (property: Property<any>) => {
-                                return <ListObjectTree context={context} property={property as EveryObjectProperty} />
+                                return <ListObjectTree getObjectName={(eo) => eo.data.getKey<string>('name', eo.id)} context={context} property={property as EveryObjectProperty} />
                             }
                         }}
                     />

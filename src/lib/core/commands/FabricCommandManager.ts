@@ -45,6 +45,24 @@ export class FabricCommandManager extends MementoCommandManager<AllCommands> {
             case "undo":
                 this.undo();
                 break;
+            case "editor-object-data-set-data":
+                this.context
+                    .getEditorObjectByIdOrThrow(data.objectId)
+                    .data
+                    .setData(data.data);
+                break;
+            case "editor-object-data-set-key":
+                this.context
+                    .getEditorObjectByIdOrThrow(data.objectId)
+                    .data
+                    .setKey(data.key, data.value);
+                break;
+            case "editor-object-data-clear":
+                this.context
+                    .getEditorObjectByIdOrThrow(data.objectId)
+                    .data
+                    .clearData();
+                break;
             default:
                 throw new Error("Command not found");
         }

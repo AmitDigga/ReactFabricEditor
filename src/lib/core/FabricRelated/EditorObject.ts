@@ -1,22 +1,23 @@
+import { EditorObjectData } from "./EditorObjectData";
 import { IDestroyable } from "./IDestroyable";
 
 export class EditorObject implements IDestroyable {
     id: string;
-    name: string;
     parent: EditorObject | null;
     children: EditorObject[];
     fabricObject: fabric.Object;
     tempPositionData: TransformData;
+    data: EditorObjectData;
 
-    constructor(id: string, name: string, fabricObject: fabric.Object) {
+    constructor(id: string, fabricObject: fabric.Object) {
         this.id = id;
-        this.name = name;
         this.fabricObject = fabricObject;
         this.parent = null;
         this.children = [];
         this.tempPositionData = getObjectData(fabricObject);
         this.fabricObject.on('mousedown:before', this.onMouseDown);
         this.fabricObject.on('moving', this.onMove);
+        this.data = new EditorObjectData();
     }
 
     destroy() {
