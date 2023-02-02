@@ -160,7 +160,7 @@ export class FabricContext implements IDestroyable {
                 left,
                 top
             })
-            this.canvas?.requestRenderAll();
+            // this.canvas?.requestRenderAll();
         }
     }
 
@@ -168,7 +168,7 @@ export class FabricContext implements IDestroyable {
         const object = this.getEditorObjectById(objectId)?.fabricObject;
         if (object) {
             object.setOptions(objectOptions)
-            this.canvas?.requestRenderAll();
+            // this.canvas?.requestRenderAll();
         }
     }
 

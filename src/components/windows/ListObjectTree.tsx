@@ -57,7 +57,7 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
             <div
                 onClick={(e) => {
                     canvas?.setActiveObject(object.fabricObject);
-                    canvas?.requestRenderAll();
+                    // canvas?.requestRenderAll();
                     props.onClickAction();
                 }}>
                 {object.name}

@@ -21,7 +21,7 @@ export function DisplayEditorObject(props: { object: EditorObject; canvas?: fabr
     return <div
         onClick={(e) => {
             canvas?.setActiveObject(object.fabricObject);
-            canvas?.requestRenderAll();
+            // canvas?.requestRenderAll();
             forceUpdate();
         }}
         style={{

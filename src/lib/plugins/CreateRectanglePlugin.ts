@@ -73,7 +73,7 @@ export class CreateRectanglePlugin extends Plugin {
             this.rect.set('left', event.pointer.x);
             this.rect.set('top', event.pointer.y);
         }
-        canvas.renderAll();
+        canvas.requestRenderAll();
     }
 
 }
