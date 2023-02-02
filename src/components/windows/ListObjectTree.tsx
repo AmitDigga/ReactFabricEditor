@@ -7,8 +7,8 @@ import { EveryObjectProperty } from '../../lib/properties/EveryObjectProperty';
 
 export function ListObjectTree({ property, context }: { property: EveryObjectProperty; context: FabricContext; }): JSX.Element {
     const forceUpdate = useForceUpdate();
-    const parentObjects = (property.context?.state.editorObjects ?? [])
-        .filter(o => o.parent == null);
+    const parentObjects: EditorObject[] = (property.context?.state.editorObjects ?? [] as EditorObject[])
+        .filter((o: EditorObject) => o.parent == null);
     return <div>
         <h5>{property.name} ({property.context?.state.editorObjects.length ?? 0})</h5>
         <div>
@@ -34,7 +34,7 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
         draggable
         onDropCapture={(e) => {
             const data = e.dataTransfer.getData('text');
-            props.context.fabricCommandManager.addCommand({
+            props.context.commandManager.addCommand({
                 type: 'set-parent',
                 data: { childId: data, parentId: object.id },
             })
@@ -57,13 +57,13 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
             <div
                 onClick={(e) => {
                     canvas?.setActiveObject(object.fabricObject);
-                    canvas?.requestRenderAll();
+                    // canvas?.requestRenderAll();
                     props.onClickAction();
                 }}>
                 {object.name}
             </div>
             <Icon fontSize='small' component={DeleteOutline} onClick={() => {
-                props.context.fabricCommandManager.addCommand({
+                props.context.commandManager.addCommand({
                     type: 'remove-object',
                     data: { id: object.id },
                 })

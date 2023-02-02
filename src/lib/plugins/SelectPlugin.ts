@@ -1,43 +1,26 @@
-import { fabric } from 'fabric';
 import { IEvent } from 'fabric/fabric-impl';
-import { FabricContext } from '../core';
-import { Plugin } from '../core/Plugin';
+import { FabricContext, Plugin } from '../core';
 
 export class SelectPlugin extends Plugin {
-    canvas: fabric.Canvas | null = null;
     onInit(context: FabricContext): void {
-        this.onEvent = this.onEvent.bind(this);
-        this.onMouseUp = this.onMouseUp.bind(this);
         const canvas = this.context?.canvas;
         if (!canvas) throw new Error('Canvas is null');
+        this.subscribeToEvents('mouse:up').subscribe(this.onMouseUp);
+        this.select$.subscribe((selected) => { canvas.selection = selected; })
         canvas.selection = this.isSelected();
-        canvas.on('mouse:up', this.onMouseUp);
-    }
-    onSelected(selected: boolean): void {
-        const canvas = this.context?.canvas;
-        if (!canvas) return;
-        if (selected) {
-            canvas.selection = true;
-            canvas.on('mouse:up', this.onEvent);
-        } else {
-            canvas.selection = false;
-            canvas.off('mouse:up', this.onEvent);
-        }
-    }
-    onEvent(e: fabric.IEvent): void {
     }
 
-    onMouseUp(e: IEvent) {
+    onMouseUp = (e: IEvent) => {
         if (!e.target) return;
-        this.context?.fabricCommandManager
+        this.context?.commandManager
             .addCommand({
                 type: 'move-object',
                 data: {
                     id: e.target.name ?? '',
                     left: e.target.left ?? 0,
                     top: e.target.top ?? 0,
-                }
+                },
             },
-                false)
+                { execute: false })
     };
 }

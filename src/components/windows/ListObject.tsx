@@ -1,13 +1,13 @@
 import React from 'react';
 import { useForceUpdate } from '../../hooks/useForceUpdate';
 import { EveryObjectProperty } from '../../lib/properties/EveryObjectProperty';
-import { EditorObject } from "../../lib/core/EditorObject";
+import { EditorObject } from "../../lib/core";
 
 export function ListObject({ property }: { property: EveryObjectProperty; }): JSX.Element {
     return <div>
         <h5>{property.name}</h5>
         <div>
-            {property.getValue().map(p => {
+            {property.getValue().map((p: EditorObject) => {
                 return <DisplayEditorObject object={p} canvas={property.context?.canvas}></DisplayEditorObject>;
             })}
         </div>
@@ -21,7 +21,7 @@ export function DisplayEditorObject(props: { object: EditorObject; canvas?: fabr
     return <div
         onClick={(e) => {
             canvas?.setActiveObject(object.fabricObject);
-            canvas?.requestRenderAll();
+            // canvas?.requestRenderAll();
             forceUpdate();
         }}
         style={{
