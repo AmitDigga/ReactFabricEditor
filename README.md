@@ -12,7 +12,7 @@ A simple project to create wrapper around fabricjs, which is extensible, using r
 
 ## Current Work
 
-![Showcase video](docs/showcase.mp4)
+[Upload Manually on Github]
 
 ## Development
 
