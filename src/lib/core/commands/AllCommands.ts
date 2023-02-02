@@ -6,6 +6,8 @@ export type CreateRectangleCommand = Command & {
     readonly data: fabric.IRectOptions,
 }
 
+export type CreateObjectTypes = 'rect' | 'circle' | 'triangle' | 'polygon' | 'path' | 'text' | 'image' | 'group';
+export type CreateObjectData = CreateObjectCommand['data'];
 export type CreateObjectCommand = Command & {
     readonly type: "create-object",
     readonly data: {
