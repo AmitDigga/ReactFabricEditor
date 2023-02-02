@@ -1,5 +1,5 @@
 import { fabric } from 'fabric';
-import { CreateObjectTypes, FabricContext, Plugin } from '../core';
+import { CreateObjectData, CreateObjectTypes, FabricContext, Plugin } from '../core';
 
 export class CreateObjectPlugin<T extends fabric.Object, O extends fabric.IObjectOptions> extends Plugin {
 
@@ -12,6 +12,7 @@ export class CreateObjectPlugin<T extends fabric.Object, O extends fabric.IObjec
         private objectType: CreateObjectTypes,
         private createGuideObject: () => T,
         private updateGuide: (option: { startX: number, startY: number, pointerX: number, pointerY: number }) => O,
+        private getFinalData: (object: T) => CreateObjectData,
     ) {
         super(name);
     }
@@ -47,16 +48,11 @@ export class CreateObjectPlugin<T extends fabric.Object, O extends fabric.IObjec
         if (!this.origin) {
             this.origin = new fabric.Point(event.pointer.x, event.pointer.y);
         } else {
+            const finalData = this.getFinalData(this.object);
             this.context?.commandManager
                 .addCommand({
                     type: 'create-object',
-                    data: {
-                        objectType: this.objectType,
-                        options: {
-                            ...this.object.toObject(),
-                            name: this.object.name,
-                        }
-                    },
+                    data: this.getFinalData(this.object),
                 })
             canvas?.remove(this.object);
             this.createAndAddObject();

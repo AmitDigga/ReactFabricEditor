@@ -5,7 +5,7 @@ import { useForceUpdate } from '../../hooks/useForceUpdate';
 import { FabricContext, EditorObject } from '../../lib/core';
 import { EveryObjectProperty } from '../../lib/properties/EveryObjectProperty';
 
-export function ListObjectTree({ property, context }: { property: EveryObjectProperty; context: FabricContext; }): JSX.Element {
+export function ListObjectTree({ property, context, getObjectName }: { property: EveryObjectProperty; context: FabricContext; getObjectName: (eo: EditorObject) => string }): JSX.Element {
     const forceUpdate = useForceUpdate();
     const parentObjects: EditorObject[] = (property.context?.state.editorObjects ?? [] as EditorObject[])
         .filter((o: EditorObject) => o.parent == null);
@@ -14,6 +14,7 @@ export function ListObjectTree({ property, context }: { property: EveryObjectPro
         <div>
             {parentObjects.map(p =>
                 <DisplayParentEditorObject
+                    getObjectName={getObjectName}
                     onDropAction={() => { forceUpdate() }}
                     onClickAction={() => { forceUpdate() }}
                     key={p.id}
@@ -25,11 +26,12 @@ export function ListObjectTree({ property, context }: { property: EveryObjectPro
 }
 
 
-export function DisplayParentEditorObject(props: { object: EditorObject; canvas?: fabric.Canvas; context: FabricContext; onDropAction: () => void, onClickAction: () => void }) {
-    const { object, canvas } = props;
+export function DisplayParentEditorObject(props: { getObjectName: (eo: EditorObject) => string, object: EditorObject; canvas?: fabric.Canvas; context: FabricContext; onDropAction: () => void, onClickAction: () => void }) {
+    const { object, canvas, getObjectName } = props;
     function allowDrop(ev: React.DragEvent<HTMLDivElement>) {
         ev.preventDefault();
     }
+    const name = getObjectName(object);
     return <div
         draggable
         onDropCapture={(e) => {
@@ -48,7 +50,7 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
         style={{
             padding: 5,
         }}
-        key={object.name}>
+        key={name}>
         <div style={{
             display: 'flex',
             flexDirection: 'row',
@@ -60,7 +62,7 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
                     // canvas?.requestRenderAll();
                     props.onClickAction();
                 }}>
-                {object.name}
+                {name}
             </div>
             <Icon fontSize='small' component={DeleteOutline} onClick={() => {
                 props.context.commandManager.addCommand({
@@ -73,6 +75,7 @@ export function DisplayParentEditorObject(props: { object: EditorObject; canvas?
         <div style={{ paddingLeft: 10 }}>
             {object.children.map(child =>
                 <DisplayParentEditorObject
+                    getObjectName={props.getObjectName}
                     onClickAction={props.onClickAction}
                     onDropAction={props.onDropAction}
                     key={child.id}

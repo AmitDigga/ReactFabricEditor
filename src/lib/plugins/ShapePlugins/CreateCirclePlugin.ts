@@ -21,6 +21,22 @@ export class CreateCirclePlugin extends CreateObjectPlugin<fabric.Circle, fabric
                 return {
                     radius: Math.abs(option.pointerX - option.startX) / 2,
                 };
-            });
+            },
+            (object) => {
+                return {
+                    objectType: 'circle',
+                    options: {
+                        left: object.left,
+                        top: object.top,
+                        radius: object.radius,
+                        fill: object.fill,
+                        stroke: object.stroke,
+                        strokeWidth: object.strokeWidth,
+                        strokeUniform: object.strokeUniform,
+                        name: object.name,
+                    }
+                }
+            },
+        );
     }
 }

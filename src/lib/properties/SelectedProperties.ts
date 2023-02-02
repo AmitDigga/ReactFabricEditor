@@ -75,18 +75,6 @@ export class SelectableProperty extends SelectedObjectProperty<boolean | undefin
     }
 }
 
-// export class NameProperty extends SelectedObjectProperty<string | undefined> {
-//     getValueFromSelectedObject(obj: fabric.Object) {
-//         return this.context?.getEditorObjectFromFabricObject(obj)?.name;
-//     }
-//     setValueToSelectedObject(obj: fabric.Object, value: any) {
-//         const editorObject = this.context?.getEditorObjectFromFabricObject(obj);
-//         if (editorObject) {
-//             editorObject.name = value;
-//         }
-//     }
-// }
-
 export class FillProperty extends SelectedObjectProperty<string | undefined> {
     getValueFromSelectedObject(obj: fabric.Object) {
         return obj.fill?.toString();

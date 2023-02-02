@@ -1,7 +1,7 @@
 import { FabricContext } from "..";
 import { fabric } from 'fabric';
 import { MementoCommandManager } from "./MementoCommandManager";
-import { AllCommands } from "./AllCommands";
+import { AllCommands, CreateObjectCommand } from "./AllCommands";
 
 
 export class FabricCommandManager extends MementoCommandManager<AllCommands> {
@@ -11,6 +11,36 @@ export class FabricCommandManager extends MementoCommandManager<AllCommands> {
         super();
     }
 
+    private getFabricObjectFromOptions(command: CreateObjectCommand): fabric.Object {
+        const { data } = command;
+        switch (data.objectType) {
+            case 'rect':
+                return new fabric.Rect(data.options);
+            case 'circle':
+                return new fabric.Circle(data.options);
+            case 'triangle':
+                return new fabric.Triangle(data.options);
+            case 'polygon':
+                return new fabric.Polygon(data.points, data.options);
+            case 'path':
+                if (typeof data.path === 'string') {
+                    return new fabric.Path(data.path, data.options);
+                } else {
+                    const points = data.path.map(p => new fabric.Point(p.x, p.y));
+                    return new fabric.Path(points, data.options);
+                }
+            case 'text':
+                return new fabric.Text(data.text, data.options);
+            case 'image':
+                return new fabric.Image(data.objectType, data.options);
+            case 'group':
+                const objects = data.objectsId.map(id => this.context.getEditorObjectByIdOrThrow(id).fabricObject);
+                return new fabric.Group(objects, data.options);
+            default:
+                throw new Error("Object type not found");
+        }
+    }
+
     executeCommand(command: AllCommands) {
         const { type, data } = command;
         switch (type) {
@@ -18,17 +48,7 @@ export class FabricCommandManager extends MementoCommandManager<AllCommands> {
                 this.context.addObject(new fabric.Rect(data));
                 break;
             case "create-object":
-                const options = data.options;
-                switch (data.objectType) {
-                    case 'rect':
-                        this.context.addObject(new fabric.Rect(options));
-                        break;
-                    case 'circle':
-                        this.context.addObject(new fabric.Circle(options));
-                        break;
-                    default:
-                        throw new Error("Object type not found");
-                }
+                this.context.addObject(this.getFabricObjectFromOptions(command));
                 break;
             case "remove-object":
                 this.context.removeObjectById(data.id);
@@ -44,6 +64,24 @@ export class FabricCommandManager extends MementoCommandManager<AllCommands> {
                 break;
             case "undo":
                 this.undo();
+                break;
+            case "editor-object-data-set-data":
+                this.context
+                    .getEditorObjectByIdOrThrow(data.objectId)
+                    .data
+                    .setData(data.data);
+                break;
+            case "editor-object-data-set-key":
+                this.context
+                    .getEditorObjectByIdOrThrow(data.objectId)
+                    .data
+                    .setKey(data.key, data.value);
+                break;
+            case "editor-object-data-clear":
+                this.context
+                    .getEditorObjectByIdOrThrow(data.objectId)
+                    .data
+                    .clearData();
                 break;
             default:
                 throw new Error("Command not found");

@@ -122,7 +122,7 @@ export class FabricContext implements IDestroyable {
         }
         const id = object.name as string;
         this.canvas?.add(object);
-        const editorObject = new EditorObject(id, id, object);
+        const editorObject = new EditorObject(id, object);
         this.destroyable.push(editorObject);
         this.state.editorObjects.push(editorObject);
         this.state.objectMap.set(object, editorObject);
@@ -155,14 +155,18 @@ export class FabricContext implements IDestroyable {
     }
 
     moveObjectById(objectId: string, left: number, top: number) {
-        const object = this.getEditorObjectById(objectId)?.fabricObject;
-        if (object) {
-            object.set({
-                left,
-                top
-            })
-            // this.canvas?.requestRenderAll();
+        const editorObject = this.getEditorObjectByIdOrThrow(objectId);
+        const object = editorObject.fabricObject;
+        const { left: objectLeft = 0, top: objectTop = 0 } = object;
+        const displacement = {
+            dLeft: left - objectLeft,
+            dTop: top - objectTop
         }
+        object.set({
+            left,
+            top
+        })
+        editorObject.moveChildren(displacement);
     }
 
     updateObjectById<T extends fabric.IObjectOptions>(objectId: string, objectOptions: T) {

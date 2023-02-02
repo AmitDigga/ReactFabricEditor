@@ -1,8 +1,7 @@
-import { fabric } from 'fabric';
-import { Property, PropertyScope, FabricContext } from '../core';
+import { Property, PropertyScope, FabricContext, EditorObjectDataSetKeyCommand, EditorObjectDataSetDataCommand, EditorObjectDataClearCommand, EditorObject } from '../core';
 
 
-export abstract class SelectedObjectProperty<T> extends Property<T> {
+export abstract class SelectedObjectDataProperty<T> extends Property<T> {
     constructor(name: string, type: string, scope: PropertyScope, private defaultValue: any) {
         super(name, type, scope);
     }
@@ -23,13 +22,15 @@ export abstract class SelectedObjectProperty<T> extends Property<T> {
         canvas.off('selection:updated', this.onChange);
         canvas.off('selection:cleared', this.onChange);
     }
-    abstract getValueFromSelectedObject(obj: fabric.Object): T;
-    abstract getObjectProperty(obj: fabric.Object, value: T): fabric.IObjectOptions | null;
+    abstract getValueFromSelectedObject(editorObject: EditorObject): T;
+    abstract getCommand(editorObject: EditorObject, value: T): EditorObjectDataSetKeyCommand | EditorObjectDataSetDataCommand | EditorObjectDataClearCommand | null;
     getValue(): T {
         const canvas = this.context?.canvas;
         const selectedObject = canvas?.getActiveObject();
-        if (selectedObject) {
-            return this.getValueFromSelectedObject(selectedObject);
+        if (this.context && selectedObject && selectedObject.name) {
+            const editorObject = this.context?.getEditorObjectByIdOrThrow(selectedObject.name);
+            const data = editorObject.data;
+            return this.getValueFromSelectedObject(editorObject);
         } else {
             return this.defaultValue;
         }
@@ -38,16 +39,11 @@ export abstract class SelectedObjectProperty<T> extends Property<T> {
         const canvas = this.context?.canvas;
         if (!canvas) throw new Error('Canvas is null');
         const selectedObject = canvas.getActiveObject();
-        if (selectedObject && selectedObject.name) {
-            const property = this.getObjectProperty(selectedObject, value);
-            if (property === null) return;
-            this.context?.commandManager.addCommand({
-                type: 'update-object',
-                data: {
-                    id: selectedObject.name,
-                    options: property
-                }
-            })
+        if (this.context && selectedObject && selectedObject.name) {
+            const editorObject = this.context.getEditorObjectByIdOrThrow(selectedObject.name);
+            const command = this.getCommand(editorObject, value);
+            if (command === null) return;
+            this.context?.commandManager.addCommand(command)
             // canvas.requestRenderAll();
         }
     }
