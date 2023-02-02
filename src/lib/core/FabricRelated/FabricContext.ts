@@ -164,6 +164,14 @@ export class FabricContext implements IDestroyable {
         }
     }
 
+    updateObjectById<T extends fabric.IObjectOptions>(objectId: string, objectOptions: T) {
+        const object = this.getEditorObjectById(objectId)?.fabricObject;
+        if (object) {
+            object.setOptions(objectOptions)
+            this.canvas?.requestRenderAll();
+        }
+    }
+
     getEditorObjectById(id: string): EditorObject | undefined {
         return this.state.editorObjects.find(o => o.id === id);
     }

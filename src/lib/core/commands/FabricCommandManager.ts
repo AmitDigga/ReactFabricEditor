@@ -23,6 +23,9 @@ export class FabricCommandManager extends MementoCommandManager<AllCommands> {
             case "move-object":
                 this.context.moveObjectById(data.id, data.left, data.top);
                 break;
+            case "update-object":
+                this.context.updateObjectById(data.id, data.options);
+                break;
             case "set-parent":
                 this.context.setParentById(data.childId, data.parentId);
                 break;

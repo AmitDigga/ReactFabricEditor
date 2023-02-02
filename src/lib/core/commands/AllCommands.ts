@@ -15,6 +15,11 @@ export type MoveObjectCommand = Command & {
     readonly data: { id: string, top: number, left: number },
 }
 
+export type UpdateObjectCommand = Command & {
+    readonly type: "update-object",
+    readonly data: { id: string, options: fabric.IObjectOptions },
+}
+
 export type SetParentCommand = Command & {
     readonly type: "set-parent",
     readonly data: { childId: string, parentId: string },
@@ -31,5 +36,6 @@ export type AllCommands =
     CreateObjectCommand |
     RemoveObjectCommand |
     MoveObjectCommand |
+    UpdateObjectCommand |
     SetParentCommand |
     UndoCommand;

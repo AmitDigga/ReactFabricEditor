@@ -25,7 +25,7 @@ export abstract class SelectedObjectProperty<T> extends Property<T> {
         canvas.off('selection:cleared', this.onChange);
     }
     abstract getValueFromSelectedObject(obj: fabric.Object): T;
-    abstract setValueToSelectedObject(obj: fabric.Object, value: T): any;
+    abstract getObjectProperty(obj: fabric.Object, value: T): fabric.IObjectOptions | null;
     getValue(): T {
         const canvas = this.context?.canvas;
         const selectedObject = canvas?.getActiveObject();
@@ -39,8 +39,16 @@ export abstract class SelectedObjectProperty<T> extends Property<T> {
         const canvas = this.context?.canvas;
         if (!canvas) throw new Error('Canvas is null');
         const selectedObject = canvas.getActiveObject();
-        if (selectedObject) {
-            this.setValueToSelectedObject(selectedObject, value);
+        if (selectedObject && selectedObject.name) {
+            const property = this.getObjectProperty(selectedObject, value);
+            if (property === null) return;
+            this.context?.commandManager.addCommand({
+                type: 'update-object',
+                data: {
+                    id: selectedObject.name,
+                    options: property
+                }
+            })
             canvas.requestRenderAll();
         }
     }
