@@ -1,8 +1,9 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, useContext, useEffect, useState } from 'react';
 import { useForceUpdate } from './hooks/useForceUpdate';
 import { PropertyWindows, Menu, MenuPluginItemProps, Editor, MenuActionItemProps } from './components';
-import { FabricContext, Property } from './lib/core';
+import { Property } from './lib/core';
 import { useWatch } from './hooks/useWatch';
+import { ReactFabricContext } from './provider-consumer';
 
 const STYLES: Record<string, CSSProperties> = {
     container: {
@@ -17,7 +18,6 @@ const STYLES: Record<string, CSSProperties> = {
 }
 
 export type EditorAppProps = {
-    context: FabricContext;
     canvasId: string;
     width: number;
     height: number;
@@ -27,7 +27,7 @@ export type EditorAppProps = {
 }
 function EditorApp(props: EditorAppProps) {
     const forceUpdate = useForceUpdate();
-    const context = props.context;
+    const context = useContext(ReactFabricContext);
 
     useWatch(context.pluginChange$);
     useWatch(context.commandManager.onChange$);
@@ -52,7 +52,6 @@ function EditorApp(props: EditorAppProps) {
             </div>
             <div style={{ gridArea: 'menu' }}>
                 <Menu
-                    context={context}
                     onValueChange={(plugin, value) => {
                         context.selectPlugin(plugin)
                         forceUpdate();
@@ -66,7 +65,6 @@ function EditorApp(props: EditorAppProps) {
             </div>
             <div style={{ gridArea: 'property-windows' }}>
                 <PropertyWindows
-                    context={context}
                     windowTitle='Exposed Properties'
                     customPropertyRenderer={props.RenderPropertyRendererMap}
                 />

@@ -1,16 +1,18 @@
 import { DeleteOutline } from '@mui/icons-material';
 import { Icon } from '@mui/material';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForceUpdate } from '../../hooks/useForceUpdate';
-import { FabricContext, EditorObject } from '../../lib/core';
+import { EditorObject } from '../../lib/core';
 import { EveryObjectProperty } from '../../lib/properties/EveryObjectProperty';
+import { ReactFabricContext } from '../../provider-consumer';
 
-export function ListObjectTree({ property, context, getObjectName }: { property: EveryObjectProperty; context: FabricContext; getObjectName: (eo: EditorObject) => string }): JSX.Element {
+export function ListObjectTree({ property, getObjectName }: { property: EveryObjectProperty; getObjectName: (eo: EditorObject) => string }): JSX.Element {
     const forceUpdate = useForceUpdate();
-    const parentObjects: EditorObject[] = (property.context?.state.editorObjects ?? [] as EditorObject[])
+    const context = React.useContext(ReactFabricContext);
+    const parentObjects: EditorObject[] = (context.state.editorObjects ?? [] as EditorObject[])
         .filter((o: EditorObject) => o.parent == null);
     return <div>
-        <h5>{property.name} ({property.context?.state.editorObjects.length ?? 0})</h5>
+        <h5>{property.name} ({context.state.editorObjects.length ?? 0})</h5>
         <div>
             {parentObjects.map(p =>
                 <DisplayParentEditorObject
@@ -18,16 +20,16 @@ export function ListObjectTree({ property, context, getObjectName }: { property:
                     onDropAction={() => { forceUpdate() }}
                     onClickAction={() => { forceUpdate() }}
                     key={p.id}
-                    context={context}
                     object={p}
-                    canvas={property.context?.canvas} />)}
+                    canvas={context.canvas} />)}
         </div>
     </div>;
 }
 
 
-export function DisplayParentEditorObject(props: { getObjectName: (eo: EditorObject) => string, object: EditorObject; canvas?: fabric.Canvas; context: FabricContext; onDropAction: () => void, onClickAction: () => void }) {
+export function DisplayParentEditorObject(props: { getObjectName: (eo: EditorObject) => string, object: EditorObject; canvas?: fabric.Canvas; onDropAction: () => void, onClickAction: () => void }) {
     const { object, canvas, getObjectName } = props;
+    const context = useContext(ReactFabricContext);
     function allowDrop(ev: React.DragEvent<HTMLDivElement>) {
         ev.preventDefault();
     }
@@ -36,7 +38,7 @@ export function DisplayParentEditorObject(props: { getObjectName: (eo: EditorObj
         draggable
         onDropCapture={(e) => {
             const data = e.dataTransfer.getData('text');
-            props.context.commandManager.addCommand({
+            context.commandManager.addCommand({
                 type: 'set-parent',
                 data: { childId: data, parentId: object.id },
             })
@@ -65,7 +67,7 @@ export function DisplayParentEditorObject(props: { getObjectName: (eo: EditorObj
                 {name}
             </div>
             <Icon fontSize='small' component={DeleteOutline} onClick={() => {
-                props.context.commandManager.addCommand({
+                context.commandManager.addCommand({
                     type: 'remove-object',
                     data: { id: object.id },
                 })
@@ -79,7 +81,6 @@ export function DisplayParentEditorObject(props: { getObjectName: (eo: EditorObj
                     onClickAction={props.onClickAction}
                     onDropAction={props.onDropAction}
                     key={child.id}
-                    context={props.context}
                     object={child}
                     canvas={canvas}
                 />)}

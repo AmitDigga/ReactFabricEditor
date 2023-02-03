@@ -7,6 +7,7 @@ import { LeftProperty, FillProperty, EveryObjectProperty, TopProperty, HeightPro
 import { Action, FabricContext, Plugin, Property } from "./lib/core";
 import { ListObjectTree, MenuActionItemProps, MenuPluginItemProps } from "./components";
 import { RectangleOutlined, HighlightAltOutlined, Menu as MenuIcon, UndoOutlined, SaveOutlined, DownloadOutlined, CircleOutlined, GridOnOutlined } from '@mui/icons-material';
+import { ReactFabricContext } from "./provider-consumer";
 
 const element = document.getElementById("root");
 if (element == null) {
@@ -96,18 +97,21 @@ actions.forEach(action => {
     context.registerAction(action);
 })
 const root = createRoot(element);
-root.render(<EditorApp
-    width={750}
-    height={500}
-    canvasId="canvas"
-    context={context}
-    RenderActionItem={CustomActionItem}
-    RenderPluginItem={CustomPluginItem}
-    RenderPropertyRendererMap={
-        {
-            'every-object-property': (property: Property) => {
-                return <ListObjectTree getObjectName={(eo) => eo.data.getKey('name', eo.id) as string} context={context} property={property as EveryObjectProperty} />
+root.render(
+    <ReactFabricContext.Provider value={context}>
+        <EditorApp
+            width={750}
+            height={500}
+            canvasId="canvas"
+            RenderActionItem={CustomActionItem}
+            RenderPluginItem={CustomPluginItem}
+            RenderPropertyRendererMap={
+                {
+                    'every-object-property': (property: Property) => {
+                        return <ListObjectTree getObjectName={(eo) => eo.data.getKey('name', eo.id) as string} property={property as EveryObjectProperty} />
+                    }
+                }
             }
-        }
-    }
-></EditorApp>)
+        ></EditorApp>
+    </ReactFabricContext.Provider>
+)
