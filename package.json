@@ -2,7 +2,8 @@
   "name": "react-fabric-extended-editor",
   "version": "0.0.1",
   "description": "",
-  "main": "app.js",
+  "main": "public/dist/app.bundle.js",
+  "types": "public/dist/app.bundle.d.ts",
   "scripts": {
     "serve": "webpack serve --port 8080",
     "build": "npm run build:js && npm run build:types",
@@ -10,7 +11,8 @@
     "build:types": "tsc --project tsconfig.build.json",
     "type:check": "tsc --project tsconfig.dev.json",
     "start": "npm run serve",
-    "start:types": "npm run type:check -- --watch"
+    "start:types": "npm run type:check -- --watch",
+    "prepare": "npm run build"
   },
   "author": "Amit Digga <diggaamitoo7@gmail.com> (https://github.com/AmitDigga/)",
   "license": "ISC",
@@ -41,5 +43,13 @@
     "react-dom": "^18.2.0",
     "rxjs": "^7.8.0",
     "uuid": "^9.0.0"
-  }
+  },
+  "files": [
+    "public/dist"
+  ],
+  "keywords": [
+    "ReactFabricEditor",
+    "React",
+    "Fabric.js"
+  ]
 }
