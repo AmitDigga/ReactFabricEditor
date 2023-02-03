@@ -9,11 +9,14 @@ const STYLES: Record<string, CSSProperties> = {
 
 export type EditorProps = {
     onCanvasReady?: (canvas: fabric.Canvas) => void;
+    width: number;
+    height: number;
+    canvasId: string;
 }
 
 export function Editor(props: EditorProps) {
     const forceUpdate = useForceUpdate();
-    const { fabricCanvas: canvasRef } = useFabricCanvas({ canvasId: 'canvas' });
+    const { fabricCanvas: canvasRef } = useFabricCanvas({ canvasId: props.canvasId });
     const canvas = canvasRef.current;
     useEffect(() => {
         if (!canvas) return;
@@ -25,7 +28,7 @@ export function Editor(props: EditorProps) {
 
 
     return (
-        <canvas height="500" width="750" id="canvas" style={STYLES.canvas}></canvas>
+        <canvas height={props.height} width={props.width} id={props.canvasId} style={STYLES.canvas}></canvas>
     )
 }
 export default Editor;
