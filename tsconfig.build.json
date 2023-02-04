@@ -3,7 +3,7 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "ES2015",
-        "outDir": "./public/dist",
+        "outDir": "./dist",
         "declaration": true,
         "esModuleInterop": true,
         "declarationMap": true

@@ -2,8 +2,8 @@
   "name": "react-fabric-extended-editor",
   "version": "0.0.1",
   "description": "",
-  "main": "public/dist/app.bundle.js",
-  "types": "public/dist/app.bundle.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "serve": "webpack serve --port 8080",
     "build": "npm run build:js",
@@ -38,7 +38,7 @@
     "react-dom": ">=16.8.0"
   },
   "files": [
-    "public/dist"
+    "dist/"
   ],
   "keywords": [
     "ReactFabricEditor",
