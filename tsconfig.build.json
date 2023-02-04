@@ -1,9 +1,10 @@
 {
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        "outFile": "./public/dist/app.bundle.d.ts",
+        "module": "commonjs",
+        "outDir": "./dist",
         "declaration": true,
-        "emitDeclarationOnly": true,
+        "esModuleInterop": true,
         "declarationMap": true
     },
 }

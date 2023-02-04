@@ -1,13 +1,13 @@
 import React from 'react';
 import { useForceUpdate } from '../../hooks/useForceUpdate';
 import { EveryObjectProperty } from '../../lib/properties/EveryObjectProperty';
-import { EditorObject } from "../../lib/core";
+import { IEditorObject } from '../../lib/core/FabricRelated/interfaces/interface';
 
 export function ListObject({ property }: { property: EveryObjectProperty; }): JSX.Element {
     return <div>
         <h5>{property.name}</h5>
         <div>
-            {property.getValue().map((p: EditorObject) => {
+            {property.getValue().map((p: IEditorObject) => {
                 return <DisplayEditorObject object={p} canvas={property.context?.canvas}></DisplayEditorObject>;
             })}
         </div>
@@ -15,7 +15,7 @@ export function ListObject({ property }: { property: EveryObjectProperty; }): JS
 }
 
 
-export function DisplayEditorObject(props: { object: EditorObject; canvas?: fabric.Canvas; }) {
+export function DisplayEditorObject(props: { object: IEditorObject; canvas?: fabric.Canvas; }) {
     const forceUpdate = useForceUpdate();
     const { object, canvas } = props;
     return <div

@@ -1,6 +1,7 @@
-import { FabricContextUser } from './FabricContextUser';
+import { IAction } from "./interfaces/interface";
+import { FabricContextUser } from "./FabricContextUser";
 
-export abstract class Action extends FabricContextUser {
+export abstract class Action extends FabricContextUser implements IAction {
     constructor(private name: string) {
         super();
     }

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Action, Plugin } from '../lib/core';
+import { IAction } from '../../lib/core';
 
 
 export type MenuActionItemProps = {
-    action: Action;
-    onTakeAction: (action: Action) => void;
+    action: IAction;
+    onTakeAction: (action: IAction) => void;
 }
 
 export function MenuActionItem({ action, onTakeAction }: MenuActionItemProps) {

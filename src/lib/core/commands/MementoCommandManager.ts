@@ -1,14 +1,7 @@
 import { Subject } from "rxjs";
-import { Command } from "./Command";
+import { Command, CommandOption, ICommandManager } from "../FabricRelated/interfaces/interface";
 
-
-export type CommandOption = {
-    execute: boolean;
-    triggerOnChange: boolean;
-    store: boolean;
-}
-
-export abstract class MementoCommandManager<T extends Command> {
+export abstract class MementoCommandManager<T extends Command> implements ICommandManager<T>{
     public commands: T[];
     public onChange$ = new Subject<void>();
     constructor() {

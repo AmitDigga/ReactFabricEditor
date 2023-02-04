@@ -1,4 +1,6 @@
-import { Property, PropertyScope, FabricContext, EditorObjectDataSetKeyCommand, EditorObjectDataSetDataCommand, EditorObjectDataClearCommand, EditorObject } from '../core';
+import { Property, PropertyScope, FabricContext } from '../core';
+import { EditorObjectDataSetKeyCommand, EditorObjectDataSetDataCommand, EditorObjectDataClearCommand } from '../core/FabricRelated/interfaces/AllCommands';
+import { IEditorObject } from '../core/FabricRelated/interfaces/interface';
 
 
 export abstract class SelectedObjectDataProperty<T> extends Property<T> {
@@ -22,8 +24,8 @@ export abstract class SelectedObjectDataProperty<T> extends Property<T> {
         canvas.off('selection:updated', this.onChange);
         canvas.off('selection:cleared', this.onChange);
     }
-    abstract getValueFromSelectedObject(editorObject: EditorObject): T;
-    abstract getCommand(editorObject: EditorObject, value: T): EditorObjectDataSetKeyCommand | EditorObjectDataSetDataCommand | EditorObjectDataClearCommand | null;
+    abstract getValueFromSelectedObject(editorObject: IEditorObject): T;
+    abstract getCommand(editorObject: IEditorObject, value: T): EditorObjectDataSetKeyCommand | EditorObjectDataSetDataCommand | EditorObjectDataClearCommand | null;
     getValue(): T {
         const canvas = this.context?.canvas;
         const selectedObject = canvas?.getActiveObject();

@@ -1,21 +1,22 @@
-import React from 'react';
-import { Property, FabricContext } from "../lib/core";
+import React, { useContext } from 'react';
+import { Property } from "../lib/core";
+import { ReactFabricContext } from '../provider-consumer';
 import { ExposedProperty } from './ExposedProperty';
 
 export type PropertyWindowsProps = {
-    context: FabricContext,
     windowTitle: string;
     customPropertyRenderer?: {
         [key: string]: (property: Property<any>) => JSX.Element;
     };
 };
 export function PropertyWindows(props: PropertyWindowsProps) {
-    const { context: { properties } } = props;
+    const context = useContext(ReactFabricContext);
+    const { properties } = context;
     const child = properties.length === 0 ?
         <div>Empty</div> :
         <>
             {properties
-                .filter(property => property.scope == 'global' || property.scope.getName() === props.context.state.selectedPluginName)
+                .filter(property => property.scope == 'global' || property.scope.getName() === context.state.selectedPluginName)
                 .map((p) => {
                     if (props.customPropertyRenderer?.[p.type] !== undefined) {
                         return props.customPropertyRenderer[p.type](p);

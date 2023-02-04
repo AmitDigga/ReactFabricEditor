@@ -1,11 +1,11 @@
 import React from 'react';
-import { Plugin } from '../lib/core';
+import { IPlugin } from '../../lib/core';
 
 
 export type MenuPluginItemProps = {
-    plugin: Plugin;
+    plugin: IPlugin;
     selected: boolean;
-    onValueChange: (plugin: Plugin, value: boolean) => void;
+    onValueChange: (plugin: IPlugin, value: boolean) => void;
 }
 
 export function MenuPluginItem({ plugin, selected, onValueChange }: MenuPluginItemProps) {

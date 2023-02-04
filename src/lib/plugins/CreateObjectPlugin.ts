@@ -1,5 +1,6 @@
 import { fabric } from 'fabric';
-import { CreateObjectData, CreateObjectTypes, FabricContext, Plugin } from '../core';
+import { FabricContext, Plugin } from '../core';
+import { CreateObjectData, CreateObjectTypes } from '../core/FabricRelated/interfaces/AllCommands';
 
 export class CreateObjectPlugin<T extends fabric.Object, O extends fabric.IObjectOptions> extends Plugin {
 

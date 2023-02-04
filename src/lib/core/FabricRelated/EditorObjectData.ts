@@ -1,11 +1,7 @@
+import { IEditorObjectData, SerializableObject } from "./interfaces/interface";
 
-export type SerializableObject = string |
-    number |
-    boolean |
-    SerializableObject[] |
-{ [key: string]: SerializableObject };
 
-export class EditorObjectData {
+export class EditorObjectData implements IEditorObjectData {
     data: Record<string, SerializableObject> = {};
 
     setKey(key: string, value: SerializableObject) {

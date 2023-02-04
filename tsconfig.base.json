@@ -5,6 +5,7 @@
         "strict": true,
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
+        "target": "ES2015",
     },
     "include": [
         "./src/**/*"

@@ -1,13 +1,14 @@
-import { fromEvent, Observable, pipe, Subject, takeUntil } from 'rxjs';
-import { FabricContextUser, IDestroyable, Property } from '..';
-import { EditorObject } from './EditorObject';
-import { Plugin, FabricCommandManager } from '..';
+import { fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { IEvent } from 'fabric/fabric-impl';
-import { Action } from './Action';
+import { IAction, IBaseState, ICommandManager, IEditorObject, IFabricContext, IFabricContextUser, IPlugin, IProperty } from './interfaces/interface';
+import { IDestroyable } from "./interfaces/IDestroyable";
+import { FabricCommandManager } from '../commands';
+import { EditorObject } from './EditorObject';
+import { AllCommands } from './interfaces/AllCommands';
 
-export class BaseState {
-    editorObjects: EditorObject[];
-    objectMap: Map<fabric.Object, EditorObject>;
+export class BaseState implements IBaseState {
+    editorObjects: IEditorObject[];
+    objectMap: Map<fabric.Object, IEditorObject>;
     selectedPluginName: string;
     constructor() {
         this.editorObjects = [];
@@ -16,12 +17,12 @@ export class BaseState {
     }
 }
 
-export class FabricContext implements IDestroyable {
+export class FabricContext implements IDestroyable, IFabricContext {
     public canvas?: fabric.Canvas;
-    public commandManager: FabricCommandManager;
-    public plugins: Plugin[];
-    public actions: Action[];
-    public properties: Property[];
+    public commandManager: ICommandManager<AllCommands>;
+    public plugins: IPlugin[];
+    public actions: IAction[];
+    public properties: IProperty[];
     public state: BaseState;
     private destroyable: IDestroyable[];
     public pluginChange$ = new Subject<void>();
@@ -34,7 +35,7 @@ export class FabricContext implements IDestroyable {
         this.destroyable = [];
     }
 
-    subscribeToEvents(eventName: string, fabricContextUser: FabricContextUser): Observable<IEvent<Event>> {
+    subscribeToEvents(eventName: string, fabricContextUser: IFabricContextUser): Observable<IEvent<Event>> {
         if (!this.canvas) {
             throw new Error("Canvas is not initialized");
         }
@@ -53,7 +54,7 @@ export class FabricContext implements IDestroyable {
         this.actions.forEach(a => a.init(this));
     }
 
-    registerPlugin(plugin: Plugin) {
+    registerPlugin(plugin: IPlugin) {
         if (this.isInit) {
             plugin.init(this);
         }
@@ -62,7 +63,7 @@ export class FabricContext implements IDestroyable {
         this.pluginChange$.next();
     }
 
-    registerAction(action: Action) {
+    registerAction(action: IAction) {
         if (this.isInit) {
             action.init(this);
         }
@@ -70,7 +71,7 @@ export class FabricContext implements IDestroyable {
         this.registerFabricContextUser(action)
     }
 
-    registerProperty(property: Property) {
+    registerProperty(property: IProperty) {
         if (this.isInit) {
             property.init(this);
         }
@@ -78,7 +79,7 @@ export class FabricContext implements IDestroyable {
         this.registerFabricContextUser(property)
     }
 
-    registerFabricContextUser(fabricContextUser: FabricContextUser) {
+    registerFabricContextUser(fabricContextUser: IFabricContextUser) {
         this.destroyable.push(fabricContextUser);
     }
 
@@ -96,7 +97,7 @@ export class FabricContext implements IDestroyable {
         this.state.objectMap = new Map();
     }
 
-    selectPlugin(plugin: Plugin) {
+    selectPlugin(plugin: IPlugin) {
         const previousPluginName = this.state.selectedPluginName;
         this.plugins.forEach(p => {
             if (p.getName() === previousPluginName) {
@@ -111,7 +112,7 @@ export class FabricContext implements IDestroyable {
 
     }
 
-    getEditorObjectFromFabricObject(object: fabric.Object): EditorObject | null {
+    getEditorObjectFromFabricObject(object: fabric.Object): IEditorObject | null {
         return this.state.objectMap.get(object) || null;
     }
 
@@ -177,11 +178,11 @@ export class FabricContext implements IDestroyable {
         }
     }
 
-    getEditorObjectById(id: string): EditorObject | undefined {
+    getEditorObjectById(id: string): IEditorObject | undefined {
         return this.state.editorObjects.find(o => o.id === id);
     }
 
-    getEditorObjectByIdOrThrow(id: string): EditorObject {
+    getEditorObjectByIdOrThrow(id: string): IEditorObject {
         const object = this.state.editorObjects.find(o => o.id === id);
         if (!object) {
             throw new Error(`Object with id ${id} not found`);
