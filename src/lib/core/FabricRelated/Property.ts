@@ -1,11 +1,6 @@
 import { Subject } from 'rxjs';
 import { FabricContextUser } from "./FabricContextUser";
-import { IFabricContext, IPlugin, IProperty } from './interfaces/interface';
-
-// import { Plugin } from '..';
-
-
-export type PropertyScope = IPlugin | 'global';
+import { IFabricContext, IProperty, PropertyScope } from './interfaces/interface';
 
 export abstract class Property<T = any> extends FabricContextUser implements IProperty {
     change$: Subject<any> = new Subject<any>();

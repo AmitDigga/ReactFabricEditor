@@ -1,4 +1,3 @@
-export * from './EditorApp'
 export * from './lib/actions'
 export * from './lib/core'
 export * from './lib/plugins'
