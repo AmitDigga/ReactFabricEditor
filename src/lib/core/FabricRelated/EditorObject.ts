@@ -1,13 +1,14 @@
 import { EditorObjectData } from "./EditorObjectData";
-import { IDestroyable } from "./IDestroyable";
+import { IDestroyable } from "./interfaces/IDestroyable";
+import { IEditorObject, IEditorObjectData } from "./interfaces/interface";
 
-export class EditorObject implements IDestroyable {
+export class EditorObject implements IDestroyable, IEditorObject {
     id: string;
-    parent: EditorObject | null;
-    children: EditorObject[];
+    parent: IEditorObject | null;
+    children: IEditorObject[];
     fabricObject: fabric.Object;
     tempPositionData: TransformData;
-    data: EditorObjectData;
+    data: IEditorObjectData;
 
     constructor(id: string, fabricObject: fabric.Object) {
         this.id = id;

@@ -1,12 +1,13 @@
 import { Subject } from 'rxjs';
-import { FabricContext } from "./FabricContext";
-import { FabricContextUser } from './FabricContextUser';
-import { Plugin } from './Plugin';
+import { FabricContextUser } from "./FabricContextUser";
+import { IFabricContext, IPlugin, IProperty } from './interfaces/interface';
+
+// import { Plugin } from '..';
 
 
-export type PropertyScope = Plugin | 'global';
+export type PropertyScope = IPlugin | 'global';
 
-export abstract class Property<T = any> extends FabricContextUser {
+export abstract class Property<T = any> extends FabricContextUser implements IProperty {
     change$: Subject<any> = new Subject<any>();
     constructor(
         public readonly name: string,
@@ -24,7 +25,7 @@ export abstract class Property<T = any> extends FabricContextUser {
         this.change$.next(value);
     }
 
-    onInit(context: FabricContext): void { }
+    onInit(context: IFabricContext): void { }
 
     abstract getValue(): T;
     abstract setValueInternal(value: T, previousValue: T): void;

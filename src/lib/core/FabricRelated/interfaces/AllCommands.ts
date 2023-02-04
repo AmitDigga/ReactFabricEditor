@@ -1,5 +1,4 @@
-import { SerializableObject } from "../FabricRelated/EditorObjectData";
-import { Command } from "./Command";
+import { Command, SerializableObject } from "./interface";
 
 export type CreateRectangleCommand = Command & {
     readonly type: "create-rectangle",

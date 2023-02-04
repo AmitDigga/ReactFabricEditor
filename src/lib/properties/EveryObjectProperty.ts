@@ -1,7 +1,8 @@
-import { EditorObject, FabricContext, Property } from '../core';
+import { FabricContext, Property } from '../core';
+import { IEditorObject } from '../core/FabricRelated/interfaces/interface';
 
 
-export class EveryObjectProperty extends Property<EditorObject[]> {
+export class EveryObjectProperty extends Property<IEditorObject[]> {
     onInit(context: FabricContext) {
         this.onChange = this.onChange.bind(this);
         const canvas = this.context?.canvas;
@@ -21,7 +22,7 @@ export class EveryObjectProperty extends Property<EditorObject[]> {
     getValue() {
         return this.context?.state.editorObjects ?? [];
     }
-    setValueInternal(value: EditorObject[], previousValue: EditorObject[]) {
+    setValueInternal(value: IEditorObject[], previousValue: IEditorObject[]) {
         // this.canvas?.clear();
         // this.canvas?.add(...value);
     }

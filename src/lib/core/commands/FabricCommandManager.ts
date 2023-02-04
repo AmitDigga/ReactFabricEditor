@@ -1,7 +1,7 @@
 import { FabricContext } from "..";
 import { fabric } from 'fabric';
 import { MementoCommandManager } from "./MementoCommandManager";
-import { AllCommands, CreateObjectCommand } from "./AllCommands";
+import { AllCommands, CreateObjectCommand } from "../FabricRelated/interfaces/AllCommands";
 
 
 export class FabricCommandManager extends MementoCommandManager<AllCommands> {

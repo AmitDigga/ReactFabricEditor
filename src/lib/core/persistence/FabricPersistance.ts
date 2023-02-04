@@ -1,4 +1,4 @@
-import { AllCommands } from "..";
+import { AllCommands } from "../FabricRelated/interfaces/AllCommands";
 import { Persistance } from "./Persistance";
 
 

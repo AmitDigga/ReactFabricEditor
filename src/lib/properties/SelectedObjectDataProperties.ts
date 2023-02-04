@@ -1,8 +1,9 @@
-import { EditorObjectDataSetKeyCommand, EditorObjectDataClearCommand, EditorObjectDataSetDataCommand, EditorObject } from '../core';
+import { EditorObjectDataSetKeyCommand, EditorObjectDataClearCommand, EditorObjectDataSetDataCommand } from '../core/FabricRelated/interfaces/AllCommands';
+import { IEditorObject } from '../core/FabricRelated/interfaces/interface';
 import { SelectedObjectDataProperty } from './SelectedObjectDataProperty';
 
 export class NameProperty extends SelectedObjectDataProperty<string | undefined> {
-    getValueFromSelectedObject(editorObject: EditorObject): string | undefined {
+    getValueFromSelectedObject(editorObject: IEditorObject): string | undefined {
         const name = editorObject.data.getKey('name');
         if (name == undefined || typeof name === 'string') {
             return name;
@@ -10,7 +11,7 @@ export class NameProperty extends SelectedObjectDataProperty<string | undefined>
             throw new Error("Wrong type for name");
         }
     }
-    getCommand(editorObject: EditorObject, value: string | undefined): EditorObjectDataSetKeyCommand | EditorObjectDataClearCommand | EditorObjectDataSetDataCommand | null {
+    getCommand(editorObject: IEditorObject, value: string | undefined): EditorObjectDataSetKeyCommand | EditorObjectDataClearCommand | EditorObjectDataSetDataCommand | null {
         if (value == undefined) {
             return null;
         } else {

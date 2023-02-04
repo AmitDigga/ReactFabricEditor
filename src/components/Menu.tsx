@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
-import { Action, Plugin } from '../lib/core';
+import { IAction, IPlugin } from '../lib/core/FabricRelated/interfaces/interface';
 import { ReactFabricContext } from '../provider-consumer';
 import MenuActionItem, { MenuActionItemProps } from './MenuActionItem';
 import { MenuPluginItem, MenuPluginItemProps } from './MenuPluginItem';
 
 export type MenuProps = {
-    onValueChange: (plugin: Plugin, value: boolean) => void;
-    onActionTaken: (action: Action) => void;
+    onValueChange: (plugin: IPlugin, value: boolean) => void;
+    onActionTaken: (action: IAction) => void;
     renderPlugin?: React.FC<MenuPluginItemProps>;
     renderAction?: React.FC<MenuActionItemProps>;
 
