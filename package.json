@@ -5,7 +5,6 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "serve": "webpack serve --port 8080",
     "build": "npm run build:js",
     "build:js": "tsc --project tsconfig.build.json",
     "type:check": "tsc --project tsconfig.dev.json",
