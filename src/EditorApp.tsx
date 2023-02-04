@@ -25,7 +25,7 @@ export type EditorAppProps = {
     RenderActionItem: React.FC<MenuActionItemProps>,
     RenderPropertyRendererMap: Record<string, (property: Property<any>) => JSX.Element>;
 }
-function EditorApp(props: EditorAppProps) {
+export function EditorApp(props: EditorAppProps) {
     const forceUpdate = useForceUpdate();
     const context = useContext(ReactFabricContext);
 
