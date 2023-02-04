@@ -1,5 +1,3 @@
-import { DeleteOutline } from '@mui/icons-material';
-import { Icon } from '@mui/material';
 import React, { useContext } from 'react';
 import { useForceUpdate } from '../../hooks/useForceUpdate';
 import { IEditorObject } from '../../lib/core/FabricRelated/interfaces/interface';
@@ -66,12 +64,12 @@ export function DisplayParentEditorObject(props: { getObjectName: (eo: IEditorOb
                 }}>
                 {name}
             </div>
-            <Icon fontSize='small' component={DeleteOutline} onClick={() => {
+            <div onClick={() => {
                 context.commandManager.addCommand({
                     type: 'remove-object',
                     data: { id: object.id },
                 })
-            }}></Icon>
+            }}>X</div>
 
         </div>
         <div style={{ paddingLeft: 10 }}>
