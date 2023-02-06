@@ -22,8 +22,8 @@ https://user-images.githubusercontent.com/7884106/216349247-26240d76-5655-439d-a
 npm run build
 ```
 
-### Starting development server
+### Running type check
 
 ```ps
-npm start
+npm run start:types
 ```
