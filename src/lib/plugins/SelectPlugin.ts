@@ -8,6 +8,9 @@ export class SelectPlugin extends Plugin {
         this.subscribeToEvents('mouse:up').subscribe(this.onMouseUp);
         this.select$.subscribe((selected) => {
             canvas.selection = selected;
+            if (this.context?.canvas?.getActiveObject()) {
+                this.context?.canvas?.discardActiveObject()
+            }
             this.context?.state.editorObjects
                 .forEach((e) => {
                     if (e) {
