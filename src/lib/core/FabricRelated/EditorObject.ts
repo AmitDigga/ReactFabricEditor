@@ -29,6 +29,19 @@ export class EditorObject implements IDestroyable, IEditorObject {
     removeChild(id: string) {
         this.children = this.children.filter(c => c.id !== id);
     }
+
+    moveChildToDifferentIndex(childId: string, newIndex: number): void {
+        const child = this.children.find(c => c.id === childId);
+        if (child) {
+            let oldIndex = this.children.indexOf(child);
+            if (oldIndex === newIndex) return;
+            this.children.splice(newIndex, 0, child);
+            if (newIndex < oldIndex) oldIndex++;
+            this.children.splice(oldIndex, 1);
+        }
+    }
+
+
     addChild(child: EditorObject) {
         this.children.push(child);
     }

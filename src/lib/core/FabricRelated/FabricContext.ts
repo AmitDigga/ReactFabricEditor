@@ -195,4 +195,9 @@ export class FabricContext implements IDestroyable, IFabricContext {
         const child = this.getEditorObjectByIdOrThrow(childId);
         child.setParent(parent);
     }
+    rearrangeIndexInParentById(childId: string, newIndex: number) {
+        const child = this.getEditorObjectByIdOrThrow(childId);
+        const parent = child.parent;
+        parent?.moveChildToDifferentIndex(childId, newIndex);
+    }
 }
