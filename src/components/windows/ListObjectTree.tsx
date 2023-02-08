@@ -38,7 +38,11 @@ export function DisplayParentEditorObject(props: DisplayParentEditorObject) {
     const { object } = props;
     const context = useContext(ReactFabricContext);
     function allowDrop(ev: React.DragEvent<HTMLDivElement>) {
-        ev.preventDefault();
+        if (ev.dataTransfer.types.includes(object.id)) {
+            ev.stopPropagation();
+        } else {
+            ev.preventDefault();
+        }
     }
     return <div
         draggable
@@ -54,6 +58,7 @@ export function DisplayParentEditorObject(props: DisplayParentEditorObject) {
         onDragOverCapture={allowDrop}
         onDragStartCapture={(e) => {
             e.dataTransfer.setData('text', object.id);
+            e.dataTransfer.setData(object.id, '_');
             props.onDropAction();
         }}
         style={{
