@@ -40,6 +40,15 @@ export class EditorObject implements IDestroyable, IEditorObject {
             this.children.splice(oldIndex, 1);
         }
     }
+    hasChild(childId: string, recurse: boolean): boolean {
+        if (this.children.find(child => child.id == childId)) return true;
+        if (recurse) {
+            return this.children.some(child => child.hasChild(childId, true));
+        } else {
+            return false;
+        }
+
+    }
 
 
     addChild(child: EditorObject) {

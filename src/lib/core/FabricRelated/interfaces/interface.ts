@@ -26,6 +26,7 @@ export interface IEditorObject extends IDestroyable {
     destroy(): void;
     removeChild(id: string): void;
     addChild(child: IEditorObject): void;
+    hasChild(childId: string, recurse: boolean): boolean;
     setParent(parentEditorObject: IEditorObject | null): void;
     moveChildToDifferentIndex(childId: string, newIndex: number): void;
     onMouseDown: (e: any) => void;

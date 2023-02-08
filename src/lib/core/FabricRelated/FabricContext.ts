@@ -198,6 +198,8 @@ export class FabricContext implements IDestroyable, IFabricContext {
         } else {
             const parent = this.getEditorObjectByIdOrThrow(parentId);
             const child = this.getEditorObjectByIdOrThrow(childId);
+            if (child.hasChild(parent.id, true))
+                throw new Error("Cannot set already existing (grand)parent of object as object's child");
             child.setParent(parent);
         }
     }
