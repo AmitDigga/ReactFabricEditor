@@ -6,7 +6,15 @@ export class SelectPlugin extends Plugin {
         const canvas = this.context?.canvas;
         if (!canvas) throw new Error('Canvas is null');
         this.subscribeToEvents('mouse:up').subscribe(this.onMouseUp);
-        this.select$.subscribe((selected) => { canvas.selection = selected; })
+        this.select$.subscribe((selected) => {
+            canvas.selection = selected;
+            this.context?.state.editorObjects
+                .forEach((e) => {
+                    if (e) {
+                        e.fabricObject.set('selectable', selected);
+                    }
+                })
+        })
         canvas.selection = this.isSelected();
     }
 

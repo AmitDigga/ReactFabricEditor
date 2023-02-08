@@ -14,6 +14,7 @@ export class CreateCirclePlugin extends CreateObjectPlugin<fabric.Circle, fabric
                     fill: '#00000000',
                     stroke: '#00000FF',
                     name: getRandomUid(),
+                    selectable: false,
                     strokeUniform: true,
                 });
             },
@@ -32,6 +33,7 @@ export class CreateCirclePlugin extends CreateObjectPlugin<fabric.Circle, fabric
                         fill: object.fill,
                         stroke: object.stroke,
                         strokeWidth: object.strokeWidth,
+                        selectable: object.selectable,
                         strokeUniform: object.strokeUniform,
                         name: object.name,
                     }

@@ -17,7 +17,7 @@ export class CreateRectPlugin extends CreateObjectPlugin<fabric.Rect, fabric.IRe
                     strokeWidth: 1,
                     width: 20,
                     height: 20,
-                    selectable: true,
+                    selectable: false,
                     strokeUniform: true,
                     name: getRandomUid(),
                 });
@@ -40,6 +40,7 @@ export class CreateRectPlugin extends CreateObjectPlugin<fabric.Rect, fabric.IRe
                         stroke: object.stroke,
                         strokeWidth: object.strokeWidth,
                         strokeUniform: object.strokeUniform,
+                        selectable: object.selectable,
                         name: object.name,
                     }
                 }
