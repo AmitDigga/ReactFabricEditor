@@ -191,6 +191,7 @@ export class FabricContext implements IDestroyable, IFabricContext {
     }
 
     setParentById(childId: string, parentId?: string) {
+        if (childId === parentId) throw new Error("Child and parent cannot be same");
         if (parentId === undefined) {
             const child = this.getEditorObjectByIdOrThrow(childId);
             child.setParent(null);

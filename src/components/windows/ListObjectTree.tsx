@@ -44,6 +44,7 @@ export function DisplayParentEditorObject(props: DisplayParentEditorObject) {
         draggable
         onDropCapture={(e) => {
             const data = e.dataTransfer.getData('text');
+            if (data === object.id) return;
             context.commandManager.addCommand({
                 type: 'set-parent',
                 data: { childId: data, parentId: object.id },
