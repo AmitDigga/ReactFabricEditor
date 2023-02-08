@@ -38,7 +38,7 @@ export function DisplayParentEditorObject(props: DisplayParentEditorObject) {
     const { object } = props;
     const context = useContext(ReactFabricContext);
     function allowDrop(ev: React.DragEvent<HTMLDivElement>) {
-        if (ev.dataTransfer.types.includes(object.id)) {
+        if (ev.dataTransfer.types.indexOf(object.id) > -1) {
             ev.stopPropagation();
         } else {
             ev.preventDefault();
