@@ -60,7 +60,7 @@ export type UpdateObjectCommand = Command & {
 
 export type SetParentCommand = Command & {
     readonly type: "set-parent",
-    readonly data: { childId: string, parentId: string },
+    readonly data: { childId: string, parentId?: string },
 }
 
 export type RearrangeIndexInParentCommand = Command & {

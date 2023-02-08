@@ -127,6 +127,6 @@ export interface IFabricContext extends IDestroyable {
     updateObjectById<T extends fabric.IObjectOptions>(objectId: string, objectOptions: T): void;
     getEditorObjectById(id: string): IEditorObject | undefined;
     getEditorObjectByIdOrThrow(id: string): IEditorObject;
-    setParentById(childId: string, parentId: string): void;
+    setParentById(childId: string, parentId?: string): void;
     rearrangeIndexInParentById(childId: string, newIndex: number): void;
 }
