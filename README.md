@@ -1,8 +1,14 @@
 # React Fabric Editor
 
-A simple project to create wrapper around fabricjs, which is extensible, using react.
+A simple project to create wrapper around [fabric.js](https://github.com/fabricjs/fabric.js), which is extensible, using [react](https://github.com/facebook/react).
 
  **_NOTE:_**  This is in development. Its API will change. It will be refactored heavily.
+
+## Current Work
+
+This project became a library for npm. So the code for below showcase is removed from this project. It will later be provided in different project later.
+
+<https://user-images.githubusercontent.com/7884106/216349247-26240d76-5655-439d-a634-e8ac09f20b82.mp4>
 
 ## Description
 
@@ -186,12 +192,6 @@ actions.forEach(action => {
 #### Creating Property
 
 TODO
-
-## Current Work
-
-This project became a library for npm. So the code for below showcase is removed from this project. It will later be provided in different project later.
-
-https://user-images.githubusercontent.com/7884106/216349247-26240d76-5655-439d-a634-e8ac09f20b82.mp4
 
 ## Development
 
