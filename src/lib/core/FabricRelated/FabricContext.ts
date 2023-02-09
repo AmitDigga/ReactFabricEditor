@@ -190,9 +190,22 @@ export class FabricContext implements IDestroyable, IFabricContext {
         return object;
     }
 
-    setParentById(childId: string, parentId: string) {
-        const parent = this.getEditorObjectByIdOrThrow(parentId);
+    setParentById(childId: string, parentId?: string) {
+        if (childId === parentId) throw new Error("Child and parent cannot be same");
+        if (parentId === undefined) {
+            const child = this.getEditorObjectByIdOrThrow(childId);
+            child.setParent(null);
+        } else {
+            const parent = this.getEditorObjectByIdOrThrow(parentId);
+            const child = this.getEditorObjectByIdOrThrow(childId);
+            if (child.hasChild(parent.id, true))
+                throw new Error("Cannot set already existing (grand)parent of object as object's child");
+            child.setParent(parent);
+        }
+    }
+    rearrangeIndexInParentById(childId: string, newIndex: number) {
         const child = this.getEditorObjectByIdOrThrow(childId);
-        child.setParent(parent);
+        const parent = child.parent;
+        parent?.moveChildToDifferentIndex(childId, newIndex);
     }
 }

@@ -62,6 +62,8 @@ export class FabricCommandManager extends MementoCommandManager<AllCommands> {
             case "set-parent":
                 this.context.setParentById(data.childId, data.parentId);
                 break;
+            case "rearrange-index-in-parent":
+                this.context.rearrangeIndexInParentById(data.childId, data.newIndex);
             case "undo":
                 this.undo();
                 break;

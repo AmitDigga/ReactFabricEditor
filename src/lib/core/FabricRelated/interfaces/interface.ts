@@ -26,7 +26,9 @@ export interface IEditorObject extends IDestroyable {
     destroy(): void;
     removeChild(id: string): void;
     addChild(child: IEditorObject): void;
+    hasChild(childId: string, recurse: boolean): boolean;
     setParent(parentEditorObject: IEditorObject | null): void;
+    moveChildToDifferentIndex(childId: string, newIndex: number): void;
     onMouseDown: (e: any) => void;
     onMove: (e: any) => void;
     moveChildren(displacement: {
@@ -126,5 +128,6 @@ export interface IFabricContext extends IDestroyable {
     updateObjectById<T extends fabric.IObjectOptions>(objectId: string, objectOptions: T): void;
     getEditorObjectById(id: string): IEditorObject | undefined;
     getEditorObjectByIdOrThrow(id: string): IEditorObject;
-    setParentById(childId: string, parentId: string): void;
+    setParentById(childId: string, parentId?: string): void;
+    rearrangeIndexInParentById(childId: string, newIndex: number): void;
 }

@@ -4,38 +4,51 @@ import { IEditorObject } from '../../lib/core/FabricRelated/interfaces/interface
 import { EveryObjectProperty } from '../../lib/properties/EveryObjectProperty';
 import { ReactFabricContext } from '../../provider-consumer';
 
-export function ListObjectTree({ property, getObjectName }: { property: EveryObjectProperty; getObjectName: (eo: IEditorObject) => string }): JSX.Element {
+type ListObjectTreeProps = {
+    property: EveryObjectProperty;
+    renderObject: (eo: IEditorObject) => JSX.Element;
+};
+
+export function ListObjectTree(props: ListObjectTreeProps): JSX.Element {
     const forceUpdate = useForceUpdate();
     const context = React.useContext(ReactFabricContext);
     const parentObjects: IEditorObject[] = (context.state.editorObjects ?? [] as IEditorObject[])
         .filter((o: IEditorObject) => o.parent == null);
     return <div>
-        <h5>{property.name} ({context.state.editorObjects.length ?? 0})</h5>
+        <h5>{props.property.name} ({context.state.editorObjects.length ?? 0})</h5>
         <div>
             {parentObjects.map(p =>
                 <DisplayParentEditorObject
-                    getObjectName={getObjectName}
+                    renderObject={props.renderObject}
                     onDropAction={() => { forceUpdate() }}
-                    onClickAction={() => { forceUpdate() }}
                     key={p.id}
-                    object={p}
-                    canvas={context.canvas} />)}
+                    object={p} />)}
         </div>
     </div>;
 }
 
 
-export function DisplayParentEditorObject(props: { getObjectName: (eo: IEditorObject) => string, object: IEditorObject; canvas?: fabric.Canvas; onDropAction: () => void, onClickAction: () => void }) {
-    const { object, canvas, getObjectName } = props;
+type DisplayParentEditorObject = {
+    object: IEditorObject;
+    onDropAction: () => void;
+    renderObject: (eo: IEditorObject) => JSX.Element;
+};
+
+export function DisplayParentEditorObject(props: DisplayParentEditorObject) {
+    const { object } = props;
     const context = useContext(ReactFabricContext);
     function allowDrop(ev: React.DragEvent<HTMLDivElement>) {
-        ev.preventDefault();
+        if (ev.dataTransfer.types.indexOf(object.id) > -1) {
+            ev.stopPropagation();
+        } else {
+            ev.preventDefault();
+        }
     }
-    const name = getObjectName(object);
     return <div
         draggable
         onDropCapture={(e) => {
             const data = e.dataTransfer.getData('text');
+            if (data === object.id) return;
             context.commandManager.addCommand({
                 type: 'set-parent',
                 data: { childId: data, parentId: object.id },
@@ -45,42 +58,21 @@ export function DisplayParentEditorObject(props: { getObjectName: (eo: IEditorOb
         onDragOverCapture={allowDrop}
         onDragStartCapture={(e) => {
             e.dataTransfer.setData('text', object.id);
+            e.dataTransfer.setData(object.id, '_');
             props.onDropAction();
         }}
         style={{
             padding: 5,
         }}
-        key={name}>
-        <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            backgroundColor: canvas?.getActiveObject()?.name === object.id ? 'lightblue' : 'white',
-        }}>
-            <div
-                onClick={(e) => {
-                    canvas?.setActiveObject(object.fabricObject);
-                    // canvas?.requestRenderAll();
-                    props.onClickAction();
-                }}>
-                {name}
-            </div>
-            <div onClick={() => {
-                context.commandManager.addCommand({
-                    type: 'remove-object',
-                    data: { id: object.id },
-                })
-            }}>X</div>
-
-        </div>
+        key={object.id}>
+        {props.renderObject(object)}
         <div style={{ paddingLeft: 10 }}>
             {object.children.map(child =>
                 <DisplayParentEditorObject
-                    getObjectName={props.getObjectName}
-                    onClickAction={props.onClickAction}
+                    renderObject={props.renderObject}
                     onDropAction={props.onDropAction}
                     key={child.id}
                     object={child}
-                    canvas={canvas}
                 />)}
         </div>
     </div>;

@@ -60,7 +60,12 @@ export type UpdateObjectCommand = Command & {
 
 export type SetParentCommand = Command & {
     readonly type: "set-parent",
-    readonly data: { childId: string, parentId: string },
+    readonly data: { childId: string, parentId?: string },
+}
+
+export type RearrangeIndexInParentCommand = Command & {
+    readonly type: "rearrange-index-in-parent",
+    readonly data: { childId: string, newIndex: number },
 }
 
 export type UndoCommand = Command & {
@@ -99,6 +104,7 @@ export type AllCommands =
     MoveObjectCommand |
     UpdateObjectCommand |
     SetParentCommand |
+    RearrangeIndexInParentCommand |
     UndoCommand |
     EditorObjectDataSetKeyCommand |
     EditorObjectDataClearCommand |
